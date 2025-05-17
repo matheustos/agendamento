@@ -1,0 +1,16 @@
+{
+    "name": "mathe/agendamento",
+    "autoload": {
+        "psr-4": {
+            "Mathe\\Agendamento\\": "src/",
+            "Controller\\": "src/Controller/",
+            "Model\\": "src/Model/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matheus"
+        }
+    ],
+    "require": {}
+}
