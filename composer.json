@@ -4,7 +4,8 @@
         "psr-4": {
             "Mathe\\Agendamento\\": "src/",
             "Controller\\": "src/Controller/",
-            "Model\\": "src/Model/"
+            "Model\\": "src/Model/",
+            "Validators\\": "src/Validators/"
         }
     },
     "authors": [
