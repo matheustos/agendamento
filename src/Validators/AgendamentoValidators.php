@@ -24,6 +24,44 @@ class AgendamentoValidators{
         return ["status" => false];
     }
 
+    public static function validacaoCancelamento($data, $hora){
+        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+
+        // Nenhum agendamento encontrado
+        if (empty($consulta['data'])) {
+            return ["status" => true, "message" => "Agendamento não encontrado!"]; // não tem agendamento para cancelar
+        }
+
+        // Percorrer os registros encontrados na data e hora
+        foreach ($consulta['data'] as $registro) {
+            if ($registro['status'] === "agendado") {
+                return ["status" => false];
+            }
+        }
+
+        // Se passou pelo loop sem encontrar "agendado", não permite cancelar
+        return ["status" => true, "message" => "Não é possível cancelar esse agendamento!"];
+    }
+
+    public static function validacaoAtualizar($data, $hora){
+        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+
+        // Nenhum agendamento encontrado
+        if (empty($consulta['data'])) {
+            return ["status" => true, "message" => "Agendamento não encontrado!"]; // não tem agendamento para cancelar
+        }
+
+        // Percorrer os registros encontrados na data e hora
+        foreach ($consulta['data'] as $registro) {
+            if ($registro['status'] === "agendado") {
+                return ["status" => false];
+            }
+        }
+
+        // Se passou pelo loop sem encontrar "agendado", não permite cancelar
+        return ["status" => true, "message" => "Não é possível atualizar esse agendamento!"];
+    }
+
     public static function validacaoData($data){
 
         $dateObj = \DateTime::createFromFormat('d/m/Y', $data);

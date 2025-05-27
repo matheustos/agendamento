@@ -75,12 +75,18 @@ class AgendamentoController{
                 "message" => "Informe todos os dados!"
             ];
         }else{
-            $res = Agendamento::Cancelar($dataIso, $horaIso);
+            $validacao = AgendamentoValidators::validacaoCancelamento($dataIso, $horaIso);
 
-            if($res){
-                return $res;
+            if($validacao["status"] === true){
+                return $validacao;
             }else{
-                return ["status" => false, "message" => "Erro ao cancelar agendamento!"];
+                $res = Agendamento::Cancelar($dataIso, $horaIso);
+
+                if($res){
+                    return $res;
+                }else{
+                    return ["status" => false, "message" => "Erro ao cancelar agendamento!"];
+                }
             }
         }
     }
@@ -103,12 +109,18 @@ class AgendamentoController{
                 "message" => "Informe todos os dados!"
             ];
         }else{
-            $res = Agendamento::atualizar($dataConvert, $horaConvert, $nova_dataConvert, $nova_horaConvert);
-
-            if($res){
-                return $res;
+            $validacao = AgendamentoValidators::validacaoCancelamento($dataConvert, $horaConvert);
+            
+            if($validacao["status"] === true){
+                return $validacao;
             }else{
-                return ["status" => false, "message" => "Erro ao atualizar o agendamento!"];
+                $res = Agendamento::atualizar($dataConvert, $horaConvert, $nova_dataConvert, $nova_horaConvert);
+
+                if($res){
+                    return $res;
+                }else{
+                    return ["status" => false, "message" => "Erro ao atualizar o agendamento!"];
+                }
             }
         }
     }
