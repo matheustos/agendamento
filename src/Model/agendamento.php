@@ -3,10 +3,10 @@
 namespace Model;
 use Model\Database;
 class Agendamento {
-    public static function agendar($data, $hora, $nome, $status) {
+    public static function agendar($data, $hora, $nome, $status, $servico) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO agenda (data, horario, nome, status) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $data, $hora, $nome, $status);
+        $stmt = $conn->prepare("INSERT INTO agenda (data, horario, nome, status, servico) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $data, $hora, $nome, $status, $servico);
         return $stmt->execute();
     }
     
@@ -78,6 +78,53 @@ class Agendamento {
             "data" => $registros,
             "message" => "Registro encontrado."
         ];
+    }
+
+    public static function Cancelar($data, $hora){
+        $novo_status = "cancelado";        
+
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+        }
+
+        // Prepara e executa a atualização
+        $sql = "UPDATE agenda SET status = ? WHERE data = ? AND horario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $novo_status, $data, $hora);
+
+        if ($stmt->execute()) {
+            return ["status" => true, "message" => "Agendamento cancelado com sucesso!"];
+        } else {
+            return ["status" => false, "message" => "Erro ao cancelar!".$stmt->error];
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
+
+    public static function atualizar($data, $hora, $nova_data, $nova_hora){       
+
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+        }
+
+        // Prepara e executa a atualização
+        $sql = "UPDATE agenda SET data = ? , horario = ? WHERE data = ? AND horario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $nova_data, $nova_hora, $data, $hora);
+
+        if ($stmt->execute()) {
+            return ["status" => true, "message" => "Agendamento atualizado com sucesso!"];
+        } else {
+            return ["status" => false, "message" => "Erro ao atualizar!".$stmt->error];
+        }
+
+        $stmt->close();
+        $conn->close();
     }
 }
 
