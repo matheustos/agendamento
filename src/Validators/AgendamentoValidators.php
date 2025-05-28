@@ -78,10 +78,12 @@ class AgendamentoValidators{
         return $horaIso;
     }
 
+    public static function formatarRetorno($mensagem, $data){
+        return ["status" => true, "messagem" => $mensagem, "data" => $data];
+    }
 
+    public static function formatarErro($mensagem){
+        return ["status" => false, "erro" => $mensagem];
+    }
 }
-
-
-
-
 ?>

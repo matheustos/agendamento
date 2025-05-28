@@ -13,11 +13,9 @@ class AgendamentoController{
         $status = "agendado";
         $servico = $dados["servico"];
 
-        $dateObj = \DateTime::createFromFormat('d/m/Y', $data);
-        $dataIso = $dateObj ? $dateObj->format('Y-m-d') : null;
+        $dataIso = AgendamentoValidators::validacaoData($data);
 
-        $horaObj = \DateTime::createFromFormat('H:i', $hora);
-        $horaIso = $horaObj ? $horaObj->format('H:i:s') : null;
+        $horaIso = AgendamentoValidators::validacaoHora($hora);
 
 
         if(empty($hora) || empty($nome) || empty($servico)){
@@ -30,9 +28,9 @@ class AgendamentoController{
             }else{
                 $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
                 if($res){
-                    return ["status" => true, "message" => "Agendamento efetuado com sucesso!", "data" => $res];
+                    return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
                 }else{
-                    return ["status" => false, "message" => "Erro ao efetuar agendamento!"];
+                    return AgendamentoValidators::formatarErro("Erro ao efetuar agendamento!");
                 }
             }
         }
@@ -41,10 +39,7 @@ class AgendamentoController{
     public static function buscarPorDia($dia) {
 
         if (empty($dia)) {
-            return [
-                "status" => false,
-                "message" => "Insira o dia!"
-            ];
+            return AgendamentoValidators::formatarErro("Informe o dia!");
         }
 
         $res = Agendamento::buscar($dia);
@@ -52,10 +47,7 @@ class AgendamentoController{
         if (is_array($res)) {
             return $res;
         } else {
-            return [
-                "status" => false,
-                "message" => "Erro ao consultar agenda."
-            ];
+            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
         }
     }
 
@@ -63,17 +55,11 @@ class AgendamentoController{
         $data = $dados["data"];
         $hora = $dados["horario"];
 
-        $dateObj = \DateTime::createFromFormat('d/m/Y', $data);
-        $dataIso = $dateObj ? $dateObj->format('Y-m-d') : null;
+        $dataIso = AgendamentoValidators::validacaoData($data);
 
-        $horaObj = \DateTime::createFromFormat('H:i', $hora);
-        $horaIso = $horaObj ? $horaObj->format('H:i:s') : null;
-
+        $horaIso = AgendamentoValidators::validacaoHora($hora);
         if(empty($dataIso) || empty($horaIso)){
-            return [
-                "status" => false,
-                "message" => "Informe todos os dados!"
-            ];
+            return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
             $validacao = AgendamentoValidators::validacaoCancelamento($dataIso, $horaIso);
 
@@ -85,7 +71,7 @@ class AgendamentoController{
                 if($res){
                     return $res;
                 }else{
-                    return ["status" => false, "message" => "Erro ao cancelar agendamento!"];
+                    return AgendamentoValidators::formatarErro("Erro ao cancelar agendamento!");
                 }
             }
         }
@@ -104,10 +90,7 @@ class AgendamentoController{
         $nova_horaConvert = AgendamentoValidators::validacaoHora($nova_hora);
 
         if(empty($data) || empty($hora) || empty($nova_data) || empty($nova_hora)){
-            return [
-                "status" => false,
-                "message" => "Informe todos os dados!"
-            ];
+            return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
             $validacao = AgendamentoValidators::validacaoCancelamento($dataConvert, $horaConvert);
             
@@ -119,7 +102,7 @@ class AgendamentoController{
                 if($res){
                     return $res;
                 }else{
-                    return ["status" => false, "message" => "Erro ao atualizar o agendamento!"];
+                    return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
                 }
             }
         }

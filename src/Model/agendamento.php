@@ -2,6 +2,8 @@
 
 namespace Model;
 use Model\Database;
+use Validators\AgendamentoValidators;
+
 class Agendamento {
     public static function agendar($data, $hora, $nome, $status, $servico) {
         $conn = Database::conectar();
@@ -12,20 +14,20 @@ class Agendamento {
     
     public static function buscar($dia) {
         if (!is_string($dia)) {
-            return ["status" => false, "message" => "Data inválida (não é string)."];
+            return AgendamentoValidators::formatarErro("Data inválida (não é string).");
         }
 
         $conn = Database::conectar();
 
         if (!$conn) {
-            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
         $sql = "SELECT * FROM agenda WHERE DATE(data) = ?";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
-            return ["status" => false, "message" => "Erro ao preparar a consulta."];
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.");
         }
 
         $stmt->bind_param("s", $dia);
@@ -51,14 +53,14 @@ class Agendamento {
         $conn = Database::conectar();
 
         if (!$conn) {
-            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
         $sql = "SELECT * FROM agenda WHERE data = ? AND horario = ?";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
-            return ["status" => false, "message" => "Erro ao preparar a consulta.".$conn->error];
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
         }
 
         $stmt->bind_param("ss", $data, $hora); // ambos são strings
@@ -73,11 +75,7 @@ class Agendamento {
 
         $stmt->close();
         
-        return [
-            "status" => true,
-            "data" => $registros,
-            "message" => "Registro encontrado."
-        ];
+        return AgendamentoValidators::formatarRetorno("Registro encontrado.", $registros);
     }
 
     public static function Cancelar($data, $hora){
@@ -86,7 +84,7 @@ class Agendamento {
         $conn = Database::conectar();
 
         if (!$conn) {
-            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
         // Prepara e executa a atualização
@@ -95,9 +93,9 @@ class Agendamento {
         $stmt->bind_param("sss", $novo_status, $data, $hora);
 
         if ($stmt->execute()) {
-            return ["status" => true, "message" => "Agendamento cancelado com sucesso!"];
+            return AgendamentoValidators::formatarRetorno("Agendamento cancelado com sucesso!", null);
         } else {
-            return ["status" => false, "message" => "Erro ao cancelar!".$stmt->error];
+            return AgendamentoValidators::formatarErro("Erro ao cancelar!".$stmt->error);
         }
 
         $stmt->close();
@@ -109,7 +107,7 @@ class Agendamento {
         $conn = Database::conectar();
 
         if (!$conn) {
-            return ["status" => false, "message" => "Erro na conexão com o banco de dados."];
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
         // Prepara e executa a atualização
@@ -118,9 +116,9 @@ class Agendamento {
         $stmt->bind_param("ssss", $nova_data, $nova_hora, $data, $hora);
 
         if ($stmt->execute()) {
-            return ["status" => true, "message" => "Agendamento atualizado com sucesso!"];
+            return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);
         } else {
-            return ["status" => false, "message" => "Erro ao atualizar!".$stmt->error];
+            return AgendamentoValidators::formatarErro( "Erro ao atualizar!".$stmt->error);
         }
 
         $stmt->close();
