@@ -7,7 +7,7 @@ use Validators\AgendamentoValidators;
 class Agendamento {
     public static function agendar($data, $hora, $nome, $status, $servico) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO agenda (data, horario, nome, status, servico) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $data, $hora, $nome, $status, $servico);
         return $stmt->execute();
     }

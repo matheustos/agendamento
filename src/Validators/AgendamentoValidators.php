@@ -79,11 +79,11 @@ class AgendamentoValidators{
     }
 
     public static function formatarRetorno($mensagem, $data){
-        return ["status" => true, "messagem" => $mensagem, "data" => $data];
+        return ["status" => true, "message" => $mensagem, "data" => $data];
     }
 
     public static function formatarErro($mensagem){
-        return ["status" => false, "erro" => $mensagem];
+        return ["status" => false, "error" => $mensagem];
     }
 }
 ?>
