@@ -13,20 +13,20 @@ class AgendamentoController{
         $status = "agendado";
         $servico = $dados["servico"];
 
-        /*$dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/ 
+        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/ 
 
-        /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
+        $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
 
         if(empty($hora) || empty($nome) || empty($servico)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
-            $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora);
+            $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
 
             if($validacao["status"] === true){
                 return $validacao;
             }else{
-                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
+                $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
                 if($res){
                     return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
                 }else{
