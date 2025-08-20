@@ -26,7 +26,18 @@ class UsuariosValidators{
         if ($usuario) {
             return ["status" => false, "message" => "Email já cadastrado!"];
         }
-        return ["status" => true];
+        else {
+            return ["status" => true];
+        }
+    }
+
+    public static function buscarEmail($email) {
+        $usuario = usuarios::buscarPorEmail($email);
+        if ($usuario) {
+            return ["status" => true];
+        } else {
+            return ["status" => false];
+        }
     }
 }
 ?>

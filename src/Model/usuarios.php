@@ -21,9 +21,14 @@ class Usuarios{
         
         if ($resultado->num_rows > 0) {
             return $resultado->fetch_assoc();
-        } else {
-            return null;
         }
+    }
+
+    public static function updateSenha($hash, $email) {
+        $conn = Database::conectar();
+        $stmt = $conn->prepare("UPDATE usuarios SET senha = ? WHERE email = ?");
+        $stmt->bind_param("ss", $hash, $email);
+        return $stmt->execute();
     }
 }
 ?>
