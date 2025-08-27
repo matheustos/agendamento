@@ -13,9 +13,9 @@ class AgendamentoController{
         $status = "agendado";
         $servico = $dados["servico"];
 
-        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/ 
+        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/ 
 
-        $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
+        $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
 
         if(empty($hora) || empty($nome) || empty($servico)){
@@ -31,6 +31,30 @@ class AgendamentoController{
                     return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
                 }else{
                     return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                }
+            }
+        }
+    }
+
+    public static function alterarStatus($status, $data, $hora, $nome){
+
+        //var_dump($status, $data, $hora, $nome);
+        if(empty($status) || empty($data) || empty($hora) || empty($nome)){
+            return AgendamentoValidators::formatarErro("Informe todos os dados!");
+        }else{
+            $dataIso = AgendamentoValidators::validacaoData($data);
+            $horaIso = AgendamentoValidators::validacaoHora($hora);
+
+            $validacao = AgendamentoValidators::validacaoCancelamento($dataIso, $horaIso);
+            if($validacao["status"] === true){
+                return $validacao;
+            }else{
+                $res = Agendamento::updateStatus($status, $dataIso, $horaIso, $nome);
+
+                if($res){
+                    return AgendamentoValidators::formatarRetorno($res, []);
+                }else{
+                    return AgendamentoValidators::formatarErro("Erro ao alterar status!");
                 }
             }
         }

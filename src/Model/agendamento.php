@@ -124,6 +124,28 @@ class Agendamento {
         $stmt->close();
         $conn->close();
     }
+
+    public static function updateStatus($status, $data, $hora, $nome){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Prepara e executa a atualização
+        $sql = "UPDATE agenda SET status = ? WHERE data = ? AND horario = ? AND nome = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $status, $data, $hora, $nome);
+
+        if ($stmt->execute()) {
+            return AgendamentoValidators::formatarRetorno("Status atualizado com sucesso!", null);
+        } else {
+            return AgendamentoValidators::formatarErro("Erro ao atualizar status!".$stmt->error);
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
 }
 
 
