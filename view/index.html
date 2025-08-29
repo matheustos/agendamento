@@ -87,7 +87,7 @@ form.addEventListener('submit', function(e){
 
     const formData = new FormData(form);
 
-    fetch('../../api/agendamento/index.php', { // ajuste o caminho se necessário
+    fetch('../api/novo/index.php', { // ajuste o caminho se necessário
         method: 'POST',
         body: formData
     })

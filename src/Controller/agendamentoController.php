@@ -7,13 +7,13 @@ class AgendamentoController{
 
     public static function agendamento($dados){
         
-        $data = $dados["data"];
-        $hora = $dados["horario"];
-        $nome = $dados["nome"];
+        $data = $dados["data"] ?? null;
+        $hora = $dados["horario"] ?? null;
+        $nome = $dados["nome"] ?? null;
         $status = "agendado";
-        $servico = $dados["servico"];
+        $servico = $dados["servico"] ?? null;
 
-        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/ 
+        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
         $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
