@@ -78,6 +78,27 @@ class Agendamento {
         return AgendamentoValidators::formatarRetorno("Registro encontrado.", $registros);
     }
 
+    public static function buscarMes($mes){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT * FROM agenda WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) ORDER BY data, horario";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $mes);
+        $stmt->execute();
+
+        // Pega os resultados
+        $result = $stmt->get_result();
+        $agendamentos = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $agendamentos;
+    }
+
     public static function Cancelar($data, $hora){
         $novo_status = "cancelado";        
 

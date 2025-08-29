@@ -75,6 +75,24 @@ class AgendamentoController{
         }
     }
 
+    public static function buscarPorMes($mes){
+        if(empty($mes)){
+            return AgendamentoValidators::formatarErro("Informe o mês");
+        }
+
+        $res = Agendamento::buscarMes($mes);
+
+        if (is_array($res)) {
+            if($res){
+                return AgendamentoValidators::formatarRetorno("Registros encontrados!",$res);
+            }else{
+                return AgendamentoValidators::formatarErro("Não existem registros para esse mês!");
+            }
+        } else {
+            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+        }
+    }
+
     public static function cancelarAgendamento($dados){
         $data = $dados["data"];
         $hora = $dados["horario"];
