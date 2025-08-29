@@ -93,6 +93,22 @@ class AgendamentoController{
         }
     }
 
+    public static function buscarHoje(){
+        $data_hoje = date("Y-m-d");
+
+        $res = Agendamento::buscar($data_hoje);
+
+        if(is_array($res)){
+            if($res){
+                return AgendamentoValidators::formatarRetorno("Seus agendamentos para hoje são:", $res);
+            }else{
+                return AgendamentoValidators::formatarErro("Nenhum agendamento para hoje!");
+            }
+        }else{
+            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+        }
+    }
+
     public static function cancelarAgendamento($dados){
         $data = $dados["data"];
         $hora = $dados["horario"];

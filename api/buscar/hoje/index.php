@@ -6,9 +6,7 @@ use Controller\AgendamentoController;
 
 header('Content-Type: application/json');
 
-$mes = $_POST["mes"];
-
-$res = AgendamentoController::buscarPorMes($mes);
+$res = AgendamentoController::buscarHoje();
 
 echo json_encode($res);
 
