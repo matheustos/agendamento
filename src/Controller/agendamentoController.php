@@ -21,18 +21,25 @@ class AgendamentoController{
         if(empty($hora) || empty($nome) || empty($servico)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
-            $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
+            $validaData = AgendamentoValidators::validaData($dataIso);
 
-            if($validacao["status"] === true){
-                return $validacao;
+            if($validaData["status"] === true){
+                return $validaData;
             }else{
-                $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
-                if($res){
-                    return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
+                $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
+
+                if($validacao["status"] === true){
+                    return $validacao;
                 }else{
-                    return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                    $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
+                    if($res){
+                        return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
+                    }else{
+                        return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                    }
                 }
             }
+            
         }
     }
 

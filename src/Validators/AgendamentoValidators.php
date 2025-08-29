@@ -24,6 +24,16 @@ class AgendamentoValidators{
         return ["status" => false];
     }
 
+    public static function validaData($data){
+
+        $data_Hoje = date("Y-m-d");
+        if (strtotime($data) < strtotime($data_Hoje)){
+            return ["status" => true, "message" => "Não é possível efetuar agendamento para um dia anterior a hoje!"];
+        }else{
+            return ["status" => false]; // livre para agendar
+        }
+    }
+
     public static function validacaoCancelamento($data, $hora){
         $consulta = Agendamento::buscarPorDataHora($data, $hora);
 
