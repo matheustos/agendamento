@@ -11,6 +11,10 @@ class ComposerStaticInit5d591f365887c7aafa41fb67613feece
         array (
             'Validators\\' => 11,
         ),
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
         'M' => 
         array (
             'Model\\' => 6,
@@ -26,6 +30,10 @@ class ComposerStaticInit5d591f365887c7aafa41fb67613feece
         'Validators\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Validators',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Model\\' => 
         array (
