@@ -30,5 +30,12 @@ class Usuarios{
         $stmt->bind_param("ss", $hash, $email);
         return $stmt->execute();
     }
+
+    public static function atualizar($nome, $telefone, $nomeUpdate){
+        $conn = Database::conectar();
+        $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, telefone = ? WHERE nome = ?");
+        $stmt->bind_param("sss", $nomeUpdate, $telefone, $nome);
+        return $stmt->execute();
+    }
 }
 ?>

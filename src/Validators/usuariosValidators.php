@@ -21,6 +21,14 @@ class UsuariosValidators{
         return ["status" => true, "message" => "Validação bem-sucedida!"];
     }
 
+    public static function validacaoAtualizar($nome, $telefone){
+        if(empty($nome) || empty($telefone)){
+            return ["status" => false, "message" => "Preencha todos os campos!"];
+        }
+
+        return ["status" => true, "message" => "Validação bem-sucedida!"];
+    }
+
     public static function verificarEmailExistente($email) {
         $usuario = usuarios::buscarPorEmail($email);
         if ($usuario) {

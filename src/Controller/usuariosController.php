@@ -33,6 +33,26 @@ class UsuariosController{
         }
     }
 
+    public static function atualizarUser($dados){
+        $nome = $dados["nome"];
+        $telefone = $dados["telefone"];
+        $nomeUpdate = $dados["nomeUpdate"];
+
+        $validacao = UsuariosValidators::validacaoAtualizar($nome, $telefone);
+
+        if($validacao["status"] === true){
+            $res = Usuarios::atualizar($nome, $telefone, $nomeUpdate);
+            if(!$res){
+                return ["status" => false, "message" => "Erro ao atualizar dados."];
+            }else{
+                return ["status" => true, "message" => "Dados atualizados com sucesso!", "data" => $res];
+            }
+        }else{
+            return $validacao;
+        }
+
+    }
+
     public static function updateSenha($dados) {
         $email = $dados["email"];
         $senha = $dados["senha"];
