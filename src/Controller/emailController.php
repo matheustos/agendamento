@@ -86,4 +86,39 @@ class EmailController{
             ];
         }
     }
+
+    public static function atualizar($email, $data, $hora, $nome, $servico)
+    {
+        $mail = new PHPMailer(true);
+        $mensagemTexto = "Olá, ".$nome."!\n".
+        "Seu agendamento foi atualizado com sucesso!\n".
+        "Data: ".$data." Hora: ".$hora."\n"."Serviço: ".$servico."\nObrigado por escolher nosso serviço!";
+        $mensagemHtml = "<h2>Olá, $nome!</h2>
+                <p>Seu agendamento foi atualizado com sucesso!</p>
+                <p><strong>Data:</strong> $data<br>
+                   <strong>Hora:</strong> $hora<br>
+                   <strong>Serviço:</strong> $servico</p>
+                <p>Obrigado por escolher nosso serviço!</p>";
+
+        try {
+            self::configurar($mail);
+
+            $mail->addAddress($email);
+            $mail->Subject = "Troca de agendamento";
+            $mail->CharSet = 'UTF-8';
+            $mail->Body    = $mensagemHtml;
+            $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
+
+            $mail->send();
+            return [
+                "status" => "success",
+                "message" => "E-mail enviado com sucesso!"
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "error",
+                "message" => $mail->ErrorInfo
+            ];
+        }
+    }
 }

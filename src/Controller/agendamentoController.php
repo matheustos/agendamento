@@ -177,7 +177,7 @@ class AgendamentoController{
                     $buscar = Agendamento::buscarPorDataHora($nova_dataConvert, $nova_horaConvert);
                     $nome = $buscar['data'][0]['nome'];
                     $servico = $buscar['data'][0]['servico'];
-                    EmailController::enviar($email, $nova_data, $nova_hora, $nome, $servico);
+                    EmailController::atualizar($email, $nova_data, $nova_hora, $nome, $servico);
                     return $res;
                 }else{
                     return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
