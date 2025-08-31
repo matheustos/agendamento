@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 use Model\usuarios;
+use Validators\AgendamentoValidators;
 use Validators\usuariosValidators;
 
 class UsuariosController{
@@ -71,5 +72,16 @@ class UsuariosController{
         }else{
             return ["status" => true, "message" => "Senha atualizada com sucesso!"];
         }
+    }
+
+    public static function listarUsuarios(){
+        $res = Usuarios::listar();
+
+        if($res){
+            return AgendamentoValidators::formatarRetorno("Usuários encontrados: ", $res);
+        }else{
+            return AgendamentoValidators::formatarErro("Nenhum usuário encontrado!");
+        }
+
     }
 }

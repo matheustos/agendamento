@@ -37,5 +37,16 @@ class Usuarios{
         $stmt->bind_param("sss", $nomeUpdate, $telefone, $nome);
         return $stmt->execute();
     }
+
+    public static function listar(){
+        $conn = Database::conectar();
+        $stmt = $conn->prepare("SELECT * FROM usuarios");
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        
+        if ($resultado->num_rows > 0) {
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        }
+    }
 }
 ?>
