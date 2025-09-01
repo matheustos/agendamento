@@ -10,5 +10,6 @@ return array(
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Model\\' => array($baseDir . '/src/Model'),
     'Mathe\\Agendamento\\' => array($baseDir . '/src'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Controller\\' => array($baseDir . '/src/Controller'),
 );

@@ -54,6 +54,17 @@ class AgendamentoValidators{
         return ["status" => true, "message" => "Não é possível cancelar esse agendamento!"];
     }
 
+    public static function verificarBloqueio($data, $hora){
+        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+
+        // Nenhum agendamento encontrado
+        if (empty($consulta['data'])) {
+            return ["status" => true]; // não tem agendamento, logo, pode bloquear
+        }else{
+            return ["status" => false, "messagem" => "Não é possível bloquear pois já existe agendamento para essa data e hora!"];
+        }
+    }
+
     public static function validacaoAtualizar($data, $hora){
         $consulta = Agendamento::buscarPorDataHora($data, $hora);
 

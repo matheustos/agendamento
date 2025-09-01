@@ -20,6 +20,10 @@ class ComposerStaticInit5d591f365887c7aafa41fb67613feece
             'Model\\' => 6,
             'Mathe\\Agendamento\\' => 18,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'C' => 
         array (
             'Controller\\' => 11,
@@ -42,6 +46,10 @@ class ComposerStaticInit5d591f365887c7aafa41fb67613feece
         'Mathe\\Agendamento\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Controller\\' => 
         array (

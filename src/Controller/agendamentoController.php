@@ -5,14 +5,9 @@ use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
 
-    public static function agendamento($dados){
+    public static function agendamento($data, $hora, $nome, $servico, $email){
         
-        $data = $dados["data"] ?? null;
-        $hora = $dados["horario"] ?? null;
-        $nome = $dados["nome"] ?? null;
         $status = "agendado";
-        $servico = $dados["servico"] ?? null;
-        $email = $dados["email"] ?? null;
 
         $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
@@ -48,7 +43,7 @@ class AgendamentoController{
     public static function alterarStatus($status, $data, $hora, $nome){
 
         //var_dump($status, $data, $hora, $nome);
-        if(empty($status) || empty($data) || empty($hora) || empty($nome)){
+        if(empty($status) || empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
             $dataIso = AgendamentoValidators::validacaoData($data);
@@ -64,6 +59,42 @@ class AgendamentoController{
                     return AgendamentoValidators::formatarRetorno($res, []);
                 }else{
                     return AgendamentoValidators::formatarErro("Erro ao alterar status!");
+                }
+            }
+        }
+    }
+
+    public static function bloquearAgenda($dados){
+        $servico = null;
+        $status = "bloqueado";
+        $nome = null;
+        $data = $dados["data"];
+        $hora = $dados["hora"];
+
+        if(empty($data) || empty($hora)){
+            return AgendamentoValidators::formatarErro("Informe data e hora!");
+        }else{
+            
+            $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
+
+            $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
+
+            $getStatus = Agendamento::getStatus($dataIso, $horaIso);
+            //var_dump($getStatus);
+            if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
+                return AgendamentoValidators::formatarErro("Agenda já se encontra bloqueada");
+            }else{
+                $validacao = AgendamentoValidators::verificarBloqueio($dataIso, $horaIso);
+                if($validacao["status"] === true){
+                    $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
+
+                    if($res){
+                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                    }else{
+                        return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                    }
+                }else{
+                    return $validacao;
                 }
             }
         }
