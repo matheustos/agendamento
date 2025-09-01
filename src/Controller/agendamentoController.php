@@ -17,26 +17,31 @@ class AgendamentoController{
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($email)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
-            $validaData = AgendamentoValidators::validaData($dataIso);
-
-            if($validaData["status"] === true){
-                return $validaData;
+            $getStatus = Agendamento::getStatus($dataIso, $horaIso);
+            //var_dump($getStatus);
+            if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
+                return AgendamentoValidators::formatarErro("Essa data/hora está bloqueada! Por favor, escolha outra data e hora.");
             }else{
-                $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
+                $validaData = AgendamentoValidators::validaData($dataIso);
 
-                if($validacao["status"] === true){
-                    return $validacao;
+                if($validaData["status"] === true){
+                    return $validaData;
                 }else{
-                    $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
-                    if($res){
-                        EmailController::enviar($email, $data, $hora, $nome, $servico);
-                        return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
+                    $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
+
+                    if($validacao["status"] === true){
+                        return $validacao;
                     }else{
-                        return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                        $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
+                        if($res){
+                            EmailController::enviar($email, $data, $hora, $nome, $servico);
+                            return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
+                        }else{
+                            return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                        }
                     }
                 }
             }
-            
         }
     }
 
