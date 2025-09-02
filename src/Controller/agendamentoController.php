@@ -6,7 +6,6 @@ use Validators\AgendamentoValidators;
 class AgendamentoController{
 
     public static function agendamento($data, $hora, $nome, $servico, $email){
-        
         $status = "agendado";
 
         $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
@@ -17,22 +16,21 @@ class AgendamentoController{
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($email)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
-            $getStatus = Agendamento::getStatus($dataIso, $horaIso);
-            //var_dump($getStatus);
-            if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
-                return AgendamentoValidators::formatarErro("Essa data/hora está bloqueada! Por favor, escolha outra data e hora.");
+            $validacao = AgendamentoValidators::validarBloqueio($data, $hora);
+            if($validacao){
+                return $validacao;
             }else{
-                $validaData = AgendamentoValidators::validaData($dataIso);
+                $validaData = AgendamentoValidators::validaData($data);
 
                 if($validaData["status"] === true){
                     return $validaData;
                 }else{
-                    $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
+                    $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora);
 
                     if($validacao["status"] === true){
                         return $validacao;
                     }else{
-                        $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
+                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
                         if($res){
                             EmailController::enviar($email, $data, $hora, $nome, $servico);
                             return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);

@@ -61,7 +61,15 @@ class AgendamentoValidators{
         if (empty($consulta['data'])) {
             return ["status" => true]; // não tem agendamento, logo, pode bloquear
         }else{
-            return ["status" => false, "messagem" => "Não é possível bloquear pois já existe agendamento para essa data e hora!"];
+            return ["status" => false, "message" => "Não é possível bloquear pois já existe agendamento para essa data e hora!"];
+        }
+    }
+
+    public static function validarBloqueio($data, $hora){
+        $getStatus = Agendamento::getStatus($data, $hora);
+
+        if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
+                return ["status" => false, "message" => "Essa data/hora está bloqueada! Por favor, escolha outra data e hora."];
         }
     }
 
@@ -105,7 +113,7 @@ class AgendamentoValidators{
     }
 
     public static function formatarErro($mensagem){
-        return ["status" => false, "error" => $mensagem];
+        return ["status" => false, "message" => $mensagem];
     }
 }
 ?>
