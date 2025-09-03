@@ -23,6 +23,6 @@ if (!$dateObj) {
 $dataIso = $dateObj->format('Y-m-d');
 $res = AgendamentoController::buscarPorDia($dataIso);
 
-echo json_encode($res);
+echo json_encode(AgendamentoValidators::formatarRetorno("Agendamentos:", $res));
 
 ?>

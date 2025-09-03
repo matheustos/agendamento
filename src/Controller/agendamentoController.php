@@ -16,24 +16,24 @@ class AgendamentoController{
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($email)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
-            $validacao = AgendamentoValidators::validarBloqueio($data, $hora);
+            $validacao = AgendamentoValidators::validarBloqueio($dataIso, $horaIso);
             if($validacao){
                 return $validacao;
             }else{
-                $validaData = AgendamentoValidators::validaData($data);
+                $validaData = AgendamentoValidators::validaData($dataIso);
 
                 if($validaData["status"] === true){
                     return $validaData;
                 }else{
-                    $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora);
+                    $validacao = AgendamentoValidators::validacaoAgendamento($dataIso, $horaIso);
 
                     if($validacao["status"] === true){
                         return $validacao;
                     }else{
-                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
+                        $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
                         if($res){
                             EmailController::enviar($email, $data, $hora, $nome, $servico);
-                            return AgendamentoValidators::formatarRetorno("Agendamento efetuado com sucesso!", $res);
+                            return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                         }else{
                             return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
                         }
@@ -150,15 +150,10 @@ class AgendamentoController{
         $data_hoje = date("Y-m-d");
 
         $res = Agendamento::buscar($data_hoje);
-
-        if(is_array($res)){
-            if($res){
-                return AgendamentoValidators::formatarRetorno("Seus agendamentos para hoje são:", $res);
-            }else{
-                return AgendamentoValidators::formatarErro("Nenhum agendamento para hoje!");
-            }
+        if($res){
+            return AgendamentoValidators::formatarRetorno("Seus agendamentos para hoje são:", $res);
         }else{
-            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+            return AgendamentoValidators::formatarErro("Nenhum agendamento para hoje!");
         }
     }
 

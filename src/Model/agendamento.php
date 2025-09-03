@@ -42,11 +42,7 @@ class Agendamento {
 
         $stmt->close();
 
-        return [
-            "status" => true,
-            "data" => $agendamentos,
-            "message" => count($agendamentos) > 0 ? "Registros encontrados." : "Nenhum registro encontrado."
-        ];
+        return $agendamentos;
     }
 
     public static function buscarPorDataHora($data, $hora) {
