@@ -48,7 +48,7 @@ body{
     height: 100%;
 }
 
-header > h1{
+h2{
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     margin-top: 20px;
@@ -56,25 +56,17 @@ header > h1{
     min-width: 320px;
 }
 
-main{
+form {
     font-family: Arial, Helvetica, sans-serif;
     padding-top: 20px;
     padding-left: 20px;
-}
-
-form {
     width: 300px;        /* define a largura do formulário */
     margin: auto;      /* centraliza horizontalmente */
 }
 
 main > form > p{
-    margin-bottom: 10px;
     font-size: 20px;
     min-width: 320px;
-}
-
-p > label{
-    padding-bottom: 20px;
 }
 
 p > input{
@@ -84,6 +76,7 @@ p > input{
     padding: 8px 8px;     /* espaço interno */
     font-size: 16px;
     border: 1px solid black;
+    margin-bottom: 10px;
 }
 
 p > select{

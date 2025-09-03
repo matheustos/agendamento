@@ -3,13 +3,21 @@ fetch("../../api/buscar/hoje")
 .then(res => res.json())
 .then(res => {
     const agendamentos = res.data; // pega a lista real
+    console.log(res.data);
     let html = "";
     agendamentos.forEach(a => {
         html += `
-            <div>
-            <b>${a.nome}</b> - ${a.data} ${a.horario} (${a.servico})
-            <button onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}')">Editar</button>
-            </div>
+            <tr>
+                <td>${a.nome}</td>
+                <td>${a.data}</td>
+                <td>${a.horario}</td>
+                <td>${a.servico}</td>
+                <td>
+                    <button class="button" onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}')">
+                        Editar
+                    </button>
+                </td>
+            </tr>
         `;
     });
     document.getElementById("lista").innerHTML = html;

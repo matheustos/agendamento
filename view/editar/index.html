@@ -5,28 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualizar</title>
     <link rel="stylesheet" href="../css/atualizar.css">
+    <script src="../javascript/atualizar.js"></script>
 </head>
 <body>
-    <h2>Agendamentos de Hoje</h2>
-    <div id="lista"></div>
+    <h2>AGENDAMENTOS PARA HOJE</h2>
+    <!--<div id="lista"></div>-->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Serviço</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="lista">
+                <!-- Linhas do JS entram aqui -->
+            </tbody>
+        </table>
+    </div>
+
 
     <div id="form-editar">
-        <h3>Editar Agendamento</h3>
-        <input type="hidden" id="id">
-        <label>Nome:</label>
-        <input type="text" id="nome"><br><br>
-        <label>Data:</label>
-        <input type="date" id="data"><br><br>
-        <label>Hora:</label>
-        <input type="time" id="horario"><br><br>
-        <label>Email:</label>
-        <input type="text" id="email"><br><br>
-        <button onclick="salvar()">Salvar</button>
-        <button onclick="cancelar()">Cancelar</button>
+        <form>
+            <h3>Editar Agendamento</h3>
+            <input type="hidden" id="id">
+            <label>Nome:</label>
+            <input type="text" id="nome"><br><br>
+            <label>Data:</label>
+            <input type="date" id="data"><br><br>
+            <label>Hora:</label>
+            <input type="time" id="horario"><br><br>
+            <label>Email:</label>
+            <input type="text" id="email"><br><br>
+            <button onclick="salvar()">Salvar</button>
+            <button onclick="cancelar()">Cancelar</button>
+        </form>
     </div>
 
     <div id="alert" class="alert"></div>
-    <script src="../javascript/atualizar.js"></script>
 
 </body>
 </html>

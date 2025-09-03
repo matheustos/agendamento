@@ -1,21 +1,72 @@
 @charset "UTF-8";
 
-#form-editar { 
-    display: none; 
-    margin-top: 20px; 
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.alert { 
-    padding: 10px; 
-    margin: 10px 0; 
-    border-radius: 5px; 
-    display: none; 
+h2{
+    text-align: center;
 }
 
-.alert.success { 
-    background-color: #d4edda; color: #155724; 
+/* Contêiner para rolagem horizontal */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
 }
 
-.alert.error { 
-    background-color: #f8d7da; color: #721c24;
+table {
+    width: 800px;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+th {
+  background-color: #b8b1b1;
+}
+
+.button{
+    background-color: #17b53c;
+    color: white
+}
+
+div > form{
+    float: right;
+}
+
+#form-editar {
+  display: none;
+  max-width: 800px;
+  margin: auto;
+
+}
+
+.alert {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  display: none;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Garante que as colunas sejam visíveis */
+th, td {
+  min-width: 100px; /* Evita colunas colapsadas */
+  display: table-cell !important; /* Força exibição como célula de tabela */
 }
