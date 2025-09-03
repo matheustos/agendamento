@@ -69,7 +69,7 @@ class AgendamentoValidators{
         $getStatus = Agendamento::getStatus($data, $hora);
 
         if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
-                return ["status" => false, "message" => "Essa data/hora está bloqueada! Por favor, escolha outra data e hora."];
+                return ["status" => false, "message" => "Essa data/hora está bloqueada!"];
         }
     }
 

@@ -10,18 +10,17 @@
     <header>
         <h1>Agendamento</h1>
     </header>
-    <div id="alerta" class="alerta"></div>
 
     <main>
         <form id="agenda">
             <p>
                 <label for="inome">Nome:</label>
-                <input type="text" name="nome" id="inome" required autocomplete="off">
+                <input type="text" name="nome" id="inome" required autocomplete="on">
             </p>
 
             <p>
                 <label for="iemail">Email:</label>
-                <input type="text" name="email" id="iemail" required autocomplete="off">
+                <input type="text" name="email" id="iemail" required autocomplete="on">
             </p>
 
             <p>
@@ -37,12 +36,14 @@
             <p>
                 <label for="iservico">Serviço:</label>
                 <select name="servico" id="iservico">
-                <option value="podologia">Podologia</option>
-                <option value="curativo">Curativo</option>
+                <option value="Podologia">Podologia</option>
+                <option value="Curativo">Curativo</option>
                 </select>
             </p>
 
             <button type="submit" class="button">Agendar</button>
+
+            <div id="alerta" class="alerta"></div>
         </form>
     </main>
     <script src="../javascript/agendamento.js"></script>
