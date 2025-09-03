@@ -1,13 +1,28 @@
 <?php
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
+ob_start(); // inicia buffer, previne que output acidental quebre o JSON
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+header('Content-Type: application/json');
 
 use Controller\AgendamentoController;
 
-header('Content-Type: application/json');
+/*$res = AgendamentoController::buscarHoje();
 
-$res = AgendamentoController::buscarHoje();
+echo json_encode($res);*/
 
-echo json_encode($res);
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    // Buscar todos os agendamentos
+    $res = AgendamentoController::buscarHoje();
 
+    echo json_encode($res);
+    
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Atualizar agendamento
+    $res = AgendamentoController::atualizarAgendamento($_POST);
+
+    echo json_encode($res);
+}
 ?>

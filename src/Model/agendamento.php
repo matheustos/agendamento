@@ -70,8 +70,10 @@ class Agendamento {
         }
 
         $stmt->close();
+        if($registros){
+            return $registros;
+        }
         
-        return AgendamentoValidators::formatarRetorno("Registro encontrado.", $registros);
     }
 
     public static function getStatus($data, $hora){
@@ -177,7 +179,7 @@ class Agendamento {
         $conn->close();
     }
 
-    public static function atualizar($data, $hora, $nova_data, $nova_hora){       
+    public static function atualizar($nova_data, $nova_hora, $id){       
 
         $conn = Database::conectar();
 
@@ -186,9 +188,9 @@ class Agendamento {
         }
 
         // Prepara e executa a atualização
-        $sql = "UPDATE agenda SET data = ? , horario = ? WHERE data = ? AND horario = ?";
+        $sql = "UPDATE agenda SET data = ? , horario = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nova_data, $nova_hora, $data, $hora);
+        $stmt->bind_param("sss", $nova_data, $nova_hora, $id);
 
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);

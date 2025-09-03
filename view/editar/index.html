@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar</title>
+    <link rel="stylesheet" href="../css/atualizar.css">
+</head>
+<body>
+    <h2>Agendamentos de Hoje</h2>
+    <div id="lista"></div>
+
+    <div id="form-editar">
+        <h3>Editar Agendamento</h3>
+        <input type="hidden" id="id">
+        <label>Nome:</label>
+        <input type="text" id="nome"><br><br>
+        <label>Data:</label>
+        <input type="date" id="data"><br><br>
+        <label>Hora:</label>
+        <input type="time" id="horario"><br><br>
+        <label>Email:</label>
+        <input type="text" id="email"><br><br>
+        <button onclick="salvar()">Salvar</button>
+        <button onclick="cancelar()">Cancelar</button>
+    </div>
+
+    <div id="alert" class="alert"></div>
+    <script src="../javascript/atualizar.js"></script>
+
+</body>
+</html>
