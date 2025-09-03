@@ -118,11 +118,8 @@ class AgendamentoController{
         }
     }
 
-    public static function buscarPorMes($mes){
-        if(empty($mes)){
-            return AgendamentoValidators::formatarErro("Informe o mês");
-        }
-
+    public static function buscarPorMes(){
+        $mes = date("m");
         $res = Agendamento::buscarMes($mes);
 
         if (is_array($res)) {
@@ -133,6 +130,19 @@ class AgendamentoController{
             }
         } else {
             return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+        }
+    }
+
+    public static function buscarPorSemana(){
+        $ano = date('Y');
+        $semana = date('W');
+
+        $res = Agendamento::buscarSemana($ano, $semana);
+
+        if(is_array($res)){
+            return AgendamentoValidators::formatarRetorno("Agendamentos:", $res);
+        }else{
+            return AgendamentoValidators::formatarErro("Não foi possível consultar os agendamentos da semana");
         }
     }
 

@@ -111,6 +111,31 @@ class Agendamento {
         }
     }
 
+    public static function buscarSemana($ano, $semana){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta usando YEAR() e WEEK()
+        $sql = "SELECT * FROM agenda 
+                WHERE YEAR(data) = $ano AND WEEK(data, 1) = $semana"; 
+        // O segundo parâmetro '1' indica que a semana começa na segunda-feira
+
+        $result = $conn->query($sql);
+
+        $agendamentos = [];
+
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $agendamentos[] = $row; // adiciona cada linha ao array
+            }
+        }
+
+        return $agendamentos;
+    }
+
     public static function buscarMes($mes){
         $conn = Database::conectar();
 
