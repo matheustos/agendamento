@@ -11,8 +11,7 @@
     font-weight: bold;
     display: none; 
     z-index: 1000;
-    margin-top: 15px;
-    margin-left: 15px;
+    margin: auto;
 }
 
 .alerta.show {
@@ -22,7 +21,7 @@
 .alerta.sucesso {
     background-color: #4caf50;
     border: 1px solid #4caf50;
-    width: 300px;
+    width: 310px;
     height: 50px;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
@@ -31,7 +30,7 @@
 .alerta.erro {
     background-color: darkred;
     border: 1px solid darkred;
-    width: 300px;
+    width: 310px;
     height: 50px;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
@@ -97,6 +96,7 @@ p > select{
 .button{
     width: 320px;
     margin-top: 10px;
+    margin-bottom: 10px;
     padding-bottom: 5px;
     padding-top: 5px;
     text-align: center;
