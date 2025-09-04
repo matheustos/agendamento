@@ -5,7 +5,7 @@ use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
 
-    public static function agendamento($data, $hora, $nome, $servico, $email){
+    public static function agendamento($data, $hora, $nome, $servico){
         $status = "agendado";
 
         $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
@@ -13,7 +13,7 @@ class AgendamentoController{
         $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
 
-        if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($email)){
+        if(empty($hora) || empty($nome) || empty($servico) || empty($data)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
             $validacao = AgendamentoValidators::validarBloqueio($data, $hora);
@@ -32,8 +32,13 @@ class AgendamentoController{
                     }else{
                         $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
                         if($res){
-                            EmailController::enviar($email, $data, $hora, $nome, $servico);
-                            return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                            $email = Agendamento::getEmail($nome);
+                            if($email){
+                                EmailController::enviar($email, $data, $hora, $nome, $servico);
+                                return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                            }else{
+                                return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                            }
                         }else{
                             return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
                         }
@@ -191,7 +196,6 @@ class AgendamentoController{
     public static function atualizarAgendamento($dados){
         $nova_data = $dados["data"];
         $nova_hora = $dados["horario"];
-        $email = $dados["email"];
         $id = $dados["id"];
 
         $data_hoje = date("Y-m-d");
@@ -205,32 +209,33 @@ class AgendamentoController{
                     "message" => "Não é possível agendar para uma data passada!"
                 ];
             }else{
-                $validacao = Agendamento::buscarPorDataHora($nova_data, $nova_hora);
                 
-                if($validacao){
+                $validacao = AgendamentoValidators::validacaoAgendamento($nova_data, $nova_hora, $id);
+                if($validacao["status"] === true){
                     return [
-                        "status" => "error",
-                        "message" => "Já existe agendamento para esta data/hora!"
+                        "status" => "error", // sempre "error"
+                        "message" => $validacao["message"]
                     ];
-                }
+                }else{
+                    $res = Agendamento::atualizar($nova_data, $nova_hora, $id);
 
-                $res = Agendamento::atualizar($nova_data, $nova_hora, $id);
-
-                if($res){
-                    if(empty($email)){
-                        return ["status" => "success", "data" => $res];
-                    }else{
+                    if($res){
                         //busca informações nome e servico no banco de dados para enviar o email com tais informações.
                         $buscar = Agendamento::buscarPorDataHora($nova_data, $nova_hora);
 
                         $nome = $buscar[0]['nome'];
                         $servico = $buscar[0]['servico'];
 
-                        EmailController::atualizar($email, $nova_data, $nova_hora, $nome, $servico);
-                        return ["status" => "success", "data" => $res];
+                        $email = Agendamento::getEmail($nome);
+                        if($email){
+                            EmailController::atualizar($email, $nova_data, $nova_hora, $nome, $servico);
+                            return ["status" => "success", "data" => $res];
+                        }else{
+                            return ["status" => "success", "data" => $res];
+                        }
+                    }else{
+                        return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
                     }
-                }else{
-                    return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
                 }
             }
         }

@@ -76,6 +76,37 @@ class Agendamento {
         
     }
 
+    public static function buscarAgend($data, $hora) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT * FROM agenda WHERE data = ? AND horario = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("ss", $data, $hora); // ambos são strings
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $registros = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $registros[] = $row;
+        }
+
+        $stmt->close();
+        if($registros){
+            return AgendamentoValidators::formatarRetorno("Registros:", $registros);
+        }
+        
+    }
+
     public static function getStatus($data, $hora){
         $conn = Database::conectar();
 
@@ -107,6 +138,35 @@ class Agendamento {
         } else {
             return AgendamentoValidators::formatarErro("Nenhum agendamento encontrado nesse horário.");
         }
+    }
+
+    public static function getEmail($nome){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT email FROM usuarios WHERE nome = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("s", $nome); // ambos são strings
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $email = null;
+
+        if ($row = $resultado->fetch_assoc()) {
+            $email = $row['email'];
+        }
+
+        $stmt->close();
+
+        return $email;
     }
 
     public static function buscarSemana($ano, $semana){

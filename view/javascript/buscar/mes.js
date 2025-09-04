@@ -1,5 +1,5 @@
 // buscar e listar agendamentos
-fetch("../../api/buscar/hoje")
+fetch("/agendamento/api/buscar/mes/index.php")
 .then(res => res.json())
 .then(res => {
     const agendamentos = res.data; // pega a lista real
@@ -29,9 +29,6 @@ function editar(id, nome, data, hora) {
     document.getElementById("nome").value = nome;
     document.getElementById("data").value = data;
     document.getElementById("horario").value = hora;
-
-    // aqui você preenche o email manualmente, ou deixa um campo para o usuário digitar
-    document.getElementById("email").value = ""; // pode deixar em branco ou colocar valor padrão
 }
 
 // Cancelar edição
@@ -46,7 +43,6 @@ function limparFormulario() {
     document.getElementById("nome").value = "";
     document.getElementById("data").value = "";
     document.getElementById("horario").value = "";
-    document.getElementById("email").value = "";
 }
 
 function salvar() {
@@ -56,10 +52,9 @@ function salvar() {
     formData.append("nome", document.getElementById("nome").value);
     formData.append("data", document.getElementById("data").value);
     formData.append("horario", document.getElementById("horario").value);
-    formData.append("email", document.getElementById("email").value);
 
 
-    fetch("../../api/buscar/hoje/index.php", {
+    fetch("/agendamento/api/atualizar/index.php", {
         method: "POST",
         body: formData
     })

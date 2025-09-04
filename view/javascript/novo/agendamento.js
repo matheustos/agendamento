@@ -7,7 +7,7 @@ event.preventDefault();
 const dados = new FormData(form);
 
 try {
-    const res = await fetch("../../api/novo/index.php", {
+    const res = await fetch("/agendamento/api/novo/index.php", {
     method: "POST",
     body: dados
     });

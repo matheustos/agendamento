@@ -7,22 +7,11 @@ header('Content-Type: application/json');
 
 use Controller\AgendamentoController;
 
-/*$res = AgendamentoController::buscarHoje();
-
-echo json_encode($res);*/
-
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     // Buscar todos os agendamentos
     $res = AgendamentoController::buscarHoje();
 
     echo json_encode($res);
-    
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Atualizar agendamento
-    $res = AgendamentoController::atualizarAgendamento($_POST);
-
-    echo json_encode($res);
+    exit;
 }
 ?>

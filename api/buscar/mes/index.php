@@ -9,5 +9,6 @@ header('Content-Type: application/json');
 $res = AgendamentoController::buscarPorMes();
 
 echo json_encode($res);
+exit;
 
 ?>

@@ -5,16 +5,13 @@ use Model\Agendamento;
 
 class AgendamentoValidators{
 
-    public static function validacaoAgendamento($data, $hora) {
-        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+    public static function validacaoAgendamento($data, $hora, $id_ignorar = null) {
+        $consulta = Agendamento::buscarAgend($data, $hora);
 
-        // Nenhum agendamento encontrado
-        if (empty($consulta['data'])) {
-            return ["status" => false]; // livre para agendar
-        }
+        $registros = $consulta['data'] ?? [];
 
         // Percorrer os registros encontrados na data e hora
-        foreach ($consulta['data'] as $registro) {
+        foreach ($registros as $registro) {
             if ($registro['status'] === "agendado") {
                 return ["status" => true, "message" => "Já existe agendamento para essa data e hora!"];
             }
@@ -28,7 +25,7 @@ class AgendamentoValidators{
 
         $data_Hoje = date("Y-m-d");
         if (strtotime($data) < strtotime($data_Hoje)){
-            return ["status" => true, "message" => "Não é possível efetuar agendamento para um dia anterior a hoje!"];
+            return ["status" => true, "message" => "Não é possível agendar para uma data passada!"];
         }else{
             return ["status" => false]; // livre para agendar
         }
@@ -69,7 +66,7 @@ class AgendamentoValidators{
         $getStatus = Agendamento::getStatus($data, $hora);
 
         if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
-                return ["status" => false, "message" => "Essa data/hora está bloqueada!"];
+                return ["status" => true, "message" => "Essa data/hora está bloqueada!"];
         }
     }
 
