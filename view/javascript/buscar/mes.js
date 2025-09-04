@@ -60,9 +60,10 @@ function salvar() {
     })
     .then(res => res.json())
     .then(res => {
+        console.log(res);
         if (res.status === "success") {
         alert("Agendamento atualizado!");
-        location.reload();
+        //location.reload();
         } else {
         alert("Erro: " + res.message);
         }

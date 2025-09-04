@@ -194,41 +194,47 @@ class AgendamentoController{
     }
 
     public static function atualizarAgendamento($dados){
-        $nova_data = $dados["data"];
-        $nova_hora = $dados["horario"];
         $id = $dados["id"];
+        $data = $dados["data"];
+        $hora = $dados["horario"];
+        $nome = $dados["nome"];
 
         $data_hoje = date("Y-m-d");
 
-        if(empty($nova_hora) || empty($nova_data) || empty($id)){
+        /*$dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
+
+        /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
+
+
+        if(empty($hora) || empty($data) || empty($id) || empty($nome)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
-            if($nova_data < $data_hoje){
+            if($data < $data_hoje){
                 return [
                     "status" => "error",
                     "message" => "Não é possível agendar para uma data passada!"
                 ];
             }else{
                 
-                $validacao = AgendamentoValidators::validacaoAgendamento($nova_data, $nova_hora, $id);
+                $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora, $id);
                 if($validacao["status"] === true){
                     return [
                         "status" => "error", // sempre "error"
                         "message" => $validacao["message"]
                     ];
                 }else{
-                    $res = Agendamento::atualizar($nova_data, $nova_hora, $id);
+                    $res = Agendamento::atualizar($data, $hora, $id, $nome);
 
                     if($res){
                         //busca informações nome e servico no banco de dados para enviar o email com tais informações.
-                        $buscar = Agendamento::buscarPorDataHora($nova_data, $nova_hora);
+                        $buscar = Agendamento::buscarPorDataHora($data, $hora);
 
                         $nome = $buscar[0]['nome'];
                         $servico = $buscar[0]['servico'];
 
                         $email = Agendamento::getEmail($nome);
                         if($email){
-                            EmailController::atualizar($email, $nova_data, $nova_hora, $nome, $servico);
+                            EmailController::atualizar($email, $data, $hora, $nome, $servico);
                             return ["status" => "success", "data" => $res];
                         }else{
                             return ["status" => "success", "data" => $res];

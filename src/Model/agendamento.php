@@ -239,7 +239,7 @@ class Agendamento {
         $conn->close();
     }
 
-    public static function atualizar($nova_data, $nova_hora, $id){       
+    public static function atualizar($nova_data, $nova_hora, $id, $nome){       
 
         $conn = Database::conectar();
 
@@ -248,9 +248,9 @@ class Agendamento {
         }
 
         // Prepara e executa a atualização
-        $sql = "UPDATE agenda SET data = ? , horario = ? WHERE id = ?";
+        $sql = "UPDATE agenda SET nome = ?, data = ? , horario = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $nova_data, $nova_hora, $id);
+        $stmt->bind_param("ssss", $nome, $nova_data, $nova_hora, $id);
 
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);
