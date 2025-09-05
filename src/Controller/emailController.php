@@ -57,13 +57,16 @@ class EmailController{
         }
     }
 
-    public static function cancelamento($email, $nome)
+    public static function cancelamento($email, $nome, $data, $hora)
     {
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento foi cancelado com sucesso!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
-                <p>Seu agendamento foi cancelado com sucesso!</p>";
+                <p>Seu agendamento foi cancelado com sucesso!</p>
+                <p>Data: $data</p>
+                <p>Hora: $hora</p>
+                <p>Status: Cancelado</p>";
 
         try {
             self::configurar($mail);

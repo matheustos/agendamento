@@ -16,6 +16,10 @@ fetch("/agendamento/api/buscar/semana/index.php")
                     <button class="button" onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}')">
                         Editar
                     </button>
+                    
+                    <button type="button" class="buttoncan" onclick="btnCancelar('${a.data}', '${a.horario}')">
+                        Cancelar
+                    </button>
                 </td>
             </tr>
         `;
@@ -65,6 +69,29 @@ function salvar() {
         location.reload();
         } else {
         alert("Erro: " + res.message);
+        }
+    });
+}
+
+// Cancelar agendamento
+function btnCancelar(data, hora) {
+    if (!confirm("Deseja realmente cancelar este agendamento?")) return;
+
+    let formData = new FormData();
+    formData.append("data", data);
+    formData.append("horario", hora);
+
+    fetch("/agendamento/api/cancelar/index.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.status === "success") {
+            alert("Agendamento cancelado!");
+            location.reload();
+        } else {
+            alert("Erro: " + res.message);
         }
     });
 }

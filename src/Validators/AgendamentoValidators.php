@@ -33,7 +33,7 @@ class AgendamentoValidators{
 
 
     public static function validacaoCancelamento($data, $hora){
-        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+        $consulta = Agendamento::getPorDataHora($data, $hora);
 
         // Nenhum agendamento encontrado
         if (empty($consulta['data'])) {

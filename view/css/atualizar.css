@@ -34,7 +34,16 @@ th {
 
 .button{
     background-color: #17b53c;
-    color: white
+    color: white;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.buttoncan{
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    margin-left: 5px;
 }
 
 div > form{

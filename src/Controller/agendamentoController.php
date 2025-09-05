@@ -165,27 +165,31 @@ class AgendamentoController{
     public static function cancelarAgendamento($dados){
         $data = $dados["data"];
         $hora = $dados["horario"];
-        $email = $dados["email"];
 
-        $dataIso = AgendamentoValidators::validacaoData($data);
+        /*$dataIso = AgendamentoValidators::validacaoData($data);
 
-        $horaIso = AgendamentoValidators::validacaoHora($hora);
-        if(empty($dataIso) || empty($horaIso)){
+        $horaIso = AgendamentoValidators::validacaoHora($hora);*/
+        if(empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
-            $validacao = AgendamentoValidators::validacaoCancelamento($dataIso, $horaIso);
+            $validacao = AgendamentoValidators::validacaoCancelamento($data, $hora);
 
             if($validacao["status"] === true){
                 return $validacao;
             }else{
-                $res = Agendamento::Cancelar($dataIso, $horaIso);
+                $res = Agendamento::Cancelar($data, $hora);
 
                 if($res){
                     //busca informações nome e servico no banco de dados para enviar o email com tais informações.
-                    $buscar = Agendamento::buscarPorDataHora($dataIso, $horaIso);
+                    $buscar = Agendamento::getPorDataHora($data, $hora);
                     $nome = $buscar['data'][0]['nome'];
-                    EmailController::cancelamento($email, $nome);
-                    return $res;
+                    $email = Agendamento::getEmail($nome);
+                    if($email){
+                        EmailController::cancelamento($email, $nome, $data, $hora);
+                        return $res;
+                    }else{
+                        return $res;
+                    }
                 }else{
                     return AgendamentoValidators::formatarErro("Erro ao cancelar agendamento!");
                 }

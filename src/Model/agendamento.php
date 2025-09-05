@@ -23,14 +23,16 @@ class Agendamento {
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
-        $sql = "SELECT * FROM agenda WHERE DATE(data) = ?";
+        $status = "agendado";
+
+        $sql = "SELECT * FROM agenda WHERE DATE(data) = ? AND status = ?";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
             return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.");
         }
 
-        $stmt->bind_param("s", $dia);
+        $stmt->bind_param("ss", $dia, $status);
         $stmt->execute();
 
         $resultado = $stmt->get_result();
@@ -72,6 +74,37 @@ class Agendamento {
         $stmt->close();
         if($registros){
             return $registros;
+        }
+        
+    }
+
+    public static function getPorDataHora($data, $hora) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT * FROM agenda WHERE data = ? AND horario = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("ss", $data, $hora); // ambos são strings
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $registros = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $registros[] = $row;
+        }
+
+        $stmt->close();
+        if($registros){
+            return AgendamentoValidators::formatarRetorno("Registros:", $registros);
         }
         
     }
@@ -176,9 +209,11 @@ class Agendamento {
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
+        $status = "agendado";
+
         // Consulta usando YEAR() e WEEK()
         $sql = "SELECT * FROM agenda 
-                WHERE YEAR(data) = $ano AND WEEK(data, 1) = $semana"; 
+                WHERE status = '{$status}'AND YEAR(data) = $ano AND WEEK(data, 1) = $semana"; 
         // O segundo parâmetro '1' indica que a semana começa na segunda-feira
 
         $result = $conn->query($sql);
@@ -201,9 +236,13 @@ class Agendamento {
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
-        $sql = "SELECT * FROM agenda WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) ORDER BY data, horario";
+        $status = "agendado";
+
+        $sql = "SELECT * FROM agenda 
+        WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) AND status = ? 
+        ORDER BY data, horario";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $mes);
+        $stmt->bind_param("is", $mes, $status);
         $stmt->execute();
 
         // Pega os resultados
