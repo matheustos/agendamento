@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Barra de alerta no topo */
-.alerta {
+/*.alerta {
     position: relative;
     width: 350px;
     padding: 5px;
@@ -34,7 +34,7 @@
     height: 50px;
     font-size: 20px;
     font-family: 'Courier New', Courier, monospace;
-}
+}*/
 
 /*estilo da página*/
 

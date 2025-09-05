@@ -1,36 +1,22 @@
 const form = document.getElementById("agenda");
-const alerta = document.getElementById("alerta");
 
 form.addEventListener("submit", async function(event) {
-event.preventDefault();
+  event.preventDefault();
 
-const dados = new FormData(form);
+  const dados = new FormData(form);
 
-try {
+  try {
     const res = await fetch("/agendamento/api/novo/index.php", {
-    method: "POST",
-    body: dados
+      method: "POST",
+      body: dados
     });
 
     const json = await res.json();
 
-    // Define a classe do alerta (sucesso ou erro)
-    alerta.className = "alerta " + (json.status ? "sucesso" : "erro");
-    alerta.textContent = json.message;
+    // Alerta nativo do navegador
+    alert(json.message);
 
-    // Mostra a barra
-    alerta.classList.add("show");
-
-    // Esconde automaticamente depois de 5 segundos
-    setTimeout(() => {
-    alerta.classList.remove("show");
-    }, 5000);
-
-} catch (err) {
-    alerta.className = "alerta erro show";
-    alerta.textContent = "Erro: " + err.message;
-    setTimeout(() => {
-    alerta.classList.remove("show");
-    }, 5000);
-}
+  } catch (err) {
+    alert("Erro: " + err.message);
+  }
 });
