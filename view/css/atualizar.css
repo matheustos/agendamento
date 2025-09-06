@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Parisienne&family=Passion+One:wght@400;700;900&family=Rubik+Burned&family=Sriracha&display=swap');
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Oswald" ,sans-serif;
 }
 
 h2{
@@ -21,15 +23,27 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
-    /*border: 1px solid black;*/
-    padding-top: 5px;
-    padding-bottom: 5px;
+td {
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
+    font-size: 18px;
 }
 
 th {
-  background-color: #b8b1b1;
+    background-color: #7cff1eb3;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.border{
+  border-radius: 10px 0px 0px 10px;
+}
+
+.border2{
+  border-radius: 0px 10px 10px 0px;
 }
 
 .button{
@@ -39,6 +53,7 @@ th {
     margin-right: 5px;
     border-radius: 5px;
     border: 1px solid darkgreen;
+    font-size: 16px;
 }
 
 .buttoncan{
@@ -48,6 +63,7 @@ th {
     margin-left: 5px;
     border-radius: 5px;
     border: 1px solid darkred;
+    font-size: 16px;
 }
 
 div > form{
