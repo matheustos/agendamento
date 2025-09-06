@@ -57,20 +57,26 @@ class UsuariosController{
     public static function updateSenha($dados) {
         $email = $dados["email"];
         $senha = $dados["senha"];
+        $confirma = $dados["repeat"];
         // Verificar se o email existe
         $emailExistente = usuariosValidators::buscarEmail($email);
         if ($emailExistente["status"] === false) {
             // Se o email não existir, retornar erro
             return ["status" => false, "message" => "Usuário não encontrado."];
-        }
-        // Atualizar senha do usuário
-        $hash = password_hash($senha, PASSWORD_DEFAULT);
-        $res = usuarios::updateSenha($hash, $email);
-        // Verificar se a atualização foi bem-sucedida
-        if(!$res){
-            return ["status" => false, "message" => "Erro ao atualizar senha."];
         }else{
-            return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+            if($senha === $confirma){
+                // Atualizar senha do usuário
+                $hash = password_hash($senha, PASSWORD_DEFAULT);
+                $res = usuarios::updateSenha($hash, $email);
+                // Verificar se a atualização foi bem-sucedida
+                if(!$res){
+                    return ["status" => false, "message" => "Erro ao atualizar senha."];
+                }else{
+                    return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                }
+            }else{
+                return AgendamentoValidators::formatarErro("As senhas não coincidem!");
+            }
         }
     }
 
