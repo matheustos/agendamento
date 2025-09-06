@@ -52,7 +52,7 @@ class AgendamentoValidators{
     }
 
     public static function verificarBloqueio($data, $hora){
-        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+        $consulta = Agendamento::getPorDataHora($data, $hora);
 
         // Nenhum agendamento encontrado
         if (empty($consulta['data'])) {
@@ -71,7 +71,7 @@ class AgendamentoValidators{
     }
 
     public static function validacaoAtualizar($data, $hora){
-        $consulta = Agendamento::buscarPorDataHora($data, $hora);
+        $consulta = Agendamento::getPorDataHora($data, $hora);
 
         // Nenhum agendamento encontrado
         if (empty($consulta['data'])) {

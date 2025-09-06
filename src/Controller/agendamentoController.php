@@ -77,32 +77,52 @@ class AgendamentoController{
         $status = "bloqueado";
         $nome = null;
         $data = $dados["data"];
-        $hora = $dados["hora"];
+        $hora = $dados["horario"];
 
         if(empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe data e hora!");
         }else{
             
-            $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
+            /*$dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
 
-            $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
+            /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
 
-            $getStatus = Agendamento::getStatus($dataIso, $horaIso);
-            //var_dump($getStatus);
-            if(isset($getStatus['data']) && $getStatus["data"] === "bloqueado"){
-                return AgendamentoValidators::formatarErro("Agenda já se encontra bloqueada");
-            }else{
-                $validacao = AgendamentoValidators::verificarBloqueio($dataIso, $horaIso);
-                if($validacao["status"] === true){
-                    $res = Agendamento::agendar($dataIso, $horaIso, $nome, $status, $servico);
-
-                    if($res){
-                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
-                    }else{
-                        return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
-                    }
+            $getStatus = Agendamento::getStatus($data, $hora);
+            if(isset($getStatus['data'])){
+                $retorno = $getStatus["data"];
+                if($retorno === "bloqueado"){
+                    return AgendamentoValidators::formatarErro("Agenda já se encontra bloqueada");
                 }else{
-                    return $validacao;
+                    if($retorno === "cancelado"){
+                        $res = Agendamento::atualizarStatus($status, $data, $hora, $nome, $servico);
+
+                        if($res){
+                            return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                        }else{
+                            return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                        }
+                    }else{
+                        $validacao = AgendamentoValidators::verificarBloqueio($data, $hora);
+                        if($validacao["status"] === true){
+                            $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
+
+                            if($res){
+                                return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                            }else{
+                                return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                            }
+                        }else{
+                            return $validacao;
+                        }
+                    }    
+                }
+            }else{
+                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico);
+
+                if($res){
+                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                }else{
+                    return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
                 }
             }
         }

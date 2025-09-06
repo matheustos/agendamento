@@ -22,7 +22,7 @@ table {
 }
 
 th, td {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     padding-top: 5px;
     padding-bottom: 5px;
     text-align: center;
@@ -37,6 +37,8 @@ th {
     color: white;
     font-weight: bold;
     margin-right: 5px;
+    border-radius: 5px;
+    border: 1px solid darkgreen;
 }
 
 .buttoncan{
@@ -44,6 +46,8 @@ th {
     color: white;
     font-weight: bold;
     margin-left: 5px;
+    border-radius: 5px;
+    border: 1px solid darkred;
 }
 
 div > form{
