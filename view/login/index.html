@@ -4,26 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../css/agendamento.css">
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
     <form id="login">
-        <h2>LOGIN</h2>
-        <p>
-            <label for="iemail">Email:</label>
+        <h2>Entrar</h2>
+        <p>Faça login em sua conta para continuar</p>
+        <div>
+            
+            <label for="iemail">Email</label><br>
             <input type="email" name="email" id="iemail">
-        </p>
+            
+        </div>
 
-        <p>
-            <label for="isenha">Senha:</label>
+        <div>
+            
+            <label for="isenha">Senha</label><br>
             <input type="password" name="senha" id="isenha">
-        </p>
+            
+        </div>
         
-        <a class="p" href="../usuarios/cadastrar/index.html" target="_blank">Cadastre-se</a>
-        
+        <button type="submit" class="button">Entrar</button><br>
 
-        <a class="senha" href="../usuarios/reset-senha/index.html" target="_blank">Esqueci a senha</a>
-        <button type="submit" class="button">Entrar</button>
+        <a class="reset" href="../usuarios/reset-senha/index.html" target="_blank">Esqueceu sua senha?</a><br>
+
+        <div class="linha"><span>ou</span></div>
+
+        <button type="submit" class="cadastro">Criar nova conta</button>
+        
     </form>
     
 </body>

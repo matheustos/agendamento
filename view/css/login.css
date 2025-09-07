@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+
+body{
+    min-height: 100vh;
+    background: hsl(210, 40%, 98%);
+    background-image: radial-gradient(ellipse at top, hsl(197, 71%, 52%, 0.06), transparent 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h2{
+    text-align: center;
+    color: lightseagreen;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+p{
+    font-size: 14px;
+    text-align: center;
+    margin-top: 0px;
+    color: gray;
+}
+
+form#login{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.255);
+}
+
+label{
+    color: rgba(0, 0, 0, 0.825);
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+input{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 8px;
+    width: 300px;
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.404);
+}
+
+button{
+    width: 320px;
+    padding: 15px;
+    color: white;
+    font-size: 17px;
+    background-color: lightseagreen;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 20px;
+}
+
+button:hover{
+    background-color: rgb(34, 138, 131);
+}
+
+.reset{
+    padding-top: 10px;
+    margin-left: 100px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    color: lightseagreen;
+}
+
+.reset:hover{
+    text-decoration: underline;
+}
+
+
+.linha {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #555;
+    font-family: Arial, sans-serif;
+    margin: 20px 0;
+}
+
+.linha::before,
+.linha::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc; /* estilo da linha */
+}
+
+.linha:not(:empty)::before {
+    margin-right: 10px;
+}
+
+.linha:not(:empty)::after {
+    margin-left: 10px;
+}
+
+.cadastro{
+    width: 320px;
+    padding: 15px;
+    color: black;
+    font-size: 17px;
+    background-color: rgba(202, 195, 195, 0.714);
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    margin-bottom: 30px;
+}
+
+.cadastro:hover{
+    background-color: #55555579;
+}

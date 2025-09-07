@@ -15,6 +15,7 @@ form.addEventListener("submit", async function(event) {
 
     // Alerta nativo do navegador
     alert(json.message);
+    location.reload();
 
   } catch (err) {
     alert("Erro: " + err.message);

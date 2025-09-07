@@ -8,7 +8,7 @@
 }
 
 body{
-    background-color: #32d3f02c;;
+    background-color: #32d3f02c;
     height: 100vh;              /* ocupa 100% da altura da janela */
     display: flex;              /* ativa flexbox */
     justify-content: center;    /* centraliza na horizontal */
@@ -24,7 +24,7 @@ h2{
 }
 
 form {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Oswald" ,Arial, Helvetica, sans-serif;
     width: 300px;       /* largura do formulário */
     padding: 20px;
     background: #07ab8dbc;
@@ -35,6 +35,7 @@ form {
 form > p{
     font-size: 20px;
     min-width: 320px;
+    color: rgb(43, 39, 39);
 }
 
 p > input{
@@ -74,19 +75,45 @@ p > select{
 }
 
 .p{
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     text-decoration: none;
 }
 
+.p:hover{
+    text-decoration: underline;
+}
+
 .senha{
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     margin-left: 110px;
     text-decoration: none;
 }
 
+.senha:hover{
+    text-decoration: underline;
+}
+
 .return{
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     text-align: center;
     text-decoration: none;
     padding-right: 10px;
+}
+
+.return:hover{
+    text-decoration: underline;
+}
+
+.login{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: left;
+}
+
+.login:hover{
+    text-decoration: underline;
 }
