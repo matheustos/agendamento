@@ -34,7 +34,7 @@ form#login{
 }
 
 label{
-    color: rgba(0, 0, 0, 0.825);
+    color: rgba(0, 0, 0, 0.653);
     padding-bottom: 5px;
     font-weight: bold;
 }
@@ -102,7 +102,7 @@ button:hover{
 }
 
 .cadastro{
-    width: 320px;
+    width: 290px;
     padding: 15px;
     color: black;
     font-size: 17px;
@@ -110,6 +110,8 @@ button:hover{
     border: none;
     border-radius: 5px 5px 5px 5px;
     margin-bottom: 30px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .cadastro:hover{
