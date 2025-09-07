@@ -4,26 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resetar senha</title>
-    <link rel="stylesheet" href="../../css/agendamento.css">
+    <link rel="stylesheet" href="../../css/reset-senha.css">
 </head>
 <body>
     <form id="resetar" method="post">
-        <h2>ALTERAR SENHA</h2>
+        <h3>REDEFINIR SENHA</h3>
 
-        <p>
-            <label for="iemail">Email:</label>
+        <p>Digite seu email e enviaremos uma nova senha.</p>
+
+        <div>
+            <label for="iemail">Email</label><br>
             <input type="email" name="email" id="iemail">
-        </p>
-        <p>
-            <label for="isenha">Senha:</label>
-            <input type="password" name="senha" id="senha">
-        </p>
-        <p>
-            <label for="irepeat">Confirmar senha:</label>
-            <input type="password" name="repeat" id="irepeat">
-        </p>
-        <button type="submit" class="button">Confirmar</button>
-        <p class="return"><a href="../../login/index.html" target="_blank">Login</a></p>
+        </div>
+        
+        <button type="submit" class="button">Enviar</button><br>
+        <div class="return">
+            <a href="../../login/index.html" target="_blank">Voltar ao login</a>
+        </div>
     </form>
     <script src="resetar.js"></script>
 </body>

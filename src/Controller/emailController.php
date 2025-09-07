@@ -124,4 +124,34 @@ class EmailController{
             ];
         }
     }
+
+    public static function resetSenha($email, $senha, $nome)
+    {
+        $mail = new PHPMailer(true);
+        $mensagemTexto = "Olá".$nome."!\nSua senha foi alterada com sucesso!\nNova senha: ".$senha;
+        $mensagemHtml = "<h2>Olá, $nome!</h2>
+                <p>Sua senha foi alterada com sucesso!</p>
+                <p><strong>Nova senha:</strong> $senha</p>";
+
+        try {
+            self::configurar($mail);
+
+            $mail->addAddress($email);
+            $mail->Subject = "Reset de Senha";
+            $mail->CharSet = 'UTF-8';
+            $mail->Body    = $mensagemHtml;
+            $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
+
+            $mail->send();
+            return [
+                "status" => "success",
+                "message" => "E-mail enviado com sucesso!"
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "error",
+                "message" => $mail->ErrorInfo
+            ];
+        }
+    }
 }

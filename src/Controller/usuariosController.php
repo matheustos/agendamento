@@ -54,28 +54,65 @@ class UsuariosController{
 
     }
 
-    public static function updateSenha($dados) {
-        $email = $dados["email"];
-        $senha = $dados["senha"];
-        $confirma = $dados["repeat"];
+ 
+    public static function gerarSenha($tamanho = 8){
+
+        $maiusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $minusculas = 'abcdefghijklmnopqrstuvwxyz';
+        $numeros    = '0123456789';
+        $simbolos   = '!@#$%^&*()-_=+<>?';
+
+        // Garante ao menos 1 de cada
+        $senha  = '';
+        $senha .= $maiusculas[random_int(0, strlen($maiusculas) - 1)];
+        $senha .= $minusculas[random_int(0, strlen($minusculas) - 1)];
+        $senha .= $numeros[random_int(0, strlen($numeros) - 1)];
+        $senha .= $simbolos[random_int(0, strlen($simbolos) - 1)];
+
+        // Junta todos os caracteres
+        $todos = $maiusculas . $minusculas . $numeros . $simbolos;
+
+        // Completa até o tamanho desejado
+        for ($i = strlen($senha); $i < $tamanho; $i++) {
+            $senha .= $todos[random_int(0, strlen($todos) - 1)];
+        }
+
+        // Embaralha a senha para não ficar previsível
+        $senha = str_shuffle($senha);
+
+        return $senha;
+    }
+
+
+
+    public static function updateSenha($email) {
+        if(empty($email)){
+            return ["status" => false, "message" => "Informe o email!"];
+        }
         // Verificar se o email existe
         $emailExistente = usuariosValidators::buscarEmail($email);
         if ($emailExistente["status"] === false) {
             // Se o email não existir, retornar erro
             return ["status" => false, "message" => "Usuário não encontrado."];
         }else{
-            if($senha === $confirma){
-                // Atualizar senha do usuário
-                $hash = password_hash($senha, PASSWORD_DEFAULT);
-                $res = usuarios::updateSenha($hash, $email);
-                // Verificar se a atualização foi bem-sucedida
-                if(!$res){
-                    return ["status" => false, "message" => "Erro ao atualizar senha."];
+            $nova_senha = UsuariosController::gerarSenha(8);
+            // Atualizar senha do usuário
+            $hash = password_hash($nova_senha, PASSWORD_DEFAULT);
+            $res = usuarios::updateSenha($hash, $email);
+            // Verificar se a atualização foi bem-sucedida
+            if(!$res){
+                return ["status" => false, "message" => "Erro ao atualizar senha."];
+            }else{
+                $user = usuarios::buscarPorEmail($email);
+                $nome = $user["nome"];
+                if($nome){
+                    EmailController::resetSenha($email, $nova_senha, $nome);
+                    return ["status" => true, "message" => "Senha atualizada com sucesso!"];
                 }else{
+                    $nome = "";
+                    EmailController::resetSenha($email, $nova_senha, $nome);
                     return ["status" => true, "message" => "Senha atualizada com sucesso!"];
                 }
-            }else{
-                return AgendamentoValidators::formatarErro("As senhas não coincidem!");
             }
         }
     }
