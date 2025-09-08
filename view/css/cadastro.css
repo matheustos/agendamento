@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 body {
-    margin: 20px;
+    margin: 5px;
     height: 100vh; /* altura total da tela */
     display: flex;
     justify-content: center; /* centraliza horizontalmente o container */
@@ -54,11 +54,21 @@ span{
 h2{
     text-align: center;
     color: lightseagreen;
+    margin-bottom: 2px;
 }
 
 p{
     text-align: center;
     color: rgba(128, 128, 128, 0.797);
+}
+
+p > a{
+    text-decoration: none;
+    color: lightseagreen;
+}
+
+p>a:hover{
+    text-decoration: underline;
 }
 
 .p{
@@ -88,7 +98,7 @@ button{
     background-color: lightseagreen;
     border: none;
     border-radius: 5px 5px 5px 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     margin-top: 10px;
 }
 

@@ -8,29 +8,30 @@
 </head>
 <body>
     <form id="agenda">
-        <h2>AGENDAMENTO</h2>
-        <p>
-            <label for="inome">Nome:</label>
-            <input type="text" name="nome" id="inome" required autocomplete="on">
-        </p>
+        <h2>Novo agendamento</h2>
+ 
+        <div>
+            <label for="inome">Nome:</label><br>
+            <input  class="agenda" type="text" name="nome" id="inome" required autocomplete="on">
+        </div>
 
-        <p>
-            <label for="idata">Data:</label>
-            <input type="date" name="data" id="idata" required>
-        </p>
+        <div>
+            <label for="idata">Data:</label><br>
+            <input class="agenda" type="date" name="data" id="idata" required>
+        </div>
 
-        <p>
-            <label for="ihorario">Horário:</label>
-            <input type="time" name="horario" id="ihorario" required>
-        </p>
+        <div>
+            <label for="ihorario">Horário:</label><br>
+            <input class="agenda" type="time" name="horario" id="ihorario" required>
+        </div>
 
-        <p>
-            <label for="iservico">Serviço:</label>
+        <div>
+            <label for="iservico">Serviço:</label><br>
             <select name="servico" id="iservico">
             <option value="Podologia">Podologia</option>
             <option value="Curativo">Curativo</option>
             </select>
-        </p>
+        </div>
 
         <button type="submit" class="button">Agendar</button>
     </form>
