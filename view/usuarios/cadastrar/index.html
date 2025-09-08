@@ -4,33 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar usuário</title>
-    <link rel="stylesheet" href="../../css/agendamento.css">
+    <link rel="stylesheet" href="../../css/cadastro.css">
 </head>
 <body>
+    <div class="box">
+        <p class="title">Bem-vindo à nossa <span>plataforma</span><p>
+        <p class="p">Crie sua conta e tenha acesso a todas as funcionalidades.</p>
+    </div>
     <form id="cadastro" method="post">
-        <h2>CADASTRE-SE</h2>
+        <h2>Criar Conta</h2>
+        <p>Preencha os dados para criar sua conta</p>
 
-        <p>
-            <label for="inome">Nome:</label>
+        
+        <div>
+            <label for="inome">Nome Completo</label><br>
             <input type="text" name="nome" id="inome">
-        </p>
+        </div>
+        
 
-        <p>
-            <label for="iemail">Email:</label>
+        
+        <div>
+            <label for="iemail">Email</label><br>
             <input type="email" name="email" id="iemail">
-        </p>
+        </div>
+    
 
-        <p>
-            <label for="isenha">Senha:</label>
+        <div>
+            <label for="isenha">Senha</label><br>
             <input type="password" name="senha" id="senha">
-        </p>
+        </div>
 
-        <p>
-            <label for="itel">Telefone:</label>
+        
+        <div>
+            <label for="itel">Telefone</label><br>
             <input type="text" name="telefone" id="itel">
-        </p>
+        </div>
+
         <button type="submit" class="button">Cadastrar</button>
-        <a class="login" href="../../login/index.html" target="_blank">Fazer Login</a>
+        <!--<a class="login" href="../../login/index.html" target="_blank">Fazer Login</a>-->
     </form>
     <script src="novo.js"></script>
     
