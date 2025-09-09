@@ -12,8 +12,9 @@ fetch("/agendamento/api/buscar/mes/index.php")
                 <td>${a.data}</td>
                 <td>${a.horario}</td>
                 <td>${a.servico}</td>
+                <td>${a.obs}</td>
                 <td>
-                    <button class="button" onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}')">
+                    <button class="button" onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}', '${a.obs}')">
                         Editar
                     </button>
 
@@ -27,12 +28,13 @@ fetch("/agendamento/api/buscar/mes/index.php")
     document.getElementById("lista").innerHTML = html;
 });
 
-function editar(id, nome, data, hora) {
+function editar(id, nome, data, hora, obs) {
     document.getElementById("form-editar").style.display = "block";
     document.getElementById("id").value = id;
     document.getElementById("nome").value = nome;
     document.getElementById("data").value = data;
     document.getElementById("horario").value = hora;
+    document.getElementById("horario").value = obs;
 }
 
 // Cancelar edição
@@ -47,6 +49,7 @@ function limparFormulario() {
     document.getElementById("nome").value = "";
     document.getElementById("data").value = "";
     document.getElementById("horario").value = "";
+    document.getElementById("obs").value = "";
 }
 
 function salvar() {

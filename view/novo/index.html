@@ -7,34 +7,66 @@
     <link rel="stylesheet" href="../css/agendamento.css">
 </head>
 <body>
-    <form id="agenda">
-        <h2>Novo agendamento</h2>
- 
-        <div>
-            <label for="inome">Nome:</label><br>
-            <input  class="agenda" type="text" name="nome" id="inome" required autocomplete="on">
+<form id="agenda" method="post">
+    <div class="form-container">
+      <h1>Novo Agendamento</h1>
+      <p>Preencha os dados abaixo para agendar seu atendimento</p>
+    
+      <h2>📅 Informações do Agendamento</h2>
+    
+      <div class="form-group">
+        <div class="field">
+          <label for="nome">Nome Completo *</label>
+          <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo">
         </div>
-
-        <div>
-            <label for="idata">Data:</label><br>
-            <input class="agenda" type="date" name="data" id="idata" required>
+        <div class="field">
+          <label for="telefone">Telefone *</label>
+          <input type="text" id="telefone" name="telefone" placeholder="(11) 99999-9999">
         </div>
-
-        <div>
-            <label for="ihorario">Horário:</label><br>
-            <input class="agenda" type="time" name="horario" id="ihorario" required>
+      </div>
+    
+      <div class="field">
+        <label for="email">E-mail *</label>
+        <input type="email" id="email" name= "email" placeholder="seu@email.com">
+      </div>
+    
+      <div class="field">
+        <label for="servico">Tipo de Serviço *</label>
+        <select id="servico" name="servico">
+          <option>Podologia</option>
+          <option>Curativo</option>
+        </select>
+      </div>
+    
+      <div class="form-group">
+        <div class="field">
+          <label for="data">Data *</label>
+          <input type="date" id="data" name="data">
         </div>
-
-        <div>
-            <label for="iservico">Serviço:</label><br>
-            <select name="servico" id="iservico">
-            <option value="Podologia">Podologia</option>
-            <option value="Curativo">Curativo</option>
-            </select>
+        <div class="field">
+          <label for="hora">Horário *</label>
+          <select id="hora" name="horario">
+            <option>08:00</option>
+            <option>09:30</option>
+            <option>11:00</option>
+            <option>14:00</option>
+            <option>15:30</option>
+            <option>17:00</option>
+          </select>
         </div>
-
-        <button type="submit" class="button">Agendar</button>
-    </form>
-    <script src="agendamento.js"></script>
+      </div>
+    
+      <div class="field">
+        <label for="obs">Observações (opcional)</label>
+        <textarea id="obs" name="obs" rows="4" placeholder="Adicione qualquer informação adicional relevante para o atendimento..." class="texto"></textarea>
+      </div>
+    
+        <div class="buttons">
+            <button type="submit" class="btn-agendar">Agendar</button>
+            <button type="reset" class="btn-limpar">Limpar</button>
+        </div>
+    </div>
+</form>
+<script src="agendamento.js"></script>
 </body>
 </html>

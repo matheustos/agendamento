@@ -1,58 +1,47 @@
 @charset "UTF-8";
 
-body{
-    min-height: 95vh;
+/*body{
+    height: 100vh;
     background: hsl(210, 40%, 98%);
     background-image: radial-gradient(ellipse at top, hsl(197, 71%, 52%, 0.06), transparent 60%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 1rem;
+    margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-h2{
+h1, p{
     text-align: center;
-    color: lightseagreen;
-    font-size: 30px;
-    margin-bottom: 5px;
 }
 
 form{
-    background-color: white;
+    background: white;
     padding: 20px;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 10px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.255);
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-h2{
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-label{
-    color: rgba(0, 0, 0, 0.653);
-    padding-bottom: 5px;
-    font-weight: bold;
-}
 
 input{
+    width: 370px;
+    padding: 5px;
+    margin-bottom: 10px;
     margin-top: 5px;
-    margin-bottom: 15px;
-    padding: 8px;
-    width: 360px;
     border-radius: 5px 5px 5px 5px;
-    border: 1px solid rgba(0, 0, 0, 0.404);
-}
-
-.agenda{
-    font-size: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.518);
 }
 
 select{
     width: 380px;
-    padding: 8px;
-    margin-bottom: 15px;
-    font-size: 16px;
+    padding: 5px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.518);
 }
 
 button{
@@ -63,9 +52,157 @@ button{
     background-color: lightseagreen;
     border: none;
     border-radius: 5px 5px 5px 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 button:hover{
     background-color: rgb(34, 138, 131);
+}*/
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f9fbff;
+  display: flex;
+  justify-content: center;
+  padding: 40px 10px;
+}
+
+form{
+    width: 700px;
+}
+
+/* Container do formulário */
+.form-container {
+  width: 100%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Título */
+.form-container h1 {
+  text-align: center;
+  font-size: 28px;
+  color: lightseagreen;
+  margin-bottom: 8px;
+}
+
+.form-container p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Subtítulo */
+.form-container h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Grupos de campos lado a lado */
+.form-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.form-group .field {
+  flex: 1;
+}
+
+/* Campo individual */
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #3b57d5;
+  box-shadow: 0 0 4px rgba(59, 87, 213, 0.3);
+}
+
+.texto{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;            /* espaço entre os botões */
+  margin-top: 20px;
+}
+
+/* Botão */
+.buttons button {
+  flex: 1;              /* deixa os botões com o mesmo tamanho */
+  padding: 15px;
+  /*border: none;*/
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-agendar{
+    background-color: lightseagreen;
+    border: none;
+    color: white;
+}
+
+.btn-agendar:hover {
+  background: rgb(57, 177, 188);
+}
+
+.btn-limpar{
+    background-color: white;
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.24);
+}
+
+.btn-limpar:hover {
+  background: rgb(32, 239, 132);
+  color: white;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-group {
+    flex-direction: column;
+  }
+}
+
