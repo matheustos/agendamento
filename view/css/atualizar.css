@@ -1,102 +1,264 @@
 @charset "UTF-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Parisienne&family=Passion+One:wght@400;700;900&family=Rubik+Burned&family=Sriracha&display=swap');
-
-body {
-  font-family: "Oswald" ,sans-serif;
-  background-color: #32d3f02c;
+body{
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f9fbff;
 }
 
-h2{
-    text-align: center;
+
+.container {
+  display: flex;
+  gap: 20px; /* espaço entre as divs */
+  flex-wrap: wrap; /* permite quebrar linha quando não couber */
 }
 
-/* Contêiner para rolagem horizontal */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 20px;
-}
-
-table {
-    width: 800px;
-    margin: auto;
-    border-collapse: collapse;
-}
-
-td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    font-size: 18px;
-}
-
-th {
-    background-color: #7cff1eb3;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-align: center;
-    font-size: 20px;
-}
-
-.border{
-  border-radius: 10px 0px 0px 10px;
-}
-
-.border2{
-  border-radius: 0px 10px 10px 0px;
-}
-
-.button{
-    background-color: #17b53c;
-    color: white;
-    font-weight: bold;
-    margin-right: 5px;
-    border-radius: 5px;
-    border: 1px solid darkgreen;
-    font-size: 16px;
-}
-
-.buttoncan{
-    background-color: red;
-    color: white;
-    font-weight: bold;
-    margin-left: 5px;
-    border-radius: 5px;
-    border: 1px solid darkred;
-    font-size: 16px;
-}
-
-div > form{
-    float: right;
-}
-
-#form-editar {
-  display: none;
-  max-width: 800px;
-  margin: auto;
-
-}
-
-.alert {
+.box {
+  flex: 1; /* ocupa espaço igual */
+  min-width: 250px; /* largura mínima antes de quebrar */
   padding: 10px;
-  margin: 10px 0;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.box > p{
+  color: gray;
+}
+
+/* Se a tela for menor que 600px -> empilha as divs */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .newagenda{
+    min-width: 95%;
+  }
+
+}
+
+header{
+  margin: 10px
+}
+
+.newagenda{
+  /*flex: 1; /* ocupa espaço igual */
+  min-width: 220px; /* largura mínima antes de quebrar */
+  padding: 10px;
+  border-radius: 10px;
+  background-color: lightseagreen;
+  height: 20px;
+  text-align: center;
+  margin: 10px;
+  margin-top: 35px;
+}
+
+.newagenda > a{
+  text-decoration: none;
+  color: white;
+}
+
+.status{
+  display: flex;
+  gap: 10px; /* espaço entre as divs */
+  flex-wrap: wrap; /* permite quebrar linha quando não couber */
+}
+
+.div{
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.304);
+  border-radius: 10px;
+  flex: 1; /* ocupa espaço igual */
+  min-width: 250px; /* largura mínima antes de quebrar */
+  height: 80px;
+  margin: 10px;
+  padding-left: 10px;
+  display: flex;              /* ativa flexbox */
+  align-items: center;        /* centraliza verticalmente */
+  text-align: left;
+}
+
+.div > p > span{
+  font-size: 25px;
+  color: green;
+  font-weight: bold;
+}
+
+.div > p{
+  color: gray;
+}
+
+.div2{
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.304);
+  border-radius: 10px;
+  flex: 1; /* ocupa espaço igual */
+  min-width: 250px; /* largura mínima antes de quebrar */
+  height: 80px;
+  margin: 10px;
+  padding-left: 10px;
+  display: flex;              /* ativa flexbox */
+  align-items: center;        /* centraliza verticalmente */
+  text-align: left;
+}
+
+.div2 > p{
+  color: gray;
+}
+
+.div2 > p > span{
+  font-size: 25px;
+  color: orange;
+  font-weight: bold;
+}
+
+.div3{
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.304);
+  border-radius: 10px;
+  flex: 1; /* ocupa espaço igual */
+  min-width: 250px; /* largura mínima antes de quebrar */
+  height: 80px;
+  margin: 10px;
+  padding-left: 10px;
+  display: flex;              /* ativa flexbox */
+  align-items: center;        /* centraliza verticalmente */
+  text-align: left;
+}
+
+.div3 > p{
+  color: gray;
+}
+
+.div3 > p > span{
+  font-size: 25px;
+  color: purple;
+  font-weight: bold;
+}
+
+.div4{
+  background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.304);
+  border-radius: 10px;
+  flex: 1; /* ocupa espaço igual */
+  min-width: 250px; /* largura mínima antes de quebrar */
+  height: 80px;
+  margin: 10px;
+  padding-left: 10px;
+  display: flex;              /* ativa flexbox */
+  align-items: center;        /* centraliza verticalmente */
+  text-align: left;
+}
+
+.div4 > p{
+  color: gray;
+}
+
+.div4 > p > span{
+  font-size: 25px;
+  color: red;
+  font-weight: bold;
+}
+
+.filtros {
+  display: flex;
+  gap: 20px;         /* espaço entre os elementos */
+  flex-wrap: wrap;   /* permite quebrar linha se necessário */
+  margin: 10px;
+  align-items: center; /* centraliza verticalmente os elementos */
+}
+
+.filtros input {
+  flex: 3;              /* ocupa o máximo disponível */
+  min-width: 200px;     /* largura mínima para telas pequenas */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.filtros select {
+  width: 250px;         /* largura fixa para select */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: black;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 600px) {
+  .filtros {
+    flex-direction: column;  /* empilha os elementos */
+    gap: 10px;
+  }
+
+  .filtros input{
+    min-width: 95%;
+  }
+
+  .filtros select{
+    min-width: 100%;
+  }
+}
+
+/*#agendamentos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.card p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.status {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.status.confirmado {
+  background-color: #28a745;
+}
+
+.status.pendente {
+  background-color: #ff9900;
+}
+
+.card button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
   border-radius: 5px;
-  display: none;
+  cursor: pointer;
 }
 
-.alert.success {
-  background-color: #d4edda;
-  color: #155724;
+.card button.editar {
+  background-color: #e0e0e0;
 }
 
-.alert.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-/* Garante que as colunas sejam visíveis */
-th, td {
-  min-width: 100px; /* Evita colunas colapsadas */
-  display: table-cell !important; /* Força exibição como célula de tabela */
+.card button.cancelar {
+  background-color: #ff4d4d;
+  color: white;
 }

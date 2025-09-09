@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamentos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><span class="icon">📅</span> Agendamentos</h1>
+            <p>Gerencie todos os seus agendamentos em um só lugar</p>
+            <button class="btn-new"><a href="../../novo/index.html" target="_blank">+ Novo Agendamento</a></button>
+        </header>
+
+        <div class="filters">
+            <input type="text" name="status" id="search" placeholder="Buscar por cliente ou serviço...">
+            <select id="periodFilter">
+                <option value="all">Todos os agendamentos</option>
+                <option value="day">Agenda do dia</option>
+                <option value="week">Agenda da semana</option>
+                <option value="month">Agenda do mês</option>
+            </select>
+        </div>
+
+        
+
+        <div id="agendamentos"></div>
+    </div>
+    
+    <div id="form-editar" style="display:none;">
+        <form>
+            <h3>Editar Agendamento</h3>
+            <input type="hidden" id="id">
+            <label>Nome:</label>
+            <input type="text" id="nome"><br><br>
+            <label>Data:</label>
+            <input type="date" id="data"><br><br>
+            <label>Hora:</label>
+            <input type="time" id="horario"><br><br>
+            <textarea name="obs" id="obs">Observações:</textarea>
+            <button type="button" onclick="salvar()">Salvar</button>
+            <button type="button" onclick="cancelar()">Cancelar</button>
+        </form>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
