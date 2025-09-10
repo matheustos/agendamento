@@ -54,6 +54,16 @@ body {
     background-color: rgb(31, 85, 82);
 }
 
+@media (max-width: 760px) {
+    .btn-new{
+        position: relative;
+    }
+
+    .filters{
+        flex-direction: column;
+    }
+}
+
 .filters {
     display: flex;
     gap: 10px;
@@ -115,13 +125,60 @@ body {
 .agendamento-card .actions .edit {
     background-color: rgba(0, 128, 0, 0.784);
     color: #fff;
-    margin-top: 8px;
+    margin-top: 15px;
 }
 
 .agendamento-card .actions .cancel {
     background-color: #ff5252;
     color: #fff;
-    margin-top: 8px;
+    margin-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
+#form-editar{
+    display: none;
+    margin-bottom: 10px;
+}
+
+#form-editar form input{
+    padding: 5px;
+    width: 200px;
+    margin-bottom: 8px;
+}
+
+#form-editar form select{
+    padding: 5px;
+    width: 200px;
+    margin-bottom: 8px;
+}
+
+#form-editar form textarea{
+    padding: 5px;
+    width: 200px;
+    height: 80px;
+}
+
+.salv{
+    width: 95px;
+    padding: 3px;
+    color: white;
+    background-color: rgba(0, 128, 0, 0.784);
+    border: none;
+    border-radius: 5px;
+    height: 25px;
+    margin-left: 3px;
+}
+
+.can{
+    width: 95px;
+    padding: 3px;
+    color: white;
+    background-color: #ff5252;
+    border: none;
+    border-radius: 5px;
+    height: 25px;
+}
 

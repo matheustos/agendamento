@@ -63,6 +63,7 @@ function gerarCards(busca = "", periodo = "all") {
     filtrados.forEach(a => {
         const card = document.createElement("div");
         card.className = "agendamento-card";
+        card.id = "agendamento-" + a.id; // <-- importante para referenciar
 
         card.innerHTML = `
             <h3>${a.nome}</h3>
@@ -73,27 +74,49 @@ function gerarCards(busca = "", periodo = "all") {
             </div>
             ${a.obs ? `<div class="observacoes"><strong>Observações:</strong> ${a.obs}</div>` : ""}
             <div class="actions">
-                <button class="edit" onclick="editar(${a.id}, '${a.nome}', '${a.data}', '${a.horario}', '${a.obs || ''}')">Editar</button>
-                <button class="cancel" onclick="btnCancelar('${a.data}', '${a.horario}')">Cancelar</button>
+                <button class="edit">Editar</button>
+                <button class="cancel">Cancelar</button>
             </div>
         `;
 
         container.appendChild(card);
+
+        // Adicionar eventos aos botões
+        const editBtn = card.querySelector(".edit");
+        editBtn.addEventListener("click", () => editar(a.id, a.nome, a.data, a.horario, a.obs || ""));
+
+        const cancelBtn = card.querySelector(".cancel");
+        cancelBtn.addEventListener("click", () => btnCancelar(a.data, a.horario));
     });
 }
 
 // Funções de editar e cancelar
 function editar(id, nome, data, hora, obs) {
-    document.getElementById("form-editar").style.display = "block";
+    const formEditar = document.getElementById("form-editar");
+    const card = document.getElementById("agendamento-" + id);
+
+    if (!card) return;
+
+    // Move o form logo abaixo do card clicado
+    card.insertAdjacentElement("afterend", formEditar);
+
+    // Preenche os campos
     document.getElementById("id").value = id;
     document.getElementById("nome").value = nome;
     document.getElementById("data").value = data;
     document.getElementById("horario").value = hora;
-    document.getElementById("obs").value = obs || ""; // obs pode ser vazio
+    document.getElementById("obs").value = obs;
+
+    // Mostra o formulário
+    formEditar.style.display = "block";
+
+    // Opcional: rola até o formulário
+    formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function cancelar() {
-    document.getElementById("form-editar").style.display = "none";
+    const formEditar = document.getElementById("form-editar");
+    formEditar.style.display = "none";
     limparFormulario();
 }
 
@@ -144,15 +167,13 @@ function btnCancelar(data, horario) {
     .then(res => {
         if (res.status === "success") {
             alert("Agendamento cancelado!");
-            buscarAgendamentos(); // atualiza a lista
+            buscarAgendamentos();
         } else {
             alert("Erro: " + res.message);
-            console.log("Resposta do servidor:", res);
         }
     })
     .catch(err => console.error("Erro ao cancelar agendamento:", err));
 }
-
 
 // Eventos de busca e filtro
 document.getElementById("search").addEventListener("input", (e) => {
