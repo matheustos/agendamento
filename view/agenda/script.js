@@ -6,7 +6,7 @@ function parseDataLocal(dataStr) {
     return new Date(ano, mes - 1, dia, 0, 0, 0, 0); // hora local
 }
 
-// Função para buscar agendamentos do servidor
+// Buscar agendamentos do servidor
 function buscarAgendamentos() {
     fetch("/agendamento/api/buscar/mes/index.php")
         .then(res => res.json())
@@ -21,7 +21,7 @@ function buscarAgendamentos() {
         .catch(err => console.error("Erro ao buscar agendamentos:", err));
 }
 
-// Função para formatar data
+// Formatar data
 function formatarData(dataStr) {
     const data = parseDataLocal(dataStr);
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
@@ -44,7 +44,7 @@ function filtrarPorPeriodo(periodo, agendamento) {
             return dataAgendamento >= primeiroDiaSemana && dataAgendamento <= ultimoDiaSemana;
         case "month":
             return dataAgendamento.getMonth() === hoje.getMonth() &&
-                    dataAgendamento.getFullYear() === hoje.getFullYear();
+                   dataAgendamento.getFullYear() === hoje.getFullYear();
         default:
             return true;
     }
@@ -63,7 +63,7 @@ function gerarCards(busca = "", periodo = "all") {
     filtrados.forEach(a => {
         const card = document.createElement("div");
         card.className = "agendamento-card";
-        card.id = "agendamento-" + a.id; // <-- importante para referenciar
+        card.id = "agendamento-" + a.id;
 
         card.innerHTML = `
             <h3>${a.nome}</h3>
@@ -71,6 +71,7 @@ function gerarCards(busca = "", periodo = "all") {
                 <span>💇 ${a.servico}</span>
                 <span>📅 ${formatarData(a.data)}</span>
                 <span>⏰ ${a.horario}</span>
+                <span>📞 ${a.telefone}</span>
             </div>
             ${a.obs ? `<div class="observacoes"><strong>Observações:</strong> ${a.obs}</div>` : ""}
             <div class="actions">
@@ -81,60 +82,54 @@ function gerarCards(busca = "", periodo = "all") {
 
         container.appendChild(card);
 
-        // Adicionar eventos aos botões
-        const editBtn = card.querySelector(".edit");
-        editBtn.addEventListener("click", () => editar(a.id, a.nome, a.data, a.horario, a.obs || ""));
-
-        const cancelBtn = card.querySelector(".cancel");
-        cancelBtn.addEventListener("click", () => btnCancelar(a.data, a.horario));
+        // Eventos dos botões
+        card.querySelector(".edit").addEventListener("click", () => editar(a.id, a.nome, a.data, a.horario, a.telefone));
+        card.querySelector(".cancel").addEventListener("click", () => btnCancelar(a.data, a.horario));
     });
 }
 
-// Funções de editar e cancelar
-function editar(id, nome, data, hora, obs) {
+// Editar agendamento (sem observação)
+function editar(id, nome, data, hora, telefone) {
     const formEditar = document.getElementById("form-editar");
     const card = document.getElementById("agendamento-" + id);
+    if (!formEditar || !card) return;
 
-    if (!card) return;
-
-    // Move o form logo abaixo do card clicado
     card.insertAdjacentElement("afterend", formEditar);
 
-    // Preenche os campos
     document.getElementById("id").value = id;
     document.getElementById("nome").value = nome;
     document.getElementById("data").value = data;
     document.getElementById("horario").value = hora;
-    document.getElementById("obs").value = obs;
+    document.getElementById("telefone").value = telefone;
 
-    // Mostra o formulário
     formEditar.style.display = "block";
-
-    // Opcional: rola até o formulário
     formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+// Cancelar edição
 function cancelar() {
     const formEditar = document.getElementById("form-editar");
     formEditar.style.display = "none";
     limparFormulario();
 }
 
+// Limpar campos do formulário
 function limparFormulario() {
     document.getElementById("id").value = "";
     document.getElementById("nome").value = "";
     document.getElementById("data").value = "";
     document.getElementById("horario").value = "";
-    document.getElementById("obs").value = "";
+    document.getElementById("telefone").value = "";
 }
 
+// Salvar alterações
 function salvar() {
     const formData = new FormData();
     formData.append("id", document.getElementById("id").value);
     formData.append("nome", document.getElementById("nome").value);
     formData.append("data", document.getElementById("data").value);
     formData.append("horario", document.getElementById("horario").value);
-    formData.append("obs", document.getElementById("obs").value);
+    formData.append("telefone", document.getElementById("telefone").value);
 
     fetch("/agendamento/api/atualizar/index.php", {
         method: "POST",
@@ -144,14 +139,14 @@ function salvar() {
     .then(res => {
         if(res.status === "success") {
             alert("Agendamento atualizado!");
-            cancelar();
-            buscarAgendamentos();
+            location.reload();
         } else {
             alert("Erro: " + res.message);
         }
     });
 }
 
+// Cancelar agendamento
 function btnCancelar(data, horario) {
     if (!confirm("Deseja realmente cancelar este agendamento?")) return;
 

@@ -9,7 +9,8 @@ $hora = $_POST["horario"];
 $nome = $_POST["nome"];
 $servico = $_POST["servico"];
 $obs = $_POST["obs"];
-$res = AgendamentoController::agendamento($data, $hora, $nome, $servico, $obs);
+$telefone = $_POST["telefone"];
+$res = AgendamentoController::agendamento($data, $hora, $nome, $servico, $obs, $telefone);
 
 echo json_encode($res);
 

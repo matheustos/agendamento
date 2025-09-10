@@ -5,10 +5,10 @@ use Model\Database;
 use Validators\AgendamentoValidators;
 
 class Agendamento {
-    public static function agendar($data, $hora, $nome, $status, $servico, $obs) {
+    public static function agendar($data, $hora, $nome, $status, $servico, $obs, $telefone) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $data, $hora, $nome, $status, $servico, $obs);
+        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone);
         return $stmt->execute();
     }
     
@@ -109,7 +109,38 @@ class Agendamento {
         
     }
 
-    public static function buscarAgend($data, $hora) {
+    public static function buscarAgend($data, $hora, $id) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT * FROM agenda WHERE data = ? AND horario = ? AND id <> ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("ssi", $data, $hora, $id); // ambos são strings
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $registros = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $registros[] = $row;
+        }
+
+        $stmt->close();
+        if($registros){
+            return AgendamentoValidators::formatarRetorno("Registros:", $registros);
+        }
+        
+    }
+
+    public static function buscarAgenda($data, $hora) {
         $conn = Database::conectar();
 
         if (!$conn) {
@@ -278,18 +309,18 @@ class Agendamento {
         $conn->close();
     }
 
-    public static function atualizar($nova_data, $nova_hora, $id, $nome){       
+    public static function atualizar($nova_data, $nova_hora, $id, $nome, $telefone){       
 
         $conn = Database::conectar();
 
         if (!$conn) {
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
-
+        
         // Prepara e executa a atualização
-        $sql = "UPDATE agenda SET nome = ?, data = ? , horario = ? WHERE id = ?";
+        $sql = "UPDATE agenda SET nome = ?, data = ? , horario = ?, telefone = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nome, $nova_data, $nova_hora, $id);
+        $stmt->bind_param("ssssi", $nome, $nova_data, $nova_hora, $telefone, $id);
 
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);

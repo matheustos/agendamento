@@ -5,8 +5,24 @@ use Model\Agendamento;
 
 class AgendamentoValidators{
 
-    public static function validacaoAgendamento($data, $hora, $id_ignorar = null) {
-        $consulta = Agendamento::buscarAgend($data, $hora);
+    public static function validacaoAgendamento($data, $hora, $id) {
+        $consulta = Agendamento::buscarAgend($data, $hora, $id);
+
+        $registros = $consulta['data'] ?? [];
+
+        // Percorrer os registros encontrados na data e hora
+        foreach ($registros as $registro) {
+            if ($registro['status'] === "agendado") {
+                return ["status" => true, "message" => "Já existe agendamento para essa data e hora!"];
+            }
+        }
+
+        // Se passou pelo loop sem encontrar "agendado", então permite agendar
+        return ["status" => false];
+    }
+
+    public static function buscaAgendamento($data, $hora) {
+        $consulta = Agendamento::buscarAgenda($data, $hora);
 
         $registros = $consulta['data'] ?? [];
 

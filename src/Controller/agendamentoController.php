@@ -5,7 +5,7 @@ use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
 
-    public static function agendamento($data, $hora, $nome, $servico, $obs){
+    public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone){
         $status = "agendado";
 
         $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
@@ -13,7 +13,7 @@ class AgendamentoController{
         $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
 
-        if(empty($hora) || empty($nome) || empty($servico) || empty($data)){
+        if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($telefone)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
             if(empty($obs)){
@@ -28,12 +28,12 @@ class AgendamentoController{
                 if($validaData["status"] === true){
                     return $validaData;
                 }else{
-                    $validacao = AgendamentoValidators::validacaoAgendamento($data, $horaIso);
+                    $validacao = AgendamentoValidators::buscaAgendamento($data, $horaIso);
 
                     if($validacao["status"] === true){
                         return $validacao;
                     }else{
-                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs);
+                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, $telefone);
                         if($res){
                             $email = Agendamento::getEmail($nome);
                             if($email){
@@ -228,6 +228,7 @@ class AgendamentoController{
         $data = $dados["data"];
         $hora = $dados["horario"];
         $nome = $dados["nome"];
+        $telefone = $dados["telefone"];
 
         $data_hoje = date("Y-m-d");
 
@@ -236,7 +237,7 @@ class AgendamentoController{
         /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
 
 
-        if(empty($hora) || empty($data) || empty($id) || empty($nome)){
+        if(empty($hora) || empty($data) || empty($id) || empty($nome) || empty($telefone)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{
             if($data < $data_hoje){
@@ -245,7 +246,6 @@ class AgendamentoController{
                     "message" => "Não é possível agendar para uma data passada!"
                 ];
             }else{
-                
                 $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora, $id);
                 if($validacao["status"] === true){
                     return [
@@ -253,7 +253,7 @@ class AgendamentoController{
                         "message" => $validacao["message"]
                     ];
                 }else{
-                    $res = Agendamento::atualizar($data, $hora, $id, $nome);
+                    $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone);
 
                     if($res){
                         //busca informações nome e servico no banco de dados para enviar o email com tais informações.
