@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    min-height: 100vh;
+    background: hsl(210, 40%, 98%);
+    background-image: radial-gradient(ellipse at top, hsl(197, 71%, 52%, 0.06), transparent 60%);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header h1{
+    text-align: center;
+    margin-top: 20px;
+}
+
+header p{
+    text-align: center;
+    color: gray;
+    margin-top: 15px;
+}
+
+main{
+    display: flex; /* Deixa os filhos lado a lado */
+    gap: 10px;     /* Espaço entre as divs */
+}
+
+main form h2{
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+main form p{
+    color: gray;
+    margin-left: 50px;
+    margin-bottom: 15px;
+}
+
+main form label{
+    margin-left: 50px;
+}
+
+#agenda{
+    flex: 1; /* Faz as divs terem tamanho igual */
+}
+
+#bloq{
+    flex: 1;
+    margin-top: 50px;
+}
+
+main form select{
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 400px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+}
+
+main form input{
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 380px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+}
+
+main form textarea{
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 380px;
+    height: 80px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button{
+    margin-left: 50px;
+    width: 400px;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    background-color: lightseagreen;
+    border: none;
+    font-weight: bold;
+}
+
+button:hover{
+    background-color: rgba(32, 178, 171, 0.518);
+}
+
+.card-bloqueio {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    width: 300px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-bloqueio .card-content p {
+    margin: 4px 0;
+    margin-bottom: 10px;
+    width: 95%;
+}
+
+.card-bloqueio button.remover {
+    margin-top: 8px;
+    margin-left: 75px;
+    padding: 6px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.card-bloqueio button.remover:hover {
+    background-color: #c0392b;
+}
+
+
+@media(max-width: 760px){
+
+    main{
+        flex-direction: column;
+    }
+
+    main h2{
+        width: 90%;
+        margin-left: 0;
+    }
+
+    main p{
+        width: 90%;
+        margin-left: 0;
+    }
+
+    main form label{
+        margin-left: 15px;
+    }
+
+    main form select{
+        width: 90%;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    main form input{
+        width: 85%;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    main form textarea{
+        width: 85%;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    button{
+        width: 90%;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+}
+

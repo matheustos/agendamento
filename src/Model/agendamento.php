@@ -285,6 +285,75 @@ class Agendamento {
         return $agendamentos;
     }
 
+    public static function getBloqueio($mes){
+        $status = "bloqueado";
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT id, data, horario, status, obs FROM agenda WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) AND status = ? 
+        ORDER BY data, horario";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("is", $mes, $status); // ambos são strings
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $bloqueios = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $bloqueios[] = $row;
+        }
+
+        $stmt->close();
+
+        return $bloqueios;
+    }
+
+    public static function bloquearTodosHorarios($data) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+        
+        // Lista de horários fixos
+        $horarios = ["08:00", "09:30", "11:00", "14:00", "15:30", "17:00"];
+
+        // Valor fixo para indicar bloqueio
+        $status = "bloqueado"; // ou $bloqueado = 1; depende de como está sua tabela
+
+        foreach ($horarios as $horario) {
+            // Verifica se já existe agendamento neste dia e horário
+            $stmt = $conn->prepare("SELECT id FROM agenda WHERE data = ? AND horario = ?");
+            $stmt->bind_param("ss", $data, $horario);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                // Já existe agendamento, não insere
+                $stmt->close();
+                continue; // pula para o próximo horário
+            }
+
+            $stmt->close();
+
+            // Insere o bloqueio
+            $insert = $conn->prepare("INSERT INTO agenda (data, horario, status) VALUES (?, ?, ?)");
+            $insert->bind_param("sss", $data, $horario, $status);
+            $insert->execute();
+            $insert->close();
+        }
+
+        return true;
+    }
+
+
     public static function Cancelar($data, $hora){
         $novo_status = "cancelado";        
 

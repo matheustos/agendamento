@@ -110,27 +110,51 @@ class AgendamentoController{
                     }else{
                         $validacao = AgendamentoValidators::verificarBloqueio($data, $hora);
                         if($validacao["status"] === true){
-                            $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs);
-
-                            if($res){
-                                return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                            if($hora === "Todos os horários"){
+                                $res = Agendamento::bloquearTodosHorarios($data);
+                                if($res === true){
+                                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                                }
                             }else{
-                                return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null);
+
+                                if($res){
+                                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                                }else{
+                                    return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                                }
                             }
+                            
                         }else{
                             return $validacao;
                         }
                     }    
                 }
             }else{
-                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs);
-
-                if($res){
-                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                if($hora === "Todos os horários"){
+                    $res = Agendamento::bloquearTodosHorarios($data);
+                    if($res === true){
+                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                    }
                 }else{
-                    return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                    $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null);
+
+                    if($res){
+                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                    }else{
+                        return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                    }
                 }
             }
+        }
+    }
+
+    public static function buscarBloqueios(){
+        $mes = date("m");
+        $res = Agendamento::getBloqueio($mes);
+
+        if($res){
+            return $res;
         }
     }
 

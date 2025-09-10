@@ -4,23 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloqueio de agenda</title>
-    <link rel="stylesheet" href="../css/agendamento.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form id="agenda">
-        <h2>BLOQUEAR AGENDA</h2>
-        <p>
-            <label for="idata">Data:</label>
-            <input type="date" name="data" id="idata" required>
-        </p>
+    <header>
+        <h1><span>🔒</span>Bloquear Agenda</h1>
+        <p>Gerencie os períodos indisponíveis da sua agenda de forma fácil e organizada</p>
+    </header>
+    <main>
+        <form id="agenda" method="post">
+            <h2>+ Criar Bloqueio</h2>
+            <p>Configure os detalhes do período a ser bloqueado</p>
+            <label for="data">Data</label><br>
+            <input type="date" name="data" id="data"><br>
+            <label for="horario">Hora</label><br>
+            <select name="horario" id="horario">
+                <option>Todos os horários</option>
+                <option>08:00</option>
+                <option>09:30</option>
+                <option>11:00</option>
+                <option>14:00</option>
+                <option>15:30</option>
+                <option>17:00</option>
+            </select><br>
+            <label for="obs">Motivo do Bloqueio</label><br>
+            <textarea name="obs" id="obs" placeholder="Ex: Reunião interna, compromisso pessoal, feriado..."></textarea><br>
 
-        <p>
-            <label for="ihorario">Horário:</label>
-            <input type="time" name="horario" id="ihorario" required>
-        </p>
-
-        <button type="submit" class="button">Bloquear</button>
-    </form>
+        
+            <button type="submit" class="button">+ Adicionar Bloqueio</button>
+        </form>
+        <div id="bloq">
+            <h2><span>🕓</span>Períodos Bloqueados</h2>
+            <p>Lista de todos os bloqueios ativos na agenda do mês</p>
+        </div>
+    </main>
+    
     <script src="bloquear.js"></script>
 </body>
 </html>

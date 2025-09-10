@@ -33,10 +33,23 @@ body {
     gap: 10px;
 }
 
-.btn-new {
+.header-buttons {
     position: absolute;
     top: 0;
     right: 0;
+    display: flex;
+    flex-direction: column; /* Coloca um botão embaixo do outro */
+    gap: 10px; /* Espaço entre os botões */
+}
+
+/* Remove absolute individual dos botões */
+.btn-new,
+.btn {
+    position: relative; /* agora é relativo ao container */
+    margin: 0;
+}
+
+.btn-new {
     background-color: lightseagreen;
     color: #fff;
     border: none;
@@ -54,9 +67,32 @@ body {
     background-color: rgb(31, 85, 82);
 }
 
+.btn {
+    background-color: rgb(159, 27, 159);
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn > a{
+    color: white;
+    text-decoration: none;
+}
+
+.btn:hover{
+    background-color: rgb(95, 13, 95);
+}
+
 @media (max-width: 760px) {
-    .btn-new{
-        position: relative;
+    .header-buttons {
+        position: relative; /* sai do absolute */
+        flex-direction: column; /* empilha os botões */
+        margin-top: 10px; /* espaço em cima */
+        top: auto;
+        right: auto;
+        align-items: flex-start; /* alinha à esquerda do container */
     }
 
     .filters{
@@ -71,6 +107,7 @@ body {
 }
 
 .filters input, .filters select {
+    margin-top: 10px;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
