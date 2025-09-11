@@ -89,10 +89,6 @@ class AgendamentoController{
             if(empty($obs)){
                 $obs = null;
             }
-            /*$dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
-
-            /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretamente sem precisar formatar*/
-
             $getStatus = Agendamento::getStatus($data, $hora);
             if(isset($getStatus['data'])){
                 $retorno = $getStatus["data"];
@@ -255,11 +251,6 @@ class AgendamentoController{
         $telefone = $dados["telefone"];
 
         $data_hoje = date("Y-m-d");
-
-        /*$dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
-
-        /*$horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
-
 
         if(empty($hora) || empty($data) || empty($id) || empty($nome) || empty($telefone)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");

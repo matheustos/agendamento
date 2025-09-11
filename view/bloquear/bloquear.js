@@ -1,9 +1,14 @@
 const form = document.getElementById("agenda");
 const bloqDiv = document.getElementById("bloq");
-
+const token = localStorage.getItem('token');
 // Função para exibir bloqueios na tela
 function exibirBloqueios() {
-    fetch("/agendamento/api/bloquear/buscar/index.php")
+    fetch("/agendamento/api/bloquear/buscar/index.php", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(bloqueios => {
             // Limpa a div antes de renderizar
@@ -30,11 +35,16 @@ function exibirBloqueios() {
 // Listener do formulário
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
+
     const formData = new FormData(form);
 
     fetch("/agendamento/api/bloquear/index.php", {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+            'Authorization': `Bearer ${token}` // o token vai no header
+        }
     })
     .then(res => res.json())
     .then(res => {
@@ -52,18 +62,5 @@ form.addEventListener("submit", (e) => {
 
 // Carrega os bloqueios ao abrir a página
 exibirBloqueios();
-
-
-
-    // FUNÇÃO 4: Remover bloqueio
-    async function removerBloqueio(id) {
-        try {
-            const response = await fetch(`/api/removerBloqueio.php?id=${id}`, { method: "DELETE" });
-            if (!response.ok) throw new Error("Erro ao remover bloqueio");
-            exibirBloqueios();
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
 

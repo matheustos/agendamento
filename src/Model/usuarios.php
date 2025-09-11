@@ -21,6 +21,8 @@ class Usuarios{
         
         if ($resultado->num_rows > 0) {
             return $resultado->fetch_assoc();
+        }else{
+            return false;
         }
     }
 

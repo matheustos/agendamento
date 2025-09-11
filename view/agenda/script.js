@@ -124,6 +124,7 @@ function limparFormulario() {
 
 // Salvar alterações
 function salvar() {
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append("id", document.getElementById("id").value);
     formData.append("nome", document.getElementById("nome").value);
@@ -133,7 +134,10 @@ function salvar() {
 
     fetch("/agendamento/api/atualizar/index.php", {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+            'Authorization': `Bearer ${token}` // o token vai no header
+        }
     })
     .then(res => res.json())
     .then(res => {
@@ -150,13 +154,18 @@ function salvar() {
 function btnCancelar(data, horario) {
     if (!confirm("Deseja realmente cancelar este agendamento?")) return;
 
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
     formData.append("data", data);
     formData.append("horario", horario);
 
     fetch("/agendamento/api/cancelar/index.php", {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+            'Authorization': `Bearer ${token}` // o token vai no header
+        }
     })
     .then(res => res.json())
     .then(res => {

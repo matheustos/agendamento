@@ -88,8 +88,6 @@ class UsuariosController{
         return $senha;
     }
 
-
-
     public static function updateSenha($email) {
         if(empty($email)){
             return ["status" => false, "message" => "Informe o email!"];

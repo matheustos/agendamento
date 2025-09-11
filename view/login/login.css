@@ -120,3 +120,8 @@ button:hover{
 .cadastro:hover{
     background-color: #55555579;
 }
+
+#message{
+    text-align: center;
+    color: red;
+}

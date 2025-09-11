@@ -7,20 +7,20 @@
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <form id="login">
+    <form id="login" method="post">
         <h2>Entrar</h2>
         <p>Faça login em sua conta para continuar</p>
         <div>
             
-            <label for="iemail">Email</label><br>
-            <input type="email" name="email" id="iemail">
+            <label for="email">Email</label><br>
+            <input type="email" name="email" id="email">
             
         </div>
 
         <div>
             
-            <label for="isenha">Senha</label><br>
-            <input type="password" name="senha" id="isenha">
+            <label for="senha">Senha</label><br>
+            <input type="password" name="senha" id="senha">
             
         </div>
         
@@ -31,8 +31,10 @@
         <div class="linha"><span>ou</span></div>
 
         <div class="cadastro"><a href="../usuarios/cadastrar/index.html" target="_blank">Criar nova conta</a></div>
+
+        <div id="message"></div>
         
     </form>
-    
+    <script src="login.js"></script>
 </body>
 </html>

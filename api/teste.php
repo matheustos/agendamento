@@ -1,48 +1,32 @@
 <?php
 
-$inicioBloqueio = $_POST["inicio"];
-$fimBloqueio = $_POST["fim"];
-function gerarHorarios($inicio = "08:00", $fim = "17:00", $intervaloMinutos = 90) {
-    $horarios = [];
+namespace Jwt;
+require_once __DIR__ . '/../vendor/autoload.php';
 
-    $inicioDate = DateTime::createFromFormat("H:i", $inicio);
-    $fimDate = DateTime::createFromFormat("H:i", $fim);
 
-    while ($inicioDate <= $fimDate) {
-        $horarios[] = $inicioDate->format("H:i");
-        $inicioDate->modify("+{$intervaloMinutos} minutes");
-    }
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
-    return $horarios;
-}
+class Token{
+    public static function geraToken($user_id){
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
 
-function bloquearHorarios($horarios, $inicioBloqueio, $fimBloqueio) {
-    $inicioBloqueioDate = DateTime::createFromFormat("H:i", $inicioBloqueio);
-    $fimBloqueioDate = DateTime::createFromFormat("H:i", $fimBloqueio);
+        $chave_secreta = $_ENV['JWT_SECRET'];
 
-    $resultado = [];
-
-    foreach ($horarios as $hora) {
-        $horaDate = DateTime::createFromFormat("H:i", $hora);
-
-        $resultado[] = [
-            "hora" => $hora,
-            "bloqueado" => ($horaDate >= $inicioBloqueioDate && $horaDate <= $fimBloqueioDate)
+        $payload = [
+            'iss' => 'localhost',          // emissor
+            'aud' => 'localhost',          // destinatário
+            'iat' => time(),               // criado em timestamp
+            'exp' => time() + 3600,        // expira em 1 hora
+            'user_id' => $user_id                  // id do usuário
         ];
-    }
 
-    foreach($resultado as $item){
-        if($item["bloqueado"] === true){
-            $bloqueadosSomente[] = $item;
-        }
+        $jwt = JWT::encode($payload, $chave_secreta, 'HS256');
+        return $jwt;
     }
-
-    return $bloqueadosSomente;
-    
 }
 
-// Exemplo de uso:
-$horarios = gerarHorarios();
-$bloqueados = bloquearHorarios($horarios, $inicioBloqueio, $fimBloqueio);
-
-echo json_encode($bloqueados);
+echo Token::geraToken(1);
+?>
