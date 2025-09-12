@@ -1,65 +1,5 @@
 @charset "UTF-8";
 
-/*body{
-    height: 100vh;
-    background: hsl(210, 40%, 98%);
-    background-image: radial-gradient(ellipse at top, hsl(197, 71%, 52%, 0.06), transparent 60%);
-    padding: 1rem;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-h1, p{
-    text-align: center;
-}
-
-form{
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.255);
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
-input{
-    width: 370px;
-    padding: 5px;
-    margin-bottom: 10px;
-    margin-top: 5px;
-    border-radius: 5px 5px 5px 5px;
-    border: 1px solid rgba(0, 0, 0, 0.518);
-}
-
-select{
-    width: 380px;
-    padding: 5px;
-    margin-bottom: 10px;
-    margin-top: 5px;
-    border-radius: 5px 5px 5px 5px;
-    border: 1px solid rgba(0, 0, 0, 0.518);
-}
-
-button{
-    width: 380px;
-    padding: 15px;
-    color: white;
-    font-size: 17px;
-    background-color: lightseagreen;
-    border: none;
-    border-radius: 5px 5px 5px 5px;
-    margin-bottom: 5px;
-    margin-top: 10px;
-}
-
-button:hover{
-    background-color: rgb(34, 138, 131);
-}*/
-
 /* Reset básico */
 * {
   margin: 0;
@@ -75,8 +15,18 @@ body {
   padding: 40px 10px;
 }
 
+a{
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+}
+
+a:hover{
+  color: rgb(88, 86, 86);
+}
+
 form{
-    width: 700px;
+  width: 700px;
 }
 
 /* Container do formulário */
@@ -85,7 +35,7 @@ form{
   max-width: 700px;
   background: #fff;
   border-radius: 12px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -203,6 +153,10 @@ form{
 @media (max-width: 768px) {
   .form-group {
     flex-direction: column;
+  }
+
+  .link{
+    display: none;
   }
 }
 

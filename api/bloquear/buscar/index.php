@@ -12,27 +12,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $headers = getallheaders(); // pega todos os headers da requisição
     $authHeader = $headers['Authorization'] ?? ''; // pega o header Authorization
 
-    if (!$authHeader) {
-        http_response_code(401);
-        echo json_encode(["status" => false, "message" => "Token não enviado"]);
-        exit;
-    }
+    $verifica_token = Token::verificaToken($authHeader);
 
-    // Remove a palavra "Bearer " do início
-    $token = str_replace('Bearer ', '', $authHeader);
-
-    $decoded = Token::validaToken($token);
-    if (!isset($decoded->user_id)) {
-        http_response_code(401);
-        echo json_encode($decoded); // Token inválido ou expirado
-        exit;
-    }else{
+    if($verifica_token["status"] === true){
         // Buscar todos os bloqueios
         $res = AgendamentoController::buscarBloqueios();
 
         echo json_encode($res);
-        exit;
+    }else{
+        echo json_encode($verifica_token);
     }
 }
-
 ?>

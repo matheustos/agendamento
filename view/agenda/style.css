@@ -53,14 +53,11 @@ body {
     background-color: lightseagreen;
     color: #fff;
     border: none;
-    padding: 10px 16px;
+    padding: 10px 10px;
     border-radius: 8px;
     cursor: pointer;
-}
-
-.btn-new > a{
-    color: white;
     text-decoration: none;
+    text-align: center;
 }
 
 .btn-new:hover{
@@ -71,9 +68,11 @@ body {
     background-color: rgb(159, 27, 159);
     color: #fff;
     border: none;
-    padding: 10px 16px;
+    padding: 10px 10px;
     border-radius: 8px;
     cursor: pointer;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn > a{
@@ -93,6 +92,11 @@ body {
         top: auto;
         right: auto;
         align-items: flex-start; /* alinha à esquerda do container */
+    }
+
+    .btn{
+        padding-left: 18px;
+        padding-right: 18px;
     }
 
     .filters{

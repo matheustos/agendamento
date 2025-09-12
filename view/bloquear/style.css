@@ -39,17 +39,31 @@ main form p{
     margin-bottom: 15px;
 }
 
+main form a{
+    margin-top: 0;
+    margin-left: 50px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+
+main form a:hover{
+    color: rgb(88, 86, 86);
+}
+
 main form label{
     margin-left: 50px;
 }
 
 #agenda{
     flex: 1; /* Faz as divs terem tamanho igual */
+    margin-left: 0px;
 }
 
 #bloq{
     flex: 1;
     margin-top: 50px;
+    margin-left: 10px;
 }
 
 main form select{
@@ -153,6 +167,10 @@ button:hover{
         margin-left: 0;
     }
 
+    main form a{
+        display: none;
+    }
+
     main form label{
         margin-left: 15px;
     }
@@ -178,6 +196,14 @@ button:hover{
     button{
         width: 90%;
         margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    .card-bloqueio{
+        margin-left: 15px;
+    }
+
+    .bloq h2, p{
         margin-left: 15px;
     }
 }

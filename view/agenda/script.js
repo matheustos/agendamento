@@ -1,5 +1,29 @@
 let agendamentos = [];
 
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href = "../login/index.html";
+}
+
+try {
+    // Decodifica o payload do JWT (parte do meio)
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(atob(payloadBase64));
+
+    // Verifica expiração
+    const agora = Math.floor(Date.now() / 1000); // em segundos
+    if (!payload.exp || payload.exp < agora) {
+        // Token expirado ou sem exp -> limpa e redireciona
+        localStorage.removeItem('token');
+        window.location.href = "../login/index.html";
+    }
+} catch (e) {
+    // Se der erro na decodificação -> token inválido
+    localStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
+
+
 // Função para criar Date local a partir de "YYYY-MM-DD"
 function parseDataLocal(dataStr) {
     const [ano, mes, dia] = dataStr.split('-').map(Number);
@@ -8,7 +32,14 @@ function parseDataLocal(dataStr) {
 
 // Buscar agendamentos do servidor
 function buscarAgendamentos() {
-    fetch("/agendamento/api/buscar/mes/index.php")
+    const token = localStorage.getItem('token');
+    fetch("/agendamento/api/buscar/mes/index.php", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
         .then(res => res.json())
         .then(res => {
             if(res.status) {

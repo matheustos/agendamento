@@ -1,6 +1,28 @@
 const form = document.getElementById("agenda");
 const bloqDiv = document.getElementById("bloq");
 const token = localStorage.getItem('token');
+
+if(!token){
+    window.location.href = "../login/index.html";
+}
+
+try {
+    // Decodifica o payload do JWT (parte do meio)
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(atob(payloadBase64));
+
+    // Verifica expiração
+    const agora = Math.floor(Date.now() / 1000); // em segundos
+    if (!payload.exp || payload.exp < agora) {
+        // Token expirado ou sem exp -> limpa e redireciona
+        localStorage.removeItem('token');
+        window.location.href = "../login/index.html";
+    }
+} catch (e) {
+    // Se der erro na decodificação -> token inválido
+    localStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
 // Função para exibir bloqueios na tela
 function exibirBloqueios() {
     fetch("/agendamento/api/bloquear/buscar/index.php", {
