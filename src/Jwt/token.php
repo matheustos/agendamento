@@ -58,7 +58,7 @@ class Token{
         $decoded = Token::validaToken($token);
         if (!isset($decoded->user_id)) {
             http_response_code(401);
-            return ["status" => false, "message" => $decoded]; // Token inválido ou expirado
+            return ["status" => false, "message" => "Usuário não autorizado!"]; // Token inválido ou expirado
         }else{
             $user_id = $decoded->user_id; // token válido, pode usar o user_id*/
             return ["status" => true, "user_id" => $user_id];
