@@ -249,6 +249,10 @@ class AgendamentoController{
         $hora = $dados["horario"];
         $nome = $dados["nome"];
         $telefone = $dados["telefone"];
+        $status = $dados["status"];
+        if(empty($status)){
+            $status = "agendado";
+        }
 
         $data_hoje = date("Y-m-d");
 
@@ -268,7 +272,7 @@ class AgendamentoController{
                         "message" => $validacao["message"]
                     ];
                 }else{
-                    $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone);
+                    $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
 
                     if($res){
                         //busca informações nome e servico no banco de dados para enviar o email com tais informações.

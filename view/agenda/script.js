@@ -1,65 +1,44 @@
+// -----------------------
+// VARIÁVEIS GLOBAIS
+// -----------------------
 let agendamentos = [];
-
+let agendaDisponivel = {}; // JSON com todos os horários disponíveis
 const token = localStorage.getItem('token');
-if(!token){
+
+// -----------------------
+// VALIDAÇÃO DE TOKEN
+// -----------------------
+if (!token) {
     window.location.href = "../login/index.html";
 }
 
 try {
-    // Decodifica o payload do JWT (parte do meio)
     const payloadBase64 = token.split('.')[1];
     const payload = JSON.parse(atob(payloadBase64));
-
-    // Verifica expiração
-    const agora = Math.floor(Date.now() / 1000); // em segundos
+    const agora = Math.floor(Date.now() / 1000);
     if (!payload.exp || payload.exp < agora) {
-        // Token expirado ou sem exp -> limpa e redireciona
         localStorage.removeItem('token');
         window.location.href = "../login/index.html";
     }
 } catch (e) {
-    // Se der erro na decodificação -> token inválido
     localStorage.removeItem('token');
     window.location.href = "../login/index.html";
 }
 
-
-// Função para criar Date local a partir de "YYYY-MM-DD"
+// -----------------------
+// FUNÇÕES AUXILIARES
+// -----------------------
 function parseDataLocal(dataStr) {
     const [ano, mes, dia] = dataStr.split('-').map(Number);
-    return new Date(ano, mes - 1, dia, 0, 0, 0, 0); // hora local
+    return new Date(ano, mes - 1, dia, 0, 0, 0, 0);
 }
 
-// Buscar agendamentos do servidor
-function buscarAgendamentos() {
-    const token = localStorage.getItem('token');
-    fetch("/agendamento/api/buscar/mes/index.php", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if(res.status) {
-                agendamentos = res.data;
-                gerarCards();
-            } else {
-                console.warn(res.message);
-            }
-        })
-        .catch(err => console.error("Erro ao buscar agendamentos:", err));
-}
-
-// Formatar data
 function formatarData(dataStr) {
     const data = parseDataLocal(dataStr);
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
     return data.toLocaleDateString('pt-BR', options);
 }
 
-// Filtrar por período
 function filtrarPorPeriodo(periodo, agendamento) {
     const hoje = new Date();
     const dataAgendamento = parseDataLocal(agendamento.data);
@@ -81,9 +60,36 @@ function filtrarPorPeriodo(periodo, agendamento) {
     }
 }
 
-// Gerar cards
+// -----------------------
+// BUSCAR AGENDAMENTOS
+// -----------------------
+function buscarAgendamentos() {
+    fetch("/agendamento/api/buscar/mes/index.php", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(res => {
+        if(res.status) {
+            agendamentos = res.data;
+            gerarCards();
+        } else {
+            console.warn(res.message);
+        }
+    })
+    .catch(err => console.error("Erro ao buscar agendamentos:", err));
+}
+
+// -----------------------
+// GERAR CARDS
+// -----------------------
 function gerarCards(busca = "", periodo = "all") {
     const container = document.getElementById("agendamentos");
+    if (!container) return;
+
     container.innerHTML = "";
 
     const filtrados = agendamentos.filter(a =>
@@ -114,61 +120,123 @@ function gerarCards(busca = "", periodo = "all") {
         container.appendChild(card);
 
         // Eventos dos botões
-        card.querySelector(".edit").addEventListener("click", () => editar(a.id, a.nome, a.data, a.horario, a.telefone));
-        card.querySelector(".cancel").addEventListener("click", () => btnCancelar(a.data, a.horario));
+        const btnEditar = card.querySelector(".edit");
+        const btnCancelarCard = card.querySelector(".cancel");
+
+        if(btnEditar) btnEditar.addEventListener("click", () => editar(a.id, a.nome, a.data, a.horario, a.telefone));
+        if(btnCancelarCard) btnCancelarCard.addEventListener("click", () => btnCancelar(a.data, a.horario));
     });
 }
 
-// Editar agendamento (sem observação)
+// -----------------------
+// EDIÇÃO DE AGENDAMENTO
+// -----------------------
 function editar(id, nome, data, hora, telefone) {
     const formEditar = document.getElementById("form-editar");
-    const card = document.getElementById("agendamento-" + id);
-    if (!formEditar || !card) return;
+    if(!formEditar) return;
 
+    const card = document.getElementById("agendamento-" + id);
+    if(!card) return;
+
+    // Insere o form depois do card
     card.insertAdjacentElement("afterend", formEditar);
 
-    document.getElementById("id").value = id;
-    document.getElementById("nome").value = nome;
-    document.getElementById("data").value = data;
-    document.getElementById("horario").value = hora;
-    document.getElementById("telefone").value = telefone;
+    // Preenche campos
+    const idInput = document.getElementById("id");
+    const nomeInput = document.getElementById("nome");
+    const dataInput = document.getElementById("data");
+    const horarioSelect = document.getElementById("horario");
+    const telefoneInput = document.getElementById("telefone");
+    const statusSelect = document.getElementById("status");
+
+    if(idInput) idInput.value = id;
+    if(nomeInput) nomeInput.value = nome;
+    if(dataInput) dataInput.value = data;
+    if(telefoneInput) telefoneInput.value = telefone;
 
     formEditar.style.display = "block";
     formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Buscar horários disponíveis
+    fetch('/agendamento/api/agenda/horarios.php',{
+        method : "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    }
+    )
+        .then(res => res.json())
+        .then(dataBackend => {
+            agendaDisponivel = dataBackend;
+
+            function atualizarHorarios(dataEscolhida, horarioAtual = null) {
+                if(!horarioSelect) return;
+                horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+
+                const horariosDisponiveis = agendaDisponivel[dataEscolhida] ? [...agendaDisponivel[dataEscolhida]] : [];
+
+                // Garante que o horário atual apareça mesmo se não estiver mais disponível
+                if(horarioAtual && !horariosDisponiveis.includes(horarioAtual)) {
+                    horariosDisponiveis.unshift(horarioAtual);
+                }
+
+                horariosDisponiveis.forEach(h => {
+                    const option = document.createElement("option");
+                    option.value = h;
+                    option.textContent = h;
+                    if(h === horarioAtual) option.selected = true;
+                    horarioSelect.appendChild(option);
+                });
+            }
+
+            // Inicializa horários do agendamento atual
+            atualizarHorarios(data, hora);
+
+            // Atualiza horários ao mudar a data
+            if(dataInput) {
+                dataInput.addEventListener('change', () => {
+                    atualizarHorarios(dataInput.value, null); // horário antigo não deve aparecer
+                });
+            }
+
+        })
+        .catch(err => console.error("Erro ao carregar horários do back-end:", err));
 }
 
-// Cancelar edição
+// -----------------------
+// CANCELAR EDIÇÃO
+// -----------------------
 function cancelar() {
     const formEditar = document.getElementById("form-editar");
-    formEditar.style.display = "none";
+    if(formEditar) formEditar.style.display = "none";
     limparFormulario();
 }
 
-// Limpar campos do formulário
+// -----------------------
+// LIMPAR FORMULÁRIO
+// -----------------------
 function limparFormulario() {
-    document.getElementById("id").value = "";
-    document.getElementById("nome").value = "";
-    document.getElementById("data").value = "";
-    document.getElementById("horario").value = "";
-    document.getElementById("telefone").value = "";
+    ["id","nome","data","horario","telefone", "status"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = "";
+    });
 }
 
-// Salvar alterações
+// -----------------------
+// SALVAR ALTERAÇÕES
+// -----------------------
 function salvar() {
-    const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append("id", document.getElementById("id").value);
-    formData.append("nome", document.getElementById("nome").value);
-    formData.append("data", document.getElementById("data").value);
-    formData.append("horario", document.getElementById("horario").value);
-    formData.append("telefone", document.getElementById("telefone").value);
+    ["id","nome","data","horario","telefone", "status"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) formData.append(id, el.value);
+    });
 
     fetch("/agendamento/api/atualizar/index.php", {
         method: "POST",
         body: formData,
-        headers: {
-            'Authorization': `Bearer ${token}` // o token vai no header
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
     .then(res => {
@@ -181,11 +249,11 @@ function salvar() {
     });
 }
 
-// Cancelar agendamento
+// -----------------------
+// CANCELAR AGENDAMENTO
+// -----------------------
 function btnCancelar(data, horario) {
     if (!confirm("Deseja realmente cancelar este agendamento?")) return;
-
-    const token = localStorage.getItem('token');
 
     const formData = new FormData();
     formData.append("data", data);
@@ -194,13 +262,11 @@ function btnCancelar(data, horario) {
     fetch("/agendamento/api/cancelar/index.php", {
         method: "POST",
         body: formData,
-        headers: {
-            'Authorization': `Bearer ${token}` // o token vai no header
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
     .then(res => {
-        if (res.status === "success") {
+        if(res.status === "success") {
             alert("Agendamento cancelado!");
             buscarAgendamentos();
         } else {
@@ -210,14 +276,15 @@ function btnCancelar(data, horario) {
     .catch(err => console.error("Erro ao cancelar agendamento:", err));
 }
 
-// Eventos de busca e filtro
-document.getElementById("search").addEventListener("input", (e) => {
-    gerarCards(e.target.value, document.getElementById("periodFilter").value);
-});
+// -----------------------
+// EVENTOS DE BUSCA E FILTRO
+// -----------------------
+const searchInput = document.getElementById("search");
+const periodFilter = document.getElementById("periodFilter");
+if(searchInput) searchInput.addEventListener("input", (e) => gerarCards(e.target.value, periodFilter?.value || "all"));
+if(periodFilter) periodFilter.addEventListener("change", (e) => gerarCards(searchInput?.value || "", e.target.value));
 
-document.getElementById("periodFilter").addEventListener("change", (e) => {
-    gerarCards(document.getElementById("search").value, e.target.value);
-});
-
-// Inicialização
+// -----------------------
+// INICIALIZAÇÃO
+// -----------------------
 buscarAgendamentos();

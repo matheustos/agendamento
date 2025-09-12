@@ -121,6 +121,25 @@ class AgendamentoValidators{
         return $horaIso;
     }
 
+    public static function diaSemana($data){
+        $dateTime = new \DateTime($data);
+
+        $dias = [
+            'Monday'    => 'segunda',
+            'Tuesday'   => 'terca',
+            'Wednesday' => 'quarta',
+            'Thursday'  => 'quinta',
+            'Friday'    => 'sexta',
+            'Saturday'  => 'sabado',
+            'Sunday'    => 'domingo'
+        ];
+
+        $diaSemanaIngles = $dateTime->format("l");
+        $diaSemanaPortugues = $dias[$diaSemanaIngles];
+
+        return $diaSemanaPortugues;
+    }
+
     public static function formatarRetorno($mensagem, $data){
         return ["status" => true, "message" => $mensagem, "data" => $data];
     }
