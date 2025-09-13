@@ -19,10 +19,20 @@ try {
     if (!payload.exp || payload.exp < agora) {
         localStorage.removeItem('token');
         window.location.href = "../login/index.html";
+    }else{
+        userAccess = payload.acesso;  // "admin" ou "cliente"
     }
 } catch (e) {
     localStorage.removeItem('token');
     window.location.href = "../login/index.html";
+}
+
+if(userAccess === "admin") {
+    const btn = document.createElement("a");
+    btn.href = "../bloquear/index.html";
+    btn.className = "btn";
+    btn.textContent = "+ Bloquear Agenda";
+    document.querySelector(".header-buttons").appendChild(btn);
 }
 
 // -----------------------
@@ -96,8 +106,7 @@ function buscarAgendamentos() {
     fetch("/agendamento/api/buscar/mes/index.php", {
         method: "GET",
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
+            "Authorization": `Bearer ${token}`
         }
     })
     .then(res => res.json())

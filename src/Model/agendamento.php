@@ -233,33 +233,6 @@ class Agendamento {
         return $email;
     }
 
-    public static function buscarSemana($ano, $semana){
-        $conn = Database::conectar();
-
-        if (!$conn) {
-            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
-        }
-
-        $status = "agendado";
-
-        // Consulta usando YEAR() e WEEK()
-        $sql = "SELECT * FROM agenda 
-                WHERE status = '{$status}'AND YEAR(data) = $ano AND WEEK(data, 1) = $semana"; 
-        // O segundo parâmetro '1' indica que a semana começa na segunda-feira
-
-        $result = $conn->query($sql);
-
-        $agendamentos = [];
-
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $agendamentos[] = $row; // adiciona cada linha ao array
-            }
-        }
-
-        return $agendamentos;
-    }
-
     public static function buscarMes($mes){
         $conn = Database::conectar();
 
@@ -285,6 +258,50 @@ class Agendamento {
 
         return $agendamentos;
     }
+
+    public static function buscarMesNome($mes, $nome) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return [
+                "status" => false,
+                "message" => "Erro na conexão com o banco de dados.",
+                "data" => []
+            ];
+        }
+
+        $statusAgendado = "agendado";
+        $statusConfirmado = "confirmado";
+
+        // Query corrigida com parênteses para o OR
+        $sql = "SELECT * FROM agenda
+                WHERE MONTH(data) = ?
+                AND YEAR(data) = YEAR(CURDATE())
+                AND nome = ?
+                AND (status = ? OR status = ?)
+                ORDER BY data, horario";
+
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return [
+                "status" => false,
+                "message" => "Erro ao preparar a query: " . $conn->error,
+                "data" => []
+            ];
+        }
+
+        $stmt->bind_param("isss", $mes, $nome, $statusAgendado, $statusConfirmado);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $agendamentos = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $agendamentos;
+    }
+
 
     public static function getBloqueio($mes){
         $status = "bloqueado";
@@ -444,36 +461,14 @@ class Agendamento {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssi", $nome, $nova_data, $nova_hora, $telefone, $status, $id);
 
-        $stmt->close();
-        $conn->close();
-
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);
         } else {
             return AgendamentoValidators::formatarErro( "Erro ao atualizar!".$stmt->error);
         }
-    }
-
-    public static function updateStatus($status, $data, $hora, $nome){
-        $conn = Database::conectar();
-
-        if (!$conn) {
-            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
-        }
-
-        // Prepara e executa a atualização
-        $sql = "UPDATE agenda SET status = ? WHERE data = ? AND horario = ? AND nome = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $status, $data, $hora, $nome);
 
         $stmt->close();
         $conn->close();
-
-        if ($stmt->execute()) {
-            return AgendamentoValidators::formatarRetorno("Status atualizado com sucesso!", null);
-        } else {
-            return AgendamentoValidators::formatarErro("Erro ao atualizar status!".$stmt->error);
-        }
     }
 
     public static function atualizarStatus($status, $data, $hora, $nome, $servico){

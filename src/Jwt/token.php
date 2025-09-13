@@ -8,7 +8,7 @@ use Firebase\JWT\Key;
 use Dotenv\Dotenv;
 
 class Token{
-    public static function geraToken($user_id){
+    public static function geraToken($user_id, $acesso){
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
         $dotenv->load();
 
@@ -17,6 +17,7 @@ class Token{
         $payload = [
             'iss' => 'localhost',          // emissor
             'aud' => 'localhost',          // destinatário
+            'acesso' => $acesso,           // verifica permissão 
             'iat' => time(),               // criado em timestamp
             'exp' => time() + 3600,        // expira em 1 hora
             'user_id' => $user_id          // id do usuário
@@ -61,7 +62,7 @@ class Token{
             return ["status" => false, "message" => "Usuário não autorizado!"]; // Token inválido ou expirado
         }else{
             $user_id = $decoded->user_id; // token válido, pode usar o user_id*/
-            return ["status" => true, "user_id" => $user_id];
+            return ["status" => true, "user_id" => $user_id, "acesso" => $decoded->acesso];
         }
     }
 }

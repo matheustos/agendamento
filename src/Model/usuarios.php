@@ -5,10 +5,10 @@ use Model\Database;
 use Validators\AgendamentoValidators;
 
 class Usuarios{
-    public static function cadastrar($nome, $email, $senha, $telefone, $user_id) {
+    public static function cadastrar($nome, $email, $senha, $telefone, $acesso) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO usuarios (`nome`, `email`, `senha`, `telefone`, `user_id`) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $nome, $email, $senha, $telefone, $user_id);
+        $stmt = $conn->prepare("INSERT INTO usuarios (`nome`, `email`, `senha`, `telefone`, `acesso`) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $nome, $email, $senha, $telefone, $acesso);
         return $stmt->execute();
     }
 
@@ -49,6 +49,28 @@ class Usuarios{
         if ($resultado->num_rows > 0) {
             return $resultado->fetch_all(MYSQLI_ASSOC);
         }
+    }
+
+    public static function buscarUserById($id){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT nome FROM usuarios 
+        WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        // Pega os resultados
+        $result = $stmt->get_result();
+        $nome = $result->fetch_all(MYSQLI_ASSOC);
+
+        $stmt->close();
+
+        return $nome;
     }
 }
 ?>

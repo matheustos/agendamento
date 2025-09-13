@@ -12,7 +12,7 @@ class UsuariosController{
         $senha = $dados["senha"];
         $senha_confirm = $dados["senha_confirm"];
         $telefone = $dados["telefone"];
-        $user_id = 0;
+        $acesso = "cliente";
 
         if($senha === $senha_confirm){
             $hash = password_hash($senha, PASSWORD_DEFAULT);
@@ -25,7 +25,7 @@ class UsuariosController{
                     return $emailExistente; // Retorna erro se o email já estiver cadastrado
                 }
                 
-                $res = usuarios::cadastrar($nome, $email, $hash, $telefone, $user_id);
+                $res = usuarios::cadastrar($nome, $email, $hash, $telefone, $acesso);
 
                 if(!$res){
                     return ["status" => false, "message" => "Erro ao cadastrar usuário."];
@@ -129,5 +129,14 @@ class UsuariosController{
             return AgendamentoValidators::formatarErro("Nenhum usuário encontrado!");
         }
 
+    }
+
+    public static function buscarNome($id){
+        $res = Usuarios::buscarUserById($id);
+
+        if($res){
+            $nome = $res[0]["nome"];
+            return $nome;
+        }
     }
 }

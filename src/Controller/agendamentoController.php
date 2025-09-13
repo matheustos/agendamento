@@ -54,30 +54,6 @@ class AgendamentoController{
         }
     }
 
-    public static function alterarStatus($status, $data, $hora, $nome){
-
-        //var_dump($status, $data, $hora, $nome);
-        if(empty($status) || empty($data) || empty($hora)){
-            return AgendamentoValidators::formatarErro("Informe todos os dados!");
-        }else{
-            $dataIso = AgendamentoValidators::validacaoData($data);
-            $horaIso = AgendamentoValidators::validacaoHora($hora);
-
-            $validacao = AgendamentoValidators::validacaoCancelamento($dataIso, $horaIso);
-            if($validacao["status"] === true){
-                return $validacao;
-            }else{
-                $res = Agendamento::updateStatus($status, $dataIso, $horaIso, $nome);
-
-                if($res){
-                    return AgendamentoValidators::formatarRetorno($res, []);
-                }else{
-                    return AgendamentoValidators::formatarErro("Erro ao alterar status!");
-                }
-            }
-        }
-    }
-
     public static function bloquearAgenda($dados){
         $servico = null;
         $status = "bloqueado";
@@ -187,27 +163,18 @@ class AgendamentoController{
         }
     }
 
-    public static function buscarPorSemana(){
-        $ano = date('Y');
-        $semana = date('W');
+    public static function buscarPorMesENome($nome){
+        $mes = date("m");
+        $res = Agendamento::buscarMesNome($mes, $nome);
 
-        $res = Agendamento::buscarSemana($ano, $semana);
-
-        if(is_array($res)){
-            return AgendamentoValidators::formatarRetorno("Agendamentos:", $res);
-        }else{
-            return AgendamentoValidators::formatarErro("Não foi possível consultar os agendamentos da semana");
-        }
-    }
-
-    public static function buscarHoje(){
-        $data_hoje = date("Y-m-d");
-
-        $res = Agendamento::buscar($data_hoje);
-        if($res){
-            return AgendamentoValidators::formatarRetorno("Seus agendamentos para hoje são:", $res);
-        }else{
-            return AgendamentoValidators::formatarErro("Nenhum agendamento para hoje!");
+        if (is_array($res)) {
+            if($res){
+                return AgendamentoValidators::formatarRetorno("Registros encontrados!",$res);
+            }else{
+                return AgendamentoValidators::formatarErro("Não existem registros para esse mês!");
+            }
+        } else {
+            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
         }
     }
 
