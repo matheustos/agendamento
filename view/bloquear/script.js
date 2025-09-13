@@ -108,10 +108,16 @@ try {
     if (!payload.exp || payload.exp < agora) {
         localStorage.removeItem('token');
         window.location.href = "../login/index.html";
+    }else{
+        userAccess = payload.acesso;  // "admin" ou "cliente"
     }
 } catch (e) {
     localStorage.removeItem('token');
     window.location.href = "../login/index.html";
+}
+
+if(userAccess != "admin") {
+    window.location.href = "../agenda/index.html"; //redirecionar para a agenda pois não tem permissão para bloquear agenda
 }
 
 // ---------------------

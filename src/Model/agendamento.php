@@ -319,7 +319,7 @@ class Agendamento {
             return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
         }
 
-        $stmt->bind_param("is", $mes, $status); // ambos são strings
+        $stmt->bind_param("is", $mes, $status); 
         $stmt->execute();
 
         $resultado = $stmt->get_result();
@@ -344,7 +344,7 @@ class Agendamento {
         $horarios = ["09:00", "10:30", "13:30", "15:00", "16:30", "18:00"];
 
         // Valor fixo para indicar bloqueio
-        $status = "bloqueado"; // ou $bloqueado = 1; depende de como está sua tabela
+        $status = "bloqueado"; 
 
         foreach ($horarios as $horario) {
             // Verifica se já existe agendamento neste dia e horário
