@@ -169,6 +169,10 @@ body {
     margin-top: 15px;
 }
 
+.agendamento-card .actions .edit:hover{
+    background-color: rgba(2, 84, 2, 0.784);
+}
+
 .agendamento-card .actions .cancel {
     background-color: #ff5252;
     color: #fff;
@@ -177,6 +181,10 @@ body {
     padding-bottom: 5px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.agendamento-card .actions .cancel:hover{
+    background-color: #912b2b;
 }
 
 #form-editar{
@@ -206,11 +214,15 @@ body {
     width: 95px;
     padding: 3px;
     color: white;
-    background-color: rgba(0, 128, 0, 0.784);
+    background-color: rgba(1, 157, 1, 0.9);
     border: none;
     border-radius: 5px;
     height: 25px;
     margin-left: 3px;
+}
+
+.salv:hover{
+    background-color: rgba(2, 84, 2, 0.784);
 }
 
 .can{
@@ -222,4 +234,9 @@ body {
     border-radius: 5px;
     height: 25px;
 }
+
+.can:hover{
+    background-color: #912b2b;
+}
+
 

@@ -26,6 +26,35 @@ try {
 }
 
 // -----------------------
+// FUNÇÕES DE LOADING
+// -----------------------
+function showLoading() {
+    let overlay = document.getElementById("loading-overlay");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "loading-overlay";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.backgroundColor = "rgba(0,0,0,0.5)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "9999";
+        overlay.innerHTML = `<div style="padding:20px; background:white; border-radius:8px;">⏳ Processando, aguarde...</div>`;
+        document.body.appendChild(overlay);
+    }
+    overlay.style.display = "flex";
+}
+
+function hideLoading() {
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.style.display = "none";
+}
+
+// -----------------------
 // FUNÇÕES AUXILIARES
 // -----------------------
 function parseDataLocal(dataStr) {
@@ -109,6 +138,7 @@ function gerarCards(busca = "", periodo = "all") {
                 <span>📅 ${formatarData(a.data)}</span>
                 <span>⏰ ${a.horario}</span>
                 <span>📞 ${a.telefone}</span>
+                <span>✅ ${a.status}</span>
             </div>
             ${a.obs ? `<div class="observacoes"><strong>Observações:</strong> ${a.obs}</div>` : ""}
             <div class="actions">
@@ -131,23 +161,21 @@ function gerarCards(busca = "", periodo = "all") {
 // -----------------------
 // EDIÇÃO DE AGENDAMENTO
 // -----------------------
-function editar(id, nome, data, hora, telefone) {
+function editar(id, nome, data, hora, telefone, email) {
     const formEditar = document.getElementById("form-editar");
     if(!formEditar) return;
 
     const card = document.getElementById("agendamento-" + id);
     if(!card) return;
 
-    // Insere o form depois do card
     card.insertAdjacentElement("afterend", formEditar);
 
-    // Preenche campos
     const idInput = document.getElementById("id");
     const nomeInput = document.getElementById("nome");
     const dataInput = document.getElementById("data");
     const horarioSelect = document.getElementById("horario");
     const telefoneInput = document.getElementById("telefone");
-    const statusSelect = document.getElementById("status");
+    const statusInput = document.getElementById("status");
 
     if(idInput) idInput.value = id;
     if(nomeInput) nomeInput.value = nome;
@@ -157,51 +185,47 @@ function editar(id, nome, data, hora, telefone) {
     formEditar.style.display = "block";
     formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // Buscar horários disponíveis
+    // Buscar horários disponíveis (apenas para preencher select, não mostra loading)
     fetch('/agendamento/api/agenda/horarios.php',{
         method : "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
         }
-    }
-    )
-        .then(res => res.json())
-        .then(dataBackend => {
-            agendaDisponivel = dataBackend;
+    })
+    .then(res => res.json())
+    .then(dataBackend => {
+        agendaDisponivel = dataBackend;
 
-            function atualizarHorarios(dataEscolhida, horarioAtual = null) {
-                if(!horarioSelect) return;
-                horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
+        function atualizarHorarios(dataEscolhida, horarioAtual = null) {
+            if(!horarioSelect) return;
+            horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
 
-                const horariosDisponiveis = agendaDisponivel[dataEscolhida] ? [...agendaDisponivel[dataEscolhida]] : [];
+            const horariosDisponiveis = agendaDisponivel[dataEscolhida] ? [...agendaDisponivel[dataEscolhida]] : [];
 
-                // Garante que o horário atual apareça mesmo se não estiver mais disponível
-                if(horarioAtual && !horariosDisponiveis.includes(horarioAtual)) {
-                    horariosDisponiveis.unshift(horarioAtual);
-                }
-
-                horariosDisponiveis.forEach(h => {
-                    const option = document.createElement("option");
-                    option.value = h;
-                    option.textContent = h;
-                    if(h === horarioAtual) option.selected = true;
-                    horarioSelect.appendChild(option);
-                });
+            if(horarioAtual && !horariosDisponiveis.includes(horarioAtual)) {
+                horariosDisponiveis.unshift(horarioAtual);
             }
 
-            // Inicializa horários do agendamento atual
-            atualizarHorarios(data, hora);
+            horariosDisponiveis.forEach(h => {
+                const option = document.createElement("option");
+                option.value = h;
+                option.textContent = h;
+                if(h === horarioAtual) option.selected = true;
+                horarioSelect.appendChild(option);
+            });
+        }
 
-            // Atualiza horários ao mudar a data
-            if(dataInput) {
-                dataInput.addEventListener('change', () => {
-                    atualizarHorarios(dataInput.value, null); // horário antigo não deve aparecer
-                });
-            }
+        atualizarHorarios(data, hora);
 
-        })
-        .catch(err => console.error("Erro ao carregar horários do back-end:", err));
+        if(dataInput) {
+            dataInput.addEventListener('change', () => {
+                atualizarHorarios(dataInput.value, null);
+            });
+        }
+
+    })
+    .catch(err => console.error("Erro ao carregar horários do back-end:", err));
 }
 
 // -----------------------
@@ -224,14 +248,16 @@ function limparFormulario() {
 }
 
 // -----------------------
-// SALVAR ALTERAÇÕES
+// SALVAR ALTERAÇÕES (mostra loading apenas aqui)
 // -----------------------
 function salvar() {
     const formData = new FormData();
-    ["id","nome","data","horario","telefone", "status"].forEach(id => {
+    ["id","nome","data","horario","telefone", "status", "email"].forEach(id => {
         const el = document.getElementById(id);
         if(el) formData.append(id, el.value);
     });
+
+    showLoading(); // <-- MOSTRA LOADING APENAS DURANTE O POST
 
     fetch("/agendamento/api/atualizar/index.php", {
         method: "POST",
@@ -240,17 +266,23 @@ function salvar() {
     })
     .then(res => res.json())
     .then(res => {
+        hideLoading(); // <-- ESCONDE LOADING QUANDO RECEBE RESPOSTA
         if(res.status === "success") {
             alert("Agendamento atualizado!");
             location.reload();
         } else {
             alert("Erro: " + res.message);
         }
+    })
+    .catch(err => {
+        hideLoading();
+        console.error(err);
+        alert("Erro ao atualizar agendamento.");
     });
 }
 
 // -----------------------
-// CANCELAR AGENDAMENTO
+// CANCELAR AGENDAMENTO (mostra loading apenas aqui)
 // -----------------------
 function btnCancelar(data, horario) {
     if (!confirm("Deseja realmente cancelar este agendamento?")) return;
@@ -259,6 +291,8 @@ function btnCancelar(data, horario) {
     formData.append("data", data);
     formData.append("horario", horario);
 
+    showLoading(); // <-- MOSTRA LOADING DURANTE CANCELAMENTO
+
     fetch("/agendamento/api/cancelar/index.php", {
         method: "POST",
         body: formData,
@@ -266,6 +300,7 @@ function btnCancelar(data, horario) {
     })
     .then(res => res.json())
     .then(res => {
+        hideLoading(); // <-- ESCONDE LOADING QUANDO RECEBE RESPOSTA
         if(res.status === "success") {
             alert("Agendamento cancelado!");
             buscarAgendamentos();
@@ -273,7 +308,10 @@ function btnCancelar(data, horario) {
             alert("Erro: " + res.message);
         }
     })
-    .catch(err => console.error("Erro ao cancelar agendamento:", err));
+    .catch(err => {
+        hideLoading();
+        console.error("Erro ao cancelar agendamento:", err);
+    });
 }
 
 // -----------------------

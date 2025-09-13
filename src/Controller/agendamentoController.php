@@ -5,7 +5,7 @@ use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
 
-    public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone){
+    public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm){
         $status = "agendado";
 
         $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
@@ -40,6 +40,9 @@ class AgendamentoController{
                                 EmailController::enviar($email, $data, $hora, $nome, $servico);
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }else{
+                                if($emailForm){
+                                    EmailController::enviar($emailForm, $data, $hora, $nome, $servico);
+                                }
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }
                         }else{
@@ -250,6 +253,7 @@ class AgendamentoController{
         $nome = $dados["nome"];
         $telefone = $dados["telefone"];
         $status = $dados["status"];
+        $emailForm = $dados["email"];
         if(empty($status)){
             $status = "agendado";
         }
@@ -286,6 +290,9 @@ class AgendamentoController{
                             EmailController::atualizar($email, $data, $hora, $nome, $servico);
                             return ["status" => "success", "data" => $res];
                         }else{
+                            if($emailForm){
+                                EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
+                            }
                             return ["status" => "success", "data" => $res];
                         }
                     }else{

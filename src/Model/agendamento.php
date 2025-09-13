@@ -268,12 +268,13 @@ class Agendamento {
         }
 
         $status = "agendado";
+        $stat = "confirmado";
 
         $sql = "SELECT * FROM agenda 
-        WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) AND status = ? 
+        WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) AND status = ? OR status = ?
         ORDER BY data, horario";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("is", $mes, $status);
+        $stmt->bind_param("iss", $mes, $status, $stat);
         $stmt->execute();
 
         // Pega os resultados

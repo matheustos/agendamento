@@ -1,54 +1,3 @@
-/*const token = localStorage.getItem('token');
-if(!token){
-    window.location.href = "../login/index.html";
-}
-
-try {
-    // Decodifica o payload do JWT (parte do meio)
-    const payloadBase64 = token.split('.')[1];
-    const payload = JSON.parse(atob(payloadBase64));
-
-    // Verifica expiração
-    const agora = Math.floor(Date.now() / 1000); // em segundos
-    if (!payload.exp || payload.exp < agora) {
-        // Token expirado ou sem exp -> limpa e redireciona
-        localStorage.removeItem('token');
-        window.location.href = "../login/index.html";
-    }
-} catch (e) {
-    // Se der erro na decodificação -> token inválido
-    localStorage.removeItem('token');
-    window.location.href = "../login/index.html";
-}
-
-const form = document.getElementById("agenda");
-
-form.addEventListener("submit", async function(event) {
-  event.preventDefault();
-
-  const token = localStorage.getItem('token');
-  const dados = new FormData(form);
-
-  try {
-    const res = await fetch("/agendamento/api/novo/index.php", {
-      method: "POST",
-      body: dados,
-      headers: {
-        'Authorization': `Bearer ${token}` // o token vai no header
-      }
-    });
-
-    const json = await res.json();
-
-    // Alerta nativo do navegador
-    alert(json.message);
-    location.reload();
-
-  } catch (err) {
-    alert("Erro: " + err.message);
-  }
-});*/
-
 // -----------------------
 // VALIDAÇÃO DO TOKEN
 // -----------------------
@@ -82,19 +31,18 @@ const form = document.getElementById("agenda");
 // CARREGAR HORÁRIOS DO BACK-END
 // -----------------------
 fetch('/agendamento/api/agenda/horarios.php', {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        }
-    }) 
-    // endpoint que retorna próximos 30 dias
-    .then(res => res.json())
-    .then(data => {
-        agendaDisponivel = data;
-        habilitarDatasDisponiveis();
-    })
-    .catch(err => console.error('Erro ao carregar agenda:', err));
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+})
+.then(res => res.json())
+.then(data => {
+    agendaDisponivel = data;
+    habilitarDatasDisponiveis();
+})
+.catch(err => console.error('Erro ao carregar agenda:', err));
 
 // -----------------------
 // FILTRAR HORÁRIOS NO SELECT
@@ -105,12 +53,10 @@ inputData.addEventListener('change', () => {
     // Limpa o select antes de preencher
     selectHorario.innerHTML = '<option value="">Selecione um horário</option>';
 
-    // ===== FILTRO AQUI =====
     // Pega somente os horários disponíveis da data selecionada
     const horarios = agendaDisponivel[dataEscolhida] || [];
-    // =======================
 
-    // Adiciona os horários no select
+    // Adiciona os horários disponíveis
     horarios.forEach(hora => {
         const option = document.createElement('option');
         option.value = hora;
@@ -135,13 +81,33 @@ function habilitarDatasDisponiveis() {
 }
 
 // -----------------------
-// ENVIO DO FORMULÁRIO DE NOVO AGENDAMENTO
+// ENVIO DO FORMULÁRIO COM TELA DE "CARREGANDO"
 // -----------------------
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const token = localStorage.getItem('token');
     const dados = new FormData(form);
+
+    // =======================
+    // TELA DE CARREGANDO
+    // =======================
+    const loadingOverlay = document.createElement("div");
+    loadingOverlay.id = "loadingOverlay";
+    loadingOverlay.style = `
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    `;
+    loadingOverlay.textContent = "⏳ Processando, aguarde...";
+    document.body.appendChild(loadingOverlay);
 
     try {
         const res = await fetch("/agendamento/api/novo/index.php", {
@@ -154,11 +120,16 @@ form.addEventListener("submit", async function(event) {
 
         const json = await res.json();
 
+        // =======================
+        // REMOVER TELA DE CARREGANDO
+        // =======================
+        loadingOverlay.remove();
+
         alert(json.message);
         location.reload();
 
     } catch (err) {
+        loadingOverlay.remove();
         alert("Erro: " + err.message);
     }
 });
-

@@ -13,17 +13,18 @@ class EmailController{
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'matheustos123456@gmail.com';
-        $mail->Password   = 'dvts ltjd ssso yezb';
+        $mail->Username   = 'matheusstos123456@gmail.com';
+        $mail->Password   = 'nnii wtto hazc awdh';
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
-        $mail->setFrom('matheustos123456@gmail.com.com', 'Sistema de Agendamento');
+        $mail->setFrom('matheusstos123456@gmail.com.com', 'Sistema de Agendamento');
         $mail->isHTML(true);
     }
 
     public static function enviar($email, $data, $hora, $nome, $servico)
     {
+        $data_format = date("d/m/Y", strtotime($data)); 
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento para o serviço ".$servico." foi confirmado.\n".
@@ -31,7 +32,7 @@ class EmailController{
         "Obrigado por escolher nosso serviço!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento para o serviço <b>$servico</b> foi confirmado.</p>
-                <p><strong>Data:</strong> $data<br>
+                <p><strong>Data:</strong> $data_format<br>
                    <strong>Hora:</strong> $hora</p>
                 <p>Obrigado por escolher nosso serviço!</p>";
 
@@ -59,12 +60,13 @@ class EmailController{
 
     public static function cancelamento($email, $nome, $data, $hora)
     {
+        $data_format = date("d/m/Y", strtotime($data)); 
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento foi cancelado com sucesso!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento foi cancelado com sucesso!</p>
-                <p>Data: $data</p>
+                <p>Data: $data_format</p>
                 <p>Hora: $hora</p>
                 <p>Status: Cancelado</p>";
 
@@ -92,13 +94,14 @@ class EmailController{
 
     public static function atualizar($email, $data, $hora, $nome, $servico)
     {
+        $data_format = date("d/m/Y", strtotime($data)); 
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento foi atualizado com sucesso!\n".
         "Data: ".$data." Hora: ".$hora."\n"."Serviço: ".$servico."\nObrigado por escolher nosso serviço!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento foi atualizado com sucesso!</p>
-                <p><strong>Data:</strong> $data<br>
+                <p><strong>Data:</strong> $data_format<br>
                    <strong>Hora:</strong> $hora<br>
                    <strong>Serviço:</strong> $servico</p>
                 <p>Obrigado por escolher nosso serviço!</p>";
