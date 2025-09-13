@@ -369,14 +369,14 @@ class Agendamento {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $novo_status, $data, $hora);
 
+        $stmt->close();
+        $conn->close();
+        
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento cancelado com sucesso!", null);
         } else {
             return AgendamentoValidators::formatarErro("Erro ao cancelar!".$stmt->error);
         }
-
-        $stmt->close();
-        $conn->close();
     }
 
     public static function getAgendaDisponivel($diasAdiante = 30) {
@@ -444,14 +444,14 @@ class Agendamento {
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssi", $nome, $nova_data, $nova_hora, $telefone, $status, $id);
 
+        $stmt->close();
+        $conn->close();
+
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento atualizado com sucesso!", null);
         } else {
             return AgendamentoValidators::formatarErro( "Erro ao atualizar!".$stmt->error);
         }
-
-        $stmt->close();
-        $conn->close();
     }
 
     public static function updateStatus($status, $data, $hora, $nome){
