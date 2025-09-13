@@ -22,7 +22,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     position: relative;
 }
 
@@ -34,12 +34,22 @@ body {
 }
 
 .header-buttons {
+    margin-top: 50px;   
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    /*flex-direction: column; /* Coloca um botão embaixo do outro */
+    gap: 10px; /* Espaço entre os botões */
+}
+
+.header-logout {
+    margin: 20px;   
     position: absolute;
     top: 0;
     right: 0;
     display: flex;
     flex-direction: column; /* Coloca um botão embaixo do outro */
-    gap: 10px; /* Espaço entre os botões */
 }
 
 /* Remove absolute individual dos botões */
@@ -84,14 +94,44 @@ body {
     background-color: rgb(95, 13, 95);
 }
 
+.btn-sair {
+    background-color: rgb(193, 3, 3);
+    width: 40px;
+    color: #fff;
+    border: none;
+    margin-right: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.btn-sair:hover{
+    background-color: rgb(116, 3, 3);;
+}
+
 @media (max-width: 760px) {
     .header-buttons {
         position: relative; /* sai do absolute */
         flex-direction: column; /* empilha os botões */
-        margin-top: 10px; /* espaço em cima */
+        margin-top: 0; /* espaço em cima */
         top: auto;
         right: auto;
         align-items: flex-start; /* alinha à esquerda do container */
+    }
+
+    .header-logout{
+        position: absolute;
+        flex-direction: column;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        margin-right: 0;
+        align-items: flex-end;
     }
 
     .btn{

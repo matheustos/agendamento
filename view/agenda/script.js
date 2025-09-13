@@ -12,6 +12,23 @@ if (!token) {
     window.location.href = "../login/index.html";
 }
 
+function logout() {
+    // Remove o token do navegador
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+
+    // Redireciona para a tela de login
+    window.location.href = "../login/index.html";
+}
+
+// Captura o clique no botão de sair
+document.addEventListener("DOMContentLoaded", () => {
+    const btnLogout = document.querySelector(".btn-sair");
+    if (btnLogout) {
+        btnLogout.addEventListener("click", logout);
+    }
+});
+
 try {
     const payloadBase64 = token.split('.')[1];
     const payload = JSON.parse(atob(payloadBase64));
