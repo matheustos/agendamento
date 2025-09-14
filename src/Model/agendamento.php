@@ -431,7 +431,7 @@ class Agendamento {
             }
 
             // remove os horários já agendados
-            $sqlAgendados = "SELECT horario FROM agenda WHERE data = ? AND (status = 'agendado' OR status = 'bloqueado')";
+            $sqlAgendados = "SELECT horario FROM agenda WHERE data = ? AND (status = 'agendado' OR status = 'bloqueado' OR status = 'confirmado')";
             $stmt2 = $conn->prepare($sqlAgendados);
             $stmt2->bind_param("s", $data);
             $stmt2->execute();
