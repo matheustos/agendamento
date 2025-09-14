@@ -411,6 +411,68 @@ class Agendamento {
 
         $agenda = [];
 
+        $horaAtual = date("H:i"); // pega a hora atual apenas uma vez
+
+        for ($i = 0; $i < $diasAdiante; $i++) {
+            $dateTime = new \DateTime("+$i day");
+            $data = $dateTime->format("Y-m-d");
+            $diaSemana = $dias[$dateTime->format("l")];
+
+            // pega os horários fixos desse dia
+            $sqlHorarios = "SELECT horario FROM horarios_semana WHERE dia_semana = ?";
+            $stmt = $conn->prepare($sqlHorarios);
+            $stmt->bind_param("s", $diaSemana);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            $horarios = [];
+            while ($row = $result->fetch_assoc()) {
+                $horarios[] = $row['horario'];
+            }
+
+            // remove os horários já agendados
+            $sqlAgendados = "SELECT horario FROM agenda WHERE data = ? AND status = 'agendado'";
+            $stmt2 = $conn->prepare($sqlAgendados);
+            $stmt2->bind_param("s", $data);
+            $stmt2->execute();
+            $result2 = $stmt2->get_result();
+
+            $ocupados = [];
+            while ($row = $result2->fetch_assoc()) {
+                $ocupados[] = $row['horario'];
+            }
+
+            $disponiveis = array_diff($horarios, $ocupados);
+
+            // filtra horários passados se for hoje
+            if ($data == date("Y-m-d")) {
+                $disponiveis = array_filter($disponiveis, function($horario) use ($horaAtual) {
+                    return $horario >= $horaAtual;
+                });
+            }
+
+            $agenda[$data] = array_values($disponiveis); // garante JSON limpo
+        }
+
+        return $agenda;
+    }
+
+
+    /*public static function getAgendaDisponivel($diasAdiante = 30) {
+        $conn = Database::conectar();
+
+        $dias = [
+            'Monday'    => 'segunda',
+            'Tuesday'   => 'terca',
+            'Wednesday' => 'quarta',
+            'Thursday'  => 'quinta',
+            'Friday'    => 'sexta',
+            'Saturday'  => 'sabado',
+            'Sunday'    => 'domingo'
+        ];
+
+        $agenda = [];
+
         for ($i = 0; $i < $diasAdiante; $i++) {
             $dateTime = new \DateTime("+$i day");
             $data = $dateTime->format("Y-m-d");
@@ -446,7 +508,7 @@ class Agendamento {
         }
 
         return $agenda;
-    }
+    }*/
 
     public static function atualizar($nova_data, $nova_hora, $id, $nome, $telefone, $status){       
 
