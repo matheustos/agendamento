@@ -15,12 +15,12 @@ class Token{
         $chave_secreta = $_ENV['JWT_SECRET'];
 
         $payload = [
-            'iss' => 'localhost',          // emissor
-            'aud' => 'localhost',          // destinatário
-            'acesso' => $acesso,           // verifica permissão 
-            'iat' => time(),               // criado em timestamp
-            'exp' => time() + 3600,        // expira em 1 hora
-            'user_id' => $user_id          // id do usuário
+            'iss' => 'localhost',                      // emissor
+            'aud' => 'localhost',                     // destinatário
+            'acesso' => $acesso,                     // verifica permissão 
+            'iat' => time(),                        // criado em timestamp
+            'exp' => time() + (60 * 60 * 24 * 30), // expira em 30 dias
+            'user_id' => $user_id                 // id do usuário
         ];
 
         $jwt = JWT::encode($payload, $chave_secreta, 'HS256');
