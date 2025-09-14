@@ -37,11 +37,11 @@ class AgendamentoController{
                         if($res){
                             $email = Agendamento::getEmail($nome);
                             if($email){
-                                EmailController::enviar($email, $data, $hora, $nome, $servico);
+                                EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }else{
                                 if($emailForm){
-                                    EmailController::enviar($emailForm, $data, $hora, $nome, $servico);
+                                    EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
                                 }
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }

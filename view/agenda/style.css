@@ -119,7 +119,7 @@ body {
     .header-buttons {
         position: relative; /* sai do absolute */
         flex-direction: column; /* empilha os botões */
-        margin-top: 0; /* espaço em cima */
+        margin-top: 10px; /* espaço em cima */
         top: auto;
         right: auto;
         align-items: flex-start; /* alinha à esquerda do container */

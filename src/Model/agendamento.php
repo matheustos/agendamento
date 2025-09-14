@@ -385,15 +385,15 @@ class Agendamento {
         $sql = "UPDATE agenda SET status = ? WHERE data = ? AND horario = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $novo_status, $data, $hora);
-
-        $stmt->close();
-        $conn->close();
         
         if ($stmt->execute()) {
             return AgendamentoValidators::formatarRetorno("Agendamento cancelado com sucesso!", null);
         } else {
             return AgendamentoValidators::formatarErro("Erro ao cancelar!".$stmt->error);
         }
+
+        $stmt->close();
+        $conn->close();
     }
 
     public static function getAgendaDisponivel($diasAdiante = 30) {

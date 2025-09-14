@@ -216,6 +216,7 @@ form.addEventListener("submit", (e) => {
         } else {
             alert("Erro: " + res.message);
         }
+        window.location.reload();
     })
     .catch(err => console.error("Erro ao criar bloqueio:", err));
 });

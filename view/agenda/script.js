@@ -211,7 +211,7 @@ function editar(id, nome, data, hora, telefone, email) {
     formEditar.style.display = "block";
     formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // Buscar horários disponíveis (apenas para preencher select, não mostra loading)
+    // Buscar horários disponíveis
     fetch('/agendamento/api/agenda/horarios.php',{
         method : "GET",
         headers: {
@@ -274,7 +274,7 @@ function limparFormulario() {
 }
 
 // -----------------------
-// SALVAR ALTERAÇÕES (mostra loading apenas aqui)
+// SALVAR ALTERAÇÕES
 // -----------------------
 function salvar() {
     const formData = new FormData();
@@ -308,7 +308,7 @@ function salvar() {
 }
 
 // -----------------------
-// CANCELAR AGENDAMENTO (mostra loading apenas aqui)
+// CANCELAR AGENDAMENTO 
 // -----------------------
 function btnCancelar(data, horario) {
     if (!confirm("Deseja realmente cancelar este agendamento?")) return;
@@ -333,6 +333,7 @@ function btnCancelar(data, horario) {
         } else {
             alert("Erro: " + res.message);
         }
+        window.location.reload();
     })
     .catch(err => {
         hideLoading();

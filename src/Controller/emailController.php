@@ -22,7 +22,7 @@ class EmailController{
         $mail->isHTML(true);
     }
 
-    public static function enviar($email, $data, $hora, $nome, $servico)
+    public static function enviar($email, $data, $hora, $nome, $servico, $obs)
     {
         $data_format = date("d/m/Y", strtotime($data)); 
         $mail = new PHPMailer(true);
@@ -34,7 +34,7 @@ class EmailController{
                 <p>Seu agendamento para o serviço <b>$servico</b> foi confirmado.</p>
                 <p><strong>Data:</strong> $data_format<br>
                    <strong>Hora:</strong> $hora</p>
-                <p>Obrigado por escolher nosso serviço!</p>";
+                <p>$obs</p>";
 
         try {
             self::configurar($mail);
