@@ -5,12 +5,54 @@ let agendamentos = [];
 let agendaDisponivel = {}; // JSON com todos os horários disponíveis
 const token = localStorage.getItem('token');
 
+// Menu lateral responsivo
+document.addEventListener("DOMContentLoaded", () => {
+    const sideMenu = document.querySelector('.side-menu');
+    const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
+
+    if (sideMenuToggle) {
+        sideMenuToggle.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+        });
+    }
+    if (btnLogoutSide) {
+        btnLogoutSide.addEventListener('click', logout);
+    }
+});
+
 // -----------------------
 // VALIDAÇÃO DE TOKEN
 // -----------------------
 if (!token) {
     window.location.href = "../login/index.html";
 }
+
+// Decodifique o token para pegar o acesso
+function getUserAccessFromToken() {
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.acesso;
+    } catch (e) {
+        return null;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // ...código do menu lateral...
+
+    // Esconde menus para cliente
+    const acesso = getUserAccessFromToken();
+    if (acesso === "cliente") {
+        const menuDashboard = document.getElementById('menu-dashboard');
+        const menuBloquear = document.getElementById('menu-bloquear');
+        const menuUsuarios = document.getElementById('menu-usuarios');
+        if (menuDashboard) menuDashboard.style.display = "none";
+        if (menuBloquear) menuBloquear.style.display = "none";
+        if (menuUsuarios) menuUsuarios.style.display = "none";
+    }
+});
 
 function logout() {
     // Remove o token do navegador
@@ -42,14 +84,6 @@ try {
 } catch (e) {
     localStorage.removeItem('token');
     window.location.href = "../login/index.html";
-}
-
-if(userAccess === "admin") {
-    const btn = document.createElement("a");
-    btn.href = "../bloquear/index.html";
-    btn.className = "btn";
-    btn.textContent = "+ Bloquear Agenda";
-    document.querySelector(".header-buttons").appendChild(btn);
 }
 
 // -----------------------

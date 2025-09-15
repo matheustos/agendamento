@@ -7,17 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Menu lateral fixo à esquerda -->
+    <nav class="side-menu">
+        <div class="side-menu-logo" id="sideMenuToggle">☰</div>
+        <ul class="side-menu-links" id="sideMenuLinks">
+            <li><a href="../novo/index.html">Novo Agendamento</a></li>
+            <li id="menu-bloquear"><a href="../bloquear/index.html">Bloquear Agenda</a></li>
+            <li id="menu-usuarios"><a href="../usuarios/listar/index.html">Usuários</a></li>
+            <li><a href="../perfil/index.html">Perfil</a></li>
+            <li><button class="btn-sair" title="Logout" id="btnLogoutSide">Sair</button></li>
+        </ul>
+    </nav>
+
     <div class="container">
-        <div class="header-logout">
-            <button class="btn-sair" title="Logout">➜]</button>
-        </div>    
         <header class="header">
+            
             <h1><span class="icon">📅</span> Agendamentos</h1>
             <p>Gerencie todos os seus agendamentos em um só lugar</p>
             
-            <div class="header-buttons">
+            <!--<div class="header-buttons">
                 <a class="btn-new" href="../novo/index.html">+ Novo Agendamento</a>
-            </div>
+            </div>-->
         </header>
 
         <div class="filters">

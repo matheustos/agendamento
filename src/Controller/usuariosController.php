@@ -42,12 +42,13 @@ class UsuariosController{
     public static function atualizarUser($dados){
         $nome = $dados["nome"];
         $telefone = $dados["telefone"];
-        $nomeUpdate = $dados["nomeUpdate"];
+        $email = $dados["email"];
+        $id = $dados["id"];
 
         $validacao = UsuariosValidators::validacaoAtualizar($nome, $telefone);
 
         if($validacao["status"] === true){
-            $res = Usuarios::atualizar($nome, $telefone, $nomeUpdate);
+            $res = Usuarios::atualizar($nome, $telefone, $email, $id);
             if(!$res){
                 return ["status" => false, "message" => "Erro ao atualizar dados."];
             }else{
@@ -57,6 +58,20 @@ class UsuariosController{
             return $validacao;
         }
 
+    }
+
+    public static function removerUser($id){
+        if(empty($id)){
+            return ["status" => false, "message" => "Informe o usuário!"];
+        }
+
+        $res = Usuarios::removerUsuario($id);
+
+        if($res){
+            return ["status" => true, "message" => "Usuário removio com sucesso!"];
+        }else{
+            return ["status" => false, "message" => "Erro ao remover usuário!"];
+        }
     }
 
  

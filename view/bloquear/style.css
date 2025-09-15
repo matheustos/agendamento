@@ -21,30 +21,49 @@ header p{
     text-align: center;
     color: gray;
     margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+menu ul{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+menu ul li{
+    display: inline-block;
+    color: lightseagreen;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+menu ul li a{
+    padding: 8px;
+    padding-bottom: 10px;
+    color: lightseagreen;
+    text-decoration: none;
+}
+
+menu ul li a:hover{
+    background-color: lightseagreen;
+    color: white;
+    border-radius: 5px 5px 5px 5px;
 }
 
 main{
-    display: flex; /* Deixa os filhos lado a lado */
+    display: flex; 
     gap: 10px;     /* Espaço entre as divs */
 }
 
 main form h2{
-    margin-left: 50px;
-    margin-top: 50px;
+    margin-left: 10px;
+    margin-top: 20px;
 }
 
 main form p{
     color: gray;
-    margin-left: 50px;
+    margin-left: 10px;
     margin-bottom: 15px;
-}
-
-main form a{
-    margin-top: 0;
-    margin-left: 50px;
-    text-decoration: none;
-    color: black;
-    font-size: 18px;
 }
 
 main form a:hover{
@@ -52,22 +71,24 @@ main form a:hover{
 }
 
 main form label{
-    margin-left: 50px;
+    margin-left: 10px;
 }
 
 #agenda{
     flex: 1; /* Faz as divs terem tamanho igual */
     margin-left: 0px;
+    margin-left: 10px;
+    height: 80vh;
 }
 
 #bloq{
     flex: 1;
-    margin-top: 50px;
-    margin-left: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
 }
 
 main form select{
-    margin-left: 50px;
+    margin-left: 10px;
     margin-top: 5px;
     margin-bottom: 10px;
     width: 400px;
@@ -77,7 +98,7 @@ main form select{
 }
 
 main form input{
-    margin-left: 50px;
+    margin-left: 10px;
     margin-top: 5px;
     margin-bottom: 10px;
     width: 380px;
@@ -87,7 +108,7 @@ main form input{
 }
 
 main form textarea{
-    margin-left: 50px;
+    margin-left: 10px;
     margin-top: 5px;
     margin-bottom: 10px;
     width: 380px;
@@ -99,7 +120,7 @@ main form textarea{
 }
 
 button{
-    margin-left: 50px;
+    margin-left: 10px;
     width: 400px;
     padding: 10px;
     border-radius: 8px;

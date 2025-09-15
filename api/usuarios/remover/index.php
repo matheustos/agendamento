@@ -1,12 +1,13 @@
 <?php
+
 require_once __DIR__ . '/../../../vendor/autoload.php';
 header('Content-Type: application/json');
 
 use Controller\UsuariosController;
 
-$res = UsuariosController::atualizarUser($_POST);
+$id = $_POST["id"];
+
+$res = UsuariosController::removerUser($id);
 
 echo json_encode($res);
-
-
 ?>

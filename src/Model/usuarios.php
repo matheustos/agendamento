@@ -33,10 +33,10 @@ class Usuarios{
         return $stmt->execute();
     }
 
-    public static function atualizar($nome, $telefone, $nomeUpdate){
+    public static function atualizar($nome, $telefone, $email, $id){
         $conn = Database::conectar();
-        $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, telefone = ? WHERE nome = ?");
-        $stmt->bind_param("sss", $nomeUpdate, $telefone, $nome);
+        $stmt = $conn->prepare("UPDATE usuarios SET nome = ?, telefone = ?, email = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $nome, $telefone, $email, $id);
         return $stmt->execute();
     }
 
@@ -49,6 +49,13 @@ class Usuarios{
         if ($resultado->num_rows > 0) {
             return $resultado->fetch_all(MYSQLI_ASSOC);
         }
+    }
+
+    public static function removerUsuario($id){
+        $conn = Database::conectar();
+        $stmt = $conn->prepare("DELETE FROM usuarios WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
     }
 
     public static function buscarUserById($id){

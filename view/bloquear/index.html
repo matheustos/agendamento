@@ -7,13 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <header>
         <h1>🔒 Bloquear Agenda</h1>
         <p>Gerencie os períodos indisponíveis da sua agenda de forma fácil e organizada</p>
     </header>
+    <menu>
+            <ul>
+                <li><a href="../agenda/index.html">Agenda</a></li>
+                <li><a href="../novo/index.html">Novo Agendamento</a></li>
+                <li><a href="../usuarios/listar/">Usuários</a></li>
+                <li><a href="../usuarios/perfil">Perfil</a></li>
+            </ul>
+        </menu>
     <main>
         <form id="agenda" method="post">
-            <a href="../agenda/index.html">↩️ Voltar</a>
             <h2>+ Criar Bloqueio</h2>
             <p>Escolha o período a ser bloqueado</p>
             <label for="data">Data</label><br>
@@ -33,7 +41,6 @@
             <p>Lista de todos os bloqueios ativos na agenda do mês</p>
         </div>
     </main>
-    
     <script src="script.js"></script>
 </body>
 </html>

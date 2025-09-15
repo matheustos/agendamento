@@ -6,6 +6,8 @@ if (!token) {
     window.location.href = "../login/index.html";
 }
 
+let userAccess = null; 
+
 try {
     const payloadBase64 = token.split('.')[1];
     const payload = JSON.parse(atob(payloadBase64));
@@ -13,10 +15,17 @@ try {
     if (!payload.exp || payload.exp < agora) {
         localStorage.removeItem('token');
         window.location.href = "../login/index.html";
+    }else{
+        userAccess = payload.acesso;  // "admin" ou "cliente"   
     }
 } catch (e) {
     localStorage.removeItem('token');
     window.location.href = "../login/index.html";
+}
+
+if(userAccess === "admin"){
+    document.getElementById("admin").style.display = "block";
+    document.getElementById("users").style.display = "block";
 }
 
 // -----------------------

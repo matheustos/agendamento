@@ -40,17 +40,44 @@ form{
 }
 
 /* Título */
-.form-container h1 {
+h1 {
   text-align: center;
   font-size: 28px;
   color: lightseagreen;
   margin-bottom: 8px;
+  display: block;
 }
 
-.form-container p {
+p {
   text-align: center;
   color: #666;
   margin-bottom: 25px;
+}
+
+#menu-admin ul{
+  display: flex;
+}
+
+#menu-admin a li {
+  padding: 8px;
+  list-style-type: none;
+  font-weight: bold;
+  color: lightseagreen;
+  font-size: 14px;
+}
+
+#menu-admin a li:hover{
+  background-color: lightseagreen;
+  color: white;
+  border-radius: 5px 5px 0px 0px;
+}
+
+ #admin{
+  display: none;
+}
+
+#users{
+  display: none;
 }
 
 #agenda .form-container .reponsive{

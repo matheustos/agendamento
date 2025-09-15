@@ -1,0 +1,327 @@
+@charset "UTF-8";
+
+/* === Base === */
+body {
+    background: #f4f3ff;
+    color: #333;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin-left: 220px;
+    transition: margin-left 0.2s;
+}
+
+/* === Menu lateral fixo === */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #23272F;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    transition: width 0.2s;
+}
+
+.side-menu-logo {
+    font-size: 2rem;
+    padding: 18px 24px 12px 24px;
+    cursor: pointer;
+    display: none;
+}
+
+.side-menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu-links li {
+    width: 78%;
+}
+
+.side-menu-links a,
+.side-menu-links button {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 18px 24px;
+    border: none;
+    background: none;
+    text-align: left;
+    transition: background 0.2s;
+    width: 100%;
+    cursor: pointer;
+}
+
+.side-menu-links li button{
+    width: 100%;
+}
+
+.side-menu-links a:hover,
+.side-menu-links button:hover {
+    background: #2563eb;
+}
+
+/* === Conteúdo principal === */
+.container {
+    max-width: 900px;
+    margin: 10px auto;
+}
+
+.container h1 {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+    color: lightseagreen;
+    text-align: center;
+}
+
+.container p {
+    color: gray;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#usuarios-list {
+    margin-top: 16px;
+}
+
+.usuario-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* === Dados do usuário === */
+.usuario-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.usuario-header,
+.usuario-dados {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr 160px;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+.usuario-header {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.usuario-dados {
+    color: #333;
+}
+
+/* === Botões padronizados === */
+.usuario-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.usuario-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 100px;
+}
+
+.usuario-actions button:hover {
+    transform: scale(1.03);
+}
+
+.btn-editar {
+    background-color: rgba(0, 128, 0, 0.784);
+    color: #fff;
+}
+.btn-editar:hover {
+    background-color: rgba(2, 84, 2, 0.784);
+}
+
+.btn-remover {
+    background-color: #d32f2f;
+    color: #fff;
+}
+.btn-remover:hover {
+    background-color: #b71c1c;
+}
+
+/* === Responsivo: menu recolhível === */
+@media (max-width: 820px) {
+    .side-menu {
+        width: 60px;
+    }
+
+    .side-menu-logo {
+        display: block;
+    }
+
+    .side-menu-links {
+        display: none;
+    }
+
+    .side-menu.open .side-menu-links {
+        display: flex;
+        background: #23272F;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 180px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    }
+
+    body {
+        margin-left: 60px;
+    }
+}
+
+/* === 📱 Responsivo até 700px === */
+@media (max-width: 700px) {
+    .usuario-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .usuario-header {
+        display: none;
+    }
+
+    .usuario-dados {
+        grid-template-columns: 1fr;
+    }
+
+    .usuario-dados span {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .usuario-id::before {
+        content: "ID: ";
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .usuario-nome::before {
+        content: "Nome: ";
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .usuario-email::before {
+        content: "E-mail: ";
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .usuario-telefone::before {
+        content: "Telefone: ";
+        font-weight: bold;
+        color: #2563eb;
+    }
+
+    .usuario-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .usuario-actions button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Modal overlay */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+}
+.close:hover {
+  color: #333;
+}
+
+/* Form fields */
+#form-editar label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+#form-editar input {
+  width: 95%;
+  padding: 8px 12px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#form-editar button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  background-color: lightseagreen;
+    border: none;
+    border-radius: 8px;
+}
+
+#form-editar button:hover {
+    background-color: rgb(13, 70, 67);
+}

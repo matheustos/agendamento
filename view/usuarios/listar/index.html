@@ -1,0 +1,50 @@
+<!-- usuarios.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuários</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Menu lateral fixo à esquerda -->
+    <nav class="side-menu">
+        <div class="side-menu-logo" id="sideMenuToggle">☰</div>
+        <ul class="side-menu-links" id="sideMenuLinks">
+            <li><a href="../../agenda/index.html">Agenda</a></li>
+            <li><a href="../../novo/index.html">Novo Agendamento</a></li>
+            <li><a href="../../bloquear/index.html">Bloquear Agenda</a></li>
+            <li class="perfil"><a href="../perfil/index.html">Perfil</a></li>
+            <li><button class="btn-sair" title="Logout" id="btnLogoutSide">Sair</button></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Usuários</h1>
+        <p>Gerencie os usuários de forma simples</p>
+        <div id="usuarios-list"></div>
+    </div>
+
+    <!-- Modal de edição -->
+    <div id="modal-editar" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h2>Editar Usuário</h2>
+    <form id="form-editar">
+      <input type="hidden" id="edit-id" name="id">
+      
+      <label for="edit-nome">Nome:</label>
+      <input type="text" id="edit-nome" name="nome" required>
+
+      <label for="edit-email">E-mail:</label>
+      <input type="email" id="edit-email" name="email" required>
+
+      <label for="edit-telefone">Telefone:</label>
+      <input type="text" id="edit-telefone" name="telefone" required>
+
+      <button type="submit" class="btn-editar">Salvar</button>
+    </form>
+  </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -13,6 +13,99 @@ body {
     padding: 20px;
 }
 
+/* Menu lateral fixo */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #23272F;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    z-index: 200;
+    transition: width 0.2s;
+}
+
+.side-menu-logo {
+    font-size: 2rem;
+    padding: 18px 24px 12px 24px;
+    cursor: pointer;
+    display: none;
+}
+
+.side-menu-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.side-menu-links li {
+    width: 100%;
+}
+
+.side-menu-links a,
+.side-menu-links button {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 18px 24px;
+    border: none;
+    background: none;
+    text-align: left;
+    border-radius: 0;
+    transition: background 0.2s;
+    width: 100%;
+    cursor: pointer;
+}
+
+.side-menu-links a:hover,
+.side-menu-links button:hover {
+    background: #2563eb;
+}
+
+/* Espaço para o conteúdo não ficar atrás do menu */
+body {
+    margin-left: 220px;
+    background-color: #f4f3ff;
+    color: #333;
+    padding: 20px;
+    transition: margin-left 0.2s;
+}
+
+/* Responsivo: menu recolhível em telas pequenas */
+@media (max-width: 820px) {
+    .side-menu {
+        width: 60px;
+    }
+    .side-menu-logo {
+        display: block;
+    }
+    .side-menu-links {
+        display: none;
+    }
+    .side-menu.open .side-menu-links {
+        display: flex;
+        background: #23272F;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 180px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    }
+    body {
+        margin-left: 60px;
+    }
+}
+
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -34,12 +127,12 @@ body {
 }
 
 .header-buttons {
-    margin-top: 50px;   
+    margin-top: 10px;   
     position: absolute;
     top: 0;
     right: 0;
     display: flex;
-    /*flex-direction: column; /* Coloca um botão embaixo do outro */
+    flex-direction: column; /* Coloca um botão embaixo do outro */
     gap: 10px; /* Espaço entre os botões */
 }
 
@@ -115,7 +208,7 @@ body {
     background-color: rgb(116, 3, 3);;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 820px) {
     .header-buttons {
         position: relative; /* sai do absolute */
         flex-direction: column; /* empilha os botões */
