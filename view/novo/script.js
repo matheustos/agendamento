@@ -19,6 +19,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+
+// Decodifique o token para pegar o acesso
+function getUserAccessFromToken() {
+    if (!token) {
+    window.location.href = "../login/index.html";
+}else{
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.acesso;
+    } catch (e) {
+        return null;
+    }
+}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // ...código do menu lateral...
+
+    // Esconde menus para cliente
+    const acesso = getUserAccessFromToken();
+    if (acesso === "cliente") {;
+        const menuBloquear = document.getElementById('menu-bloquear');
+        const menuUsuarios = document.getElementById('menu-usuarios');
+        if (menuBloquear) menuBloquear.style.display = "none";
+        if (menuUsuarios) menuUsuarios.style.display = "none";
+    }
+});
+
 if (!token) {
     window.location.href = "../login/index.html";
 }
