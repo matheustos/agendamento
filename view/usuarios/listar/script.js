@@ -144,3 +144,11 @@ function removerUsuario(id) {
         .then(() => carregarUsuarios());
     }
 }
+
+document.getElementById('btnLogoutSide').addEventListener('click', function() {
+    // Remove o token JWT do localStorage
+    localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
+
+    // Redireciona para a página de login
+    window.location.href = '../../login/index.html';
+});

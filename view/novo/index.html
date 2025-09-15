@@ -3,31 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamento</title>
+    <title> Novo Agendamento</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
   
 <form id="agenda" method="post">
+  <!-- Menu lateral fixo à esquerda -->
+    <nav class="side-menu">
+        <div class="side-menu-limpo" id="sideMenuToggle">☰</div>
+        <ul class="side-menu-links" id="sideMenuLinks">
+            <li><a href="../agenda/index.html">Agenda</a></li>
+            <li id="menu-bloquear"><a href="../bloquear/index.html">Bloquear Agenda</a></li>
+            <li id="menu-usuarios"><a href="../usuarios/listar/index.html">Usuários</a></li>
+            <li><a href="../perfil/index.html">Perfil</a></li>
+            <li><button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button></li>
+        </ul>
+    </nav>
     <h1>Novo Agendamento</h1>
     <p>Preencha os dados abaixo para agendar seu atendimento</p>
-
-    <menu id="menu-admin">
-      <ul>
-        <a href="../agenda/index.html">
-          <li>Agenda</li>
-        </a>
-        <a href="../bloquear/index.html" id="admin">
-          <li>Bloquear</li>
-        </a>
-        <a href="../usuarios/listar/" id="users">
-          <li>Usuários</li>
-        </a>
-        <a href="../usuarios/perfil/">
-          <li>Perfil</li>
-        </a>
-      </ul>
-    </menu>
     <div class="form-container">
       <h2>📅 Informações do Agendamento</h2>
       <p class="reponsive">Obs: Caso queira agendar para outra pessoa usando seu perfil, agende com seu nome e coloque nas observações que se trata de um agendamento para outra pessoa, caso contrário, o agendamento não aparecerá para o seu perfil.</p>

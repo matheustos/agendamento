@@ -82,8 +82,25 @@ form.addEventListener("submit", (e) => {
     .catch(err => console.error("Erro ao criar bloqueio:", err));
 });
 
+
+
 // Carrega os bloqueios ao abrir a página
 exibirBloqueios();*/
+// Menu lateral responsivo
+document.addEventListener("DOMContentLoaded", () => {
+    const sideMenu = document.querySelector('.side-menu');
+    const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
+
+    if (sideMenuToggle) {
+        sideMenuToggle.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+        });
+    }
+    if (btnLogoutSide) {
+        btnLogoutSide.addEventListener('click', logout);
+    }
+});
 
 const form = document.getElementById("agenda");
 const bloqDiv = document.getElementById("bloq");
@@ -219,6 +236,14 @@ form.addEventListener("submit", (e) => {
         window.location.reload();
     })
     .catch(err => console.error("Erro ao criar bloqueio:", err));
+});
+
+document.getElementById('btnLogoutSide').addEventListener('click', function() {
+    // Remove o token JWT do localStorage
+    localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
+
+    // Redireciona para a página de login
+    window.location.href = '../login/index.html';
 });
 
 // ---------------------

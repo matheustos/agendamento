@@ -9,17 +9,20 @@
 <body>
     
     <header>
+        <!-- Menu lateral fixo à esquerda -->
+        <nav class="side-menu">
+            <div class="side-menu-limpo" id="sideMenuToggle">☰</div>
+            <ul class="side-menu-links" id="sideMenuLinks">
+                <li><a href="../agenda/index.html">Agenda</a></li>
+                <li><a href="../novo/index.html">Novo Agendamento</a></li>
+                <li><a href="../usuarios/listar/index.html">Usuários</a></li>
+                <li><a href="../perfil/index.html">Perfil</a></li>
+                <button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button>
+            </ul>
+        </nav>
         <h1>🔒 Bloquear Agenda</h1>
         <p>Gerencie os períodos indisponíveis da sua agenda de forma fácil e organizada</p>
     </header>
-    <menu>
-            <ul>
-                <li><a href="../agenda/index.html">Agenda</a></li>
-                <li><a href="../novo/index.html">Novo Agendamento</a></li>
-                <li><a href="../usuarios/listar/">Usuários</a></li>
-                <li><a href="../usuarios/perfil">Perfil</a></li>
-            </ul>
-        </menu>
     <main>
         <form id="agenda" method="post">
             <h2>+ Criar Bloqueio</h2>

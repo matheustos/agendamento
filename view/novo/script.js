@@ -2,30 +2,25 @@
 // VALIDAÇÃO DO TOKEN
 // -----------------------
 const token = localStorage.getItem('token');
+
+// Menu lateral responsivo
+document.addEventListener("DOMContentLoaded", () => {
+    const sideMenu = document.querySelector('.side-menu');
+    const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
+
+    if (sideMenuToggle) {
+        sideMenuToggle.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+        });
+    }
+    if (btnLogoutSide) {
+        btnLogoutSide.addEventListener('click', logout);
+    }
+});
+
 if (!token) {
     window.location.href = "../login/index.html";
-}
-
-let userAccess = null; 
-
-try {
-    const payloadBase64 = token.split('.')[1];
-    const payload = JSON.parse(atob(payloadBase64));
-    const agora = Math.floor(Date.now() / 1000);
-    if (!payload.exp || payload.exp < agora) {
-        localStorage.removeItem('token');
-        window.location.href = "../login/index.html";
-    }else{
-        userAccess = payload.acesso;  // "admin" ou "cliente"   
-    }
-} catch (e) {
-    localStorage.removeItem('token');
-    window.location.href = "../login/index.html";
-}
-
-if(userAccess === "admin"){
-    document.getElementById("admin").style.display = "block";
-    document.getElementById("users").style.display = "block";
 }
 
 // -----------------------
@@ -141,4 +136,12 @@ form.addEventListener("submit", async function(event) {
         loadingOverlay.remove();
         alert("Erro: " + err.message);
     }
+});
+
+document.getElementById('btnLogoutSide').addEventListener('click', function() {
+    // Remove o token JWT do localStorage
+    localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
+
+    // Redireciona para a página de login
+    window.location.href = '../login/index.html';
 });

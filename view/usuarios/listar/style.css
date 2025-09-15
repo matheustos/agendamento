@@ -61,8 +61,8 @@ body {
     cursor: pointer;
 }
 
-.side-menu-links li button{
-    width: 100%;
+.side-menu-links #btnLogoutSide{
+    width: 128%;
 }
 
 .side-menu-links a:hover,
@@ -184,6 +184,14 @@ body {
 
     .side-menu-links {
         display: none;
+    }
+
+    .side-menu-links li{
+        width: 73.5%;
+    }
+
+    .side-menu-links #btnLogoutSide{
+        width: 136%;
     }
 
     .side-menu.open .side-menu-links {
