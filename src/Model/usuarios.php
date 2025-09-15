@@ -42,7 +42,7 @@ class Usuarios{
 
     public static function listar(){
         $conn = Database::conectar();
-        $stmt = $conn->prepare("SELECT * FROM usuarios");
+        $stmt = $conn->prepare("SELECT id, nome, email, telefone FROM usuarios");
         $stmt->execute();
         $resultado = $stmt->get_result();
         

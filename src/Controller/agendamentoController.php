@@ -8,11 +8,6 @@ class AgendamentoController{
     public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm){
         $status = "agendado";
 
-        $dataIso = AgendamentoValidators::validacaoData($data); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
-
-        $horaIso = AgendamentoValidators::validacaoHora($hora); /* apenas para testes no insomnia, após concluido a fase de front, retirar os parametros horaIso e DataIso pois o formulario já manda corretmanete sem precisar formatar*/
-
-
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($telefone)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
@@ -28,7 +23,7 @@ class AgendamentoController{
                 if($validaData["status"] === true){
                     return $validaData;
                 }else{
-                    $validacao = AgendamentoValidators::buscaAgendamento($data, $horaIso);
+                    $validacao = AgendamentoValidators::buscaAgendamento($data, $hora);
 
                     if($validacao["status"] === true){
                         return $validacao;
@@ -182,9 +177,6 @@ class AgendamentoController{
         $data = $dados["data"];
         $hora = $dados["horario"];
 
-        /*$dataIso = AgendamentoValidators::validacaoData($data);
-
-        $horaIso = AgendamentoValidators::validacaoHora($hora);*/
         if(empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe todos os dados!");
         }else{

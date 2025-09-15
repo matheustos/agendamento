@@ -53,6 +53,10 @@ form{
   margin-bottom: 25px;
 }
 
+#agenda .form-container .reponsive{
+  text-align: justify;
+}
+
 /* Subtítulo */
 .form-container h2 {
   font-size: 18px;
