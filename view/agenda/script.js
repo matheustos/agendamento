@@ -54,6 +54,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+try {
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(atob(payloadBase64));
+    const agora = Math.floor(Date.now() / 1000);
+    if (!payload.exp || payload.exp < agora) {
+        localStorage.removeItem('token');
+        window.location.href = "../login/index.html";
+    }else{
+        userAccess = payload.acesso;  // "admin" ou "cliente"
+    }
+} catch (e) {
+    localStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
+
+
 function logout() {
     // Remove o token do navegador
     localStorage.removeItem("token");
@@ -70,21 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btnLogout.addEventListener("click", logout);
     }
 });
-
-try {
-    const payloadBase64 = token.split('.')[1];
-    const payload = JSON.parse(atob(payloadBase64));
-    const agora = Math.floor(Date.now() / 1000);
-    if (!payload.exp || payload.exp < agora) {
-        localStorage.removeItem('token');
-        window.location.href = "../login/index.html";
-    }else{
-        userAccess = payload.acesso;  // "admin" ou "cliente"
-    }
-} catch (e) {
-    localStorage.removeItem('token');
-    window.location.href = "../login/index.html";
-}
 
 // -----------------------
 // FUNÇÕES DE LOADING
@@ -228,6 +229,7 @@ function editar(id, nome, data, hora, telefone, email) {
     const card = document.getElementById("agendamento-" + id);
     if(!card) return;
 
+    formEditar.remove(); // Remove de onde estiver antes de reposicionar
     card.insertAdjacentElement("afterend", formEditar);
 
     const idInput = document.getElementById("id");
@@ -242,8 +244,9 @@ function editar(id, nome, data, hora, telefone, email) {
     if(dataInput) dataInput.value = data;
     if(telefoneInput) telefoneInput.value = telefone;
 
+    document.getElementById("loadingOverlay").style.display = "block";
     formEditar.style.display = "block";
-    formEditar.scrollIntoView({ behavior: "smooth", block: "center" });
+
 
     // Buscar horários disponíveis
     fetch('/agendamento/api/agenda/horarios.php',{
@@ -294,7 +297,9 @@ function editar(id, nome, data, hora, telefone, email) {
 function cancelar() {
     const formEditar = document.getElementById("form-editar");
     if(formEditar) formEditar.style.display = "none";
+    location.reload();
     limparFormulario();
+    
 }
 
 // -----------------------

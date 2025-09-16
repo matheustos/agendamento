@@ -320,38 +320,59 @@ body {
     background-color: #912b2b;
 }
 
-#form-editar{
-    display: none;
+#form-editar {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+  width: 400px;
+  max-width: 90%;
+}
+
+#form-editar h2{
+    text-align: center;
+    color: lightseagreen;
     margin-bottom: 10px;
 }
 
-#form-editar form input{
-    padding: 5px;
-    width: 200px;
-    margin-bottom: 8px;
+#form-editar input{
+    width: 95%;
+    padding: 6px;
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
-#form-editar form select{
-    padding: 5px;
-    width: 200px;
-    margin-bottom: 8px;
+#form-editar select{
+    width: 95%;
+    padding: 6px;
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
-#form-editar form textarea{
-    padding: 5px;
-    width: 200px;
-    height: 80px;
+#loadingOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
 }
+
 
 .salv{
-    width: 95px;
-    padding: 3px;
+    width: 160px;
+    padding: 5px;
     color: white;
     background-color: rgba(1, 157, 1, 0.9);
     border: none;
     border-radius: 5px;
-    height: 25px;
-    margin-left: 3px;
+    font-size: 16px;
 }
 
 .salv:hover{
@@ -359,13 +380,13 @@ body {
 }
 
 .can{
-    width: 95px;
-    padding: 3px;
+    width: 160px;
+    padding: 5px;
     color: white;
     background-color: #ff5252;
     border: none;
     border-radius: 5px;
-    height: 25px;
+    font-size: 16px;
 }
 
 .can:hover{
