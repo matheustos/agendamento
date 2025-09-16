@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $verifica_token = Token::verificaToken($authHeader);
 
     if($verifica_token["status"] === true){
-        // Buscar todos os bloqueios
+        // Buscar todos os bloqueios*/
         $res = AgendamentoController::buscarBloqueios();
 
         echo json_encode($res);

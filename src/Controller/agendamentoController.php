@@ -60,7 +60,7 @@ class AgendamentoController{
         if(empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe data e hora!");
         }else{
-            if(empty($obs)){
+            if(empty($obs) || !isset($obs)){
                 $obs = null;
             }
             $getStatus = Agendamento::getStatus($data, $hora);
@@ -70,7 +70,7 @@ class AgendamentoController{
                     return AgendamentoValidators::formatarErro("Agenda já se encontra bloqueada");
                 }else{
                     if($retorno === "cancelado"){
-                        $res = Agendamento::atualizarStatus($status, $data, $hora, $nome, $servico);
+                        $res = Agendamento::atualizarStatus($status, $data, $hora, $nome, $servico, $obs);
 
                         if($res){
                             return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
@@ -120,11 +120,21 @@ class AgendamentoController{
     }
 
     public static function buscarBloqueios(){
+        $dataHoje = date('Y-m-d');
+
         $mes = date("m");
         $res = Agendamento::getBloqueio($mes);
 
+        $bloqueios = [];
+
         if($res){
-            return $res;
+            //filtra e pega apenas as datas bloqueadas que sejam iguais ou maiores que o dia atual
+            foreach($res as $data){
+                if($data['data'] >= $dataHoje){
+                    $bloqueios[] = $data;
+                }
+            }
+            return $bloqueios;
         }
     }
 

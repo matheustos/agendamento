@@ -480,7 +480,7 @@ class Agendamento {
         $conn->close();
     }
 
-    public static function atualizarStatus($status, $data, $hora, $nome, $servico){
+    public static function atualizarStatus($status, $data, $hora, $nome, $servico, $obs){
         $conn = Database::conectar();
 
         if (!$conn) {
@@ -488,9 +488,9 @@ class Agendamento {
         }
 
         // Prepara e executa a atualização
-        $sql = "UPDATE agenda SET status = ?, nome= ?, servico = ? WHERE data = ? AND horario = ?";
+        $sql = "UPDATE agenda SET status = ?, nome= ?, servico = ?, obs = ? WHERE data = ? AND horario = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $status, $nome, $servico, $data, $hora);
+        $stmt->bind_param("ssssss", $status, $nome, $servico, $obs, $data, $hora);
 
 
         if ($stmt->execute()) {
