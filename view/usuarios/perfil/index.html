@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Usuário</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>Perfil do Usuário</h1>
+        <p>Visualize e gerencie suas informações pessoais</p>
+        <nav class="side-menu">
+            <div class="side-menu-limpo" id="sideMenuToggle">☰</div>
+            <ul class="side-menu-links" id="sideMenuLinks">
+                <li><a href="../../agenda/index.html">Agenda</a></li>
+                <li><a href="../../novo/index.html">Novo Agendamento</a></li>
+                <li><a href="../../bloquear/index.html">Bloquear Agenda</a></li>
+                <li><a href="../listar/index.html">Usuários</a></li>
+                <button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button>
+            </ul>
+        </nav>
+    </header>
+  <div class="container">
+    <div class="profile-card">
+        <div class="name-maior" id="user"></div>
+      <div class="info">
+        <div class="id"><strong>ID</strong><br> <span id="user-id"></span></div>
+        <div class="name"><strong>Nome</strong><br> <span id="user-name"></span></div>
+        <div class="email"><strong>Email</strong><br> <span id="user-email"></span></div>
+        <div class="tel"><strong>Telefone</strong><br> <span id="user-phone"></span></div>
+      </div>
+      <button id="edit-btn">Editar Perfil</button>
+    </div>
+  </div>
+  <div id="edit-modal"></div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -65,7 +65,7 @@ class Usuarios{
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
-        $sql = "SELECT nome FROM usuarios 
+        $sql = "SELECT id, nome, email, telefone FROM usuarios 
         WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -73,11 +73,11 @@ class Usuarios{
 
         // Pega os resultados
         $result = $stmt->get_result();
-        $nome = $result->fetch_all(MYSQLI_ASSOC);
+        $user = $result->fetch_all(MYSQLI_ASSOC);
 
         $stmt->close();
 
-        return $nome;
+        return $user;
     }
 }
 ?>

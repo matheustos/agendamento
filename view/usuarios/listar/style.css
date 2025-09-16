@@ -81,12 +81,19 @@ body {
     margin-bottom: 5px;
     color: lightseagreen;
     text-align: center;
+    margin-top: 0px;
+}
+
+.container h1 img{
+    font-size: 20px;
+    color: lightseagreen;
 }
 
 .container p {
     color: gray;
     text-align: center;
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
 
 #usuarios-list {

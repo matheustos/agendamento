@@ -261,47 +261,32 @@ button:hover{
 
     main p{
         width: 90%;
-        margin-left: 0;
     }
 
-    main form a{
-        display: none;
-    }
-
-    main form label{
-        margin-left: 15px;
-    }
 
     main form select{
         width: 90%;
-        margin-right: 15px;
-        margin-left: 15px;
+        margin-right: 10px;
+
     }
 
     main form input{
         width: 85%;
-        margin-right: 15px;
-        margin-left: 15px;
+        margin-right: 10px;
     }
 
     main form textarea{
         width: 85%;
         margin-right: 15px;
-        margin-left: 15px;
     }
 
     button{
         width: 90%;
         margin-right: 15px;
-        margin-left: 15px;
     }
 
     .card-bloqueio{
-        margin-left: 15px;
-    }
-
-    .bloq h2, p{
-        margin-left: 15px;
+        width: 250px;
     }
 }
 

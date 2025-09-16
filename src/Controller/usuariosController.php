@@ -146,6 +146,20 @@ class UsuariosController{
 
     }
 
+    public static function listarById($id){
+        if(empty($id)){
+            return ["status" => false, "message" => "Informe o ID!"];
+        }
+
+        $res = Usuarios::buscarUserById($id);
+
+        if($res){
+            return $res;
+        }else{
+            return AgendamentoValidators::formatarErro("Nenhum usuário encontrado!");
+        }
+    }
+
     public static function buscarNome($id){
         $res = Usuarios::buscarUserById($id);
 
