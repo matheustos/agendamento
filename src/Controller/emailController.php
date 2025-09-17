@@ -137,16 +137,48 @@ class EmailController{
     public static function resetSenha($email, $senha, $nome)
     {
         $mail = new PHPMailer(true);
-        $mensagemTexto = "Olá".$nome."!\nSua senha foi alterada com sucesso!\nNova senha: ".$senha;
+        $mensagemTexto = "Olá".$nome."!\nSua senha foi alterada com sucesso!\nNova senha: ".$senha."\n".
+        "Aviso: Caso queira criar uma senha personalizada, basta acessar: Perfil -> Atualizar Senha.";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Sua senha foi alterada com sucesso!</p>
-                <p><strong>Nova senha:</strong> $senha</p>";
+                <p><strong>Nova senha:</strong> $senha</p>
+                <p><em><strong>Aviso:</strong> Caso queira criar uma senha personalizada, basta acessar: Perfil -> Atualizar Senha.</em></p>";
 
         try {
             self::configurar($mail);
 
             $mail->addAddress($email);
             $mail->Subject = "Reset de Senha";
+            $mail->CharSet = 'UTF-8';
+            $mail->Body    = $mensagemHtml;
+            $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
+
+            $mail->send();
+            return [
+                "status" => "success",
+                "message" => "E-mail enviado com sucesso!"
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "error",
+                "message" => $mail->ErrorInfo
+            ];
+        }
+    }
+
+    public static function atualizarSenha($email, $nome)
+    {
+        $mail = new PHPMailer(true);
+        $mensagemTexto = "Olá".$nome."!\nSua senha foi alterada com sucesso!\nFaça login e acesse seus agendamentos!";
+        $mensagemHtml = "<h2>Olá, $nome!</h2>
+                <p>Sua senha foi alterada com sucesso!</p>
+                <p>Faça login e acesse seus agendamentos!</p>";
+
+        try {
+            self::configurar($mail);
+
+            $mail->addAddress($email);
+            $mail->Subject = "Atualização de Senha";
             $mail->CharSet = 'UTF-8';
             $mail->Body    = $mensagemHtml;
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);

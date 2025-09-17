@@ -135,6 +135,36 @@ class UsuariosController{
         }
     }
 
+    public static function atualizar_senha($email, $nova_senha, $confirmar_senha){
+        if(empty($email) || empty($nova_senha)|| empty($confirmar_senha)){
+            return ["status" => false, "message" => "Insira todos os dados!"];
+        }else{
+            if($nova_senha != $confirmar_senha){
+                return ["status" => false, "message" => "As senhas não coincidem!"];
+            }else{
+                // Atualizar senha do usuário
+                $hash = password_hash($nova_senha, PASSWORD_DEFAULT);
+                $res = usuarios::updateSenha($hash, $email);
+                if(!$res){
+                    return ["status" => false, "message" => "Erro ao atualizar senha."];
+                }else{
+                    $user = usuarios::buscarPorEmail($email);
+                    $nome = $user["nome"];
+                    if($nome){
+                        EmailController::atualizarSenha($email, $nome);
+                        return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                    }else{
+                        $nome = "";
+                        EmailController::atualizarSenha($email, $nome);
+                        return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                    }
+                }
+            }
+        }
+
+
+    }
+
     public static function listarUsuarios(){
         $res = Usuarios::listar();
 

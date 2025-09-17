@@ -166,11 +166,12 @@ body {
 }
 
 /* Botão de edição */
-#edit-btn {
+#edit-btn, #password-btn {
   background-color: lightseagreen;
   color: white;
   border: none;
   padding: 12px;
+  margin-bottom: 5px;
   width: 100%;
   border-radius: 6px;
   font-size: 1rem;
@@ -178,12 +179,12 @@ body {
   transition: background-color 0.3s;
 }
 
-#edit-btn:hover {
+#edit-btn:hover, #password-btn:hover {
   background-color: rgb(12, 74, 71);
 }
 
 /* Form editar responsivo */
-#edit-modal {
+#edit-modal, #password-modal {
   display: none;
   position: fixed;
   z-index: 1000;
@@ -242,19 +243,19 @@ body {
 }
 
 /* Form layout */
-#edit-form {
+#edit-form, #password-modal {
   display: flex;
   flex-direction: column;
 }
 
-#edit-form label {
+#edit-form label, #password-form label {
   margin-top: 15px;
   font-weight: 600;
   color: #333;
   font-size: 0.95rem;
 }
 
-#edit-form input {
+#edit-form input{
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
@@ -263,13 +264,24 @@ body {
   transition: border-color 0.3s;
 }
 
-#edit-form input:focus {
+#password-form input{
+  padding: 10px;
+  margin-top: 3px;
+  margin-bottom: 15px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+#edit-form input:focus, #password-form input:focus {
   border-color: lightseagreen;
   outline: none;
 }
 
 /* Save button */
-#edit-form button {
+#edit-form button{
   margin-top: 25px;
   background-color: lightseagreen;
   color: white;
@@ -281,7 +293,20 @@ body {
   transition: background-color 0.3s;
 }
 
-#edit-form button:hover {
+#password-modal button{
+  margin-top: 15px;
+  background-color: lightseagreen;
+  color: white;
+  width: 100%;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#edit-form button:hover, #password-form button:hover {
   background-color: rgb(15, 74, 71);
 }
 

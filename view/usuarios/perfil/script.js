@@ -140,6 +140,84 @@ function configurarModalEdicao(userData, apiUrl, token) {
       });
   });
 
+  function configurarModalSenha(token) {
+  const modalSenha = document.getElementById("password-modal");
+  modalSenha.innerHTML = `
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Atualizar Senha</h3>
+      <form id="password-form">
+        <label>Email:</label><br>
+        <input type="email" name="email" required /><br>
+
+        <label>Nova Senha:</label><br>
+        <input type="password" name="nova_senha" required /><br>
+
+        <label>Confirmar Senha:</label><br>
+        <input type="password" name="confirmar_senha" required /><br>
+
+        <button type="submit">Atualizar</button>
+      </form>
+    </div>
+  `;
+  modalSenha.style.display = "none";
+
+  const passwordBtn = document.getElementById("password-btn"); // botão "Alterar Senha"
+  const closeBtn = modalSenha.querySelector(".close");
+  const passwordForm = modalSenha.querySelector("#password-form");
+
+  // Abrir modal
+  passwordBtn.onclick = () => {
+    modalSenha.style.display = "flex";
+  };
+
+  // Fechar modal
+  closeBtn.onclick = () => {
+    modalSenha.style.display = "none";
+  };
+
+  window.onclick = (event) => {
+    if (event.target === modalSenha) {
+      modalSenha.style.display = "none";
+    }
+  };
+
+  // Enviar formulário
+  passwordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(passwordForm);
+    const novaSenha = formData.get("nova_senha");
+    const confirmarSenha = formData.get("confirmar_senha");
+
+    if (novaSenha !== confirmarSenha) {
+      alert("As senhas não coincidem!");
+      return;
+    }
+
+    fetch('/agendamento/api/usuarios/atualizar_senha/index.php', { // tua rota nova
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Erro ao atualizar senha");
+        return response.json();
+      })
+      .then(data => {
+        alert("Senha atualizada com sucesso!");
+        modalSenha.style.display = "none";
+      })
+      .catch(error => {
+        console.error("Erro ao atualizar senha:", error);
+        alert("Não foi possível atualizar a senha.");
+      });
+  });
+}
+configurarModalSenha(token);
+
   document.getElementById('btnLogoutSide').addEventListener('click', function() {
     // Remove o token JWT do localStorage
     localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
