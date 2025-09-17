@@ -28,13 +28,18 @@ class EmailController{
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento para o serviço ".$servico." foi confirmado.\n".
-        "Data: ".$data." Hora: ".$hora."\n".
-        "Obrigado por escolher nosso serviço!";
+        "📅 Data: ".$data." ⏰ Hora: ".$hora."\n".
+        "Obrigado por escolher nosso serviço!"."\n".
+        "Aviso: Pedimos que chegue com alguns minutos de antecedência.\n
+        Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento
+        e poderá ser necessário reagendar conforme disponibilidade de horário.";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento para o serviço <b>$servico</b> foi confirmado.</p>
-                <p><strong>Data:</strong> $data_format<br>
-                   <strong>Hora:</strong> $hora</p>
-                <p>$obs</p>";
+                <p><strong><span>📅</span> Data:</strong> $data_format<br>
+                   <strong><span>⏰</span> Hora:</strong> $hora</p>
+                <p><strong>Observações:</strong> $obs</p>
+                <p><em><strong>Aviso:</strong> Pedimos que chegue com alguns minutos de antecedência. Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento e poderá ser necessário reagendar conforme disponibilidade de horário.</em>"
+                ;
 
         try {
             self::configurar($mail);
@@ -66,8 +71,8 @@ class EmailController{
         "Seu agendamento foi cancelado com sucesso!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento foi cancelado com sucesso!</p>
-                <p>Data: $data_format</p>
-                <p>Hora: $hora</p>
+                <p><span>📅</span> Data: $data_format</p>
+                <p><span>⏰</span> Hora: $hora</p>
                 <p>Status: Cancelado</p>";
 
         try {
@@ -98,13 +103,14 @@ class EmailController{
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
         "Seu agendamento foi atualizado com sucesso!\n".
-        "Data: ".$data." Hora: ".$hora."\n"."Serviço: ".$servico."\nObrigado por escolher nosso serviço!";
+        "📅Data: ".$data."\n"."⏰ Hora: ".$hora."\n"."Serviço: ".$servico."\nObrigado por escolher nosso serviço!";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
                 <p>Seu agendamento foi atualizado com sucesso!</p>
-                <p><strong>Data:</strong> $data_format<br>
-                   <strong>Hora:</strong> $hora<br>
-                   <strong>Serviço:</strong> $servico</p>
-                <p>Obrigado por escolher nosso serviço!</p>";
+                <p><strong><span>📅</span> Data:</strong> $data_format<br>
+                   <strong><span>⏰</span> Hora:</strong> $hora<br>
+                   <strong>Serviço:</strong> $servico
+                </p>
+                <p><em><strong>Aviso:</strong> Pedimos que chegue com alguns minutos de antecedência. Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento e poderá ser necessário reagendar conforme disponibilidade de horário.</em>";
 
         try {
             self::configurar($mail);
