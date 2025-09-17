@@ -5,39 +5,50 @@ use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
 
+    // lógica e validações para fazer o agendamento
     public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm){
         $status = "agendado";
 
+        // verifica se os campos estão vazios, se sim, retorna erro
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($telefone)){
             return ["status" => false, "message" => "Insira todos os dados!"];
         }else{
+            // permite que a observação seja nula, caso não seja passada via form
             if(empty($obs)){
                 $obs = null;
             }
+            // verifica se existe bloqueio na data escolhida
             $validacao = AgendamentoValidators::validarBloqueio($data, $hora);
             if($validacao){
                 return $validacao;
             }else{
+                // verifica se a data informada é anterior à data atual
                 $validaData = AgendamentoValidators::validaData($data);
 
                 if($validaData["status"] === true){
                     return $validaData;
                 }else{
+                    // verifica se já existe agendamento para aquela data/hora
                     $validacao = AgendamentoValidators::buscaAgendamento($data, $hora);
 
                     if($validacao["status"] === true){
                         return $validacao;
                     }else{
+                        // se não houver, agenda
                         $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, $telefone);
                         if($res){
+                            // pega o email do user no bd
                             $email = Agendamento::getEmail($nome);
                             if($email){
+                                // envia email de confirmação do agendamento
                                 EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }else{
                                 if($emailForm){
+                                    // envia confirmação de agendamento no email informado via form, caso não haja email no bd
                                     EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
                                 }
+                                // agenda sem enviar email caso não seja encontrado/informado nenhum email
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }
                         }else{
@@ -49,6 +60,7 @@ class AgendamentoController{
         }
     }
 
+    // lógica e validações para fazer bloqueio de agenda
     public static function bloquearAgenda($dados){
         $servico = null;
         $status = "bloqueado";
@@ -57,12 +69,15 @@ class AgendamentoController{
         $hora = $dados["horario"];
         $obs = $dados["obs"];
 
+        // verifica se os dados essenciais para o bloqueio foram informadas
         if(empty($data) || empty($hora)){
             return AgendamentoValidators::formatarErro("Informe data e hora!");
         }else{
+            // permite que a observação seja nula se não for informada
             if(empty($obs) || !isset($obs)){
                 $obs = null;
             }
+            // pega status do registro que consta na data/hora do bloqueio
             $getStatus = Agendamento::getStatus($data, $hora);
             if(isset($getStatus['data'])){
                 $retorno = $getStatus["data"];

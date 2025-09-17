@@ -28,7 +28,7 @@ if (!token) {
     window.location.href = "../login/index.html";
 }
 
-// Decodifique o token para pegar o acesso
+// Decodifica o token para pegar o acesso
 function getUserAccessFromToken() {
     if (!token) return null;
     try {
@@ -45,10 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Esconde menus para cliente
     const acesso = getUserAccessFromToken();
     if (acesso === "cliente") {
-        const menuDashboard = document.getElementById('menu-dashboard');
         const menuBloquear = document.getElementById('menu-bloquear');
         const menuUsuarios = document.getElementById('menu-usuarios');
-        if (menuDashboard) menuDashboard.style.display = "none";
         if (menuBloquear) menuBloquear.style.display = "none";
         if (menuUsuarios) menuUsuarios.style.display = "none";
     }
