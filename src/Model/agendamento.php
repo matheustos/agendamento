@@ -341,15 +341,17 @@ class Agendamento {
         }
         
         // Lista de horários fixos
-        $horarios = ["09:00", "10:30", "13:30", "15:00", "16:30", "18:00"];
+        $horarios = ["09:00:00", "10:30:00", "13:30:00", "15:00:00", "16:30:00", "18:00:00"];
 
         // Valor fixo para indicar bloqueio
         $status = "bloqueado"; 
+        $agendado = "agendado";
+        $confirm = "confirmado";
 
         foreach ($horarios as $horario) {
             // Verifica se já existe agendamento neste dia e horário
-            $stmt = $conn->prepare("SELECT id FROM agenda WHERE data = ? AND horario = ?");
-            $stmt->bind_param("ss", $data, $horario);
+            $stmt = $conn->prepare("SELECT id FROM agenda WHERE data = ? AND horario = ? AND (status = ? OR status = ? OR status = ?)");
+            $stmt->bind_param("sssss", $data, $horario, $status, $agendado, $confirm);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -365,6 +367,7 @@ class Agendamento {
             $insert = $conn->prepare("INSERT INTO agenda (data, horario, status) VALUES (?, ?, ?)");
             $insert->bind_param("sss", $data, $horario, $status);
             $insert->execute();
+            error_log("Insert executado: afetou {$insert->affected_rows} linha(s)");
             $insert->close();
         }
 

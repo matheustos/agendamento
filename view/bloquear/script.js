@@ -82,6 +82,13 @@ function atualizarHorarios(dataEscolhida) {
         return;
     }
 
+    
+    // Adiciona a opção de bloquear todos (somente se existir horário)
+    const bloquearOption = document.createElement("option");
+    bloquearOption.value = "Todos os horários";
+    bloquearOption.textContent = "Bloquear todos os horários do dia";
+    selectHorario.appendChild(bloquearOption);
+
     horarios.forEach(h => {
         const option = document.createElement("option");
         option.value = h;
