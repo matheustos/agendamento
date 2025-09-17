@@ -1,3 +1,10 @@
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = '/agendamento/view/login/index.html';
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.querySelector('.side-menu');
     const sideMenuToggle = document.getElementById('sideMenuToggle');
@@ -8,49 +15,56 @@ document.addEventListener("DOMContentLoaded", () => {
             sideMenu.classList.toggle('open');
         });
     }
-    if (btnLogoutSide) {
-        btnLogoutSide.addEventListener('click', logout);
-    }
 });
+
+// Decodifica o token para pegar o acesso
+function getUserAccessFromToken() {
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.acesso;
+    } catch (e) {
+        return null;
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-// Menu lateral responsivo
-
-
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    window.location.href = '/agendamento/view/login/index.html';
-        return;
-  }
-
-  const apiUrl = "/agendamento/api/usuarios/listar/id/index.php";
-
-  // Buscar dados do usuário
-  fetch(apiUrl, {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`
+    // Esconde menus para cliente
+    const acesso = getUserAccessFromToken();
+    if (acesso === "cliente") {
+        const menuBloquear = document.getElementById('menu-bloquear');
+        const menuUsuarios = document.getElementById('menu-usuarios');
+        if (menuBloquear) menuBloquear.style.display = "none";
+        if (menuUsuarios) menuUsuarios.style.display = "none";
     }
-  })
-    .then(response => {
-      if (!response.ok) throw new Error("Erro ao buscar dados");
-      return response.json();
-    })
-    .then(userArray => {
-      if (!Array.isArray(userArray) || userArray.length === 0) {
-        throw new Error("Nenhum usuário encontrado.");
-      }
-
-      const userData = userArray[0]; // Pega o primeiro usuário
-      preencherPerfil(userData);
-      configurarModalEdicao(userData, apiUrl, token);
-    })
-    .catch(error => {
-      console.error("Erro ao carregar perfil:", error);
-      alert("Não foi possível carregar os dados do usuário.");
-    });
 });
+
+const apiUrl = "/agendamento/api/usuarios/listar/id/index.php";
+
+// Buscar dados do usuário
+fetch(apiUrl, {
+  method: "GET",
+  headers: {
+    "Authorization": `Bearer ${token}`
+  }
+})
+  .then(response => {
+    if (!response.ok) throw new Error("Erro ao buscar dados");
+    return response.json();
+  })
+  .then(userArray => {
+    if (!Array.isArray(userArray) || userArray.length === 0) {
+      throw new Error("Nenhum usuário encontrado.");
+    }
+
+    const userData = userArray[0]; // Pega o primeiro usuário
+    preencherPerfil(userData);
+    configurarModalEdicao(userData, apiUrl, token);
+  })
+  .catch(error => {
+    console.error("Erro ao carregar perfil:", error);
+    alert("Não foi possível carregar os dados do usuário.");
+  });
 
 function preencherPerfil(userData) {
   document.getElementById("user-id").textContent = userData.id;
