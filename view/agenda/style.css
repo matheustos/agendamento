@@ -346,6 +346,8 @@ body {
     padding: 6px;
     font-size: 16px;
     margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
 }
 
 #form-editar select{
@@ -353,6 +355,8 @@ body {
     padding: 6px;
     font-size: 16px;
     margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
 }
 
 #loadingOverlay {
