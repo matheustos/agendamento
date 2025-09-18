@@ -58,7 +58,7 @@ class AgendamentoValidators{
 
         // Percorrer os registros encontrados na data e hora
         foreach ($consulta['data'] as $registro) {
-            if ($registro['status'] === "agendado") {
+            if ($registro['status'] === "agendado" || $registro['status'] === "Confirmado") {
                 return ["status" => false];
             }
         }

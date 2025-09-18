@@ -27,17 +27,56 @@ class EmailController{
         $data_format = date("d/m/Y", strtotime($data)); 
         $mail = new PHPMailer(true);
         $mensagemTexto = "Olá, ".$nome."!\n".
-        "Seu agendamento para o serviço ".$servico." foi confirmado.\n".
+        "Seu agendamento para o serviço ".$servico." foi efetuado com sucesso.\n".
         "📅 Data: ".$data." ⏰ Hora: ".$hora."\n".
         "Obrigado por escolher nosso serviço!"."\n".
         "Aviso: Pedimos que chegue com alguns minutos de antecedência.\n
         Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento
         e poderá ser necessário reagendar conforme disponibilidade de horário.";
         $mensagemHtml = "<h2>Olá, $nome!</h2>
-                <p>Seu agendamento para o serviço <b>$servico</b> foi confirmado.</p>
+                <p>Seu agendamento para o serviço <b>$servico</b> foi efetuado com sucesso.</p>
                 <p><strong><span>📅</span> Data:</strong> $data_format<br>
                    <strong><span>⏰</span> Hora:</strong> $hora</p>
                 <p><strong>Observações:</strong> $obs</p>
+                <p><em><strong>Aviso:</strong> Pedimos que chegue com alguns minutos de antecedência. Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento e poderá ser necessário reagendar conforme disponibilidade de horário.</em>"
+                ;
+
+        try {
+            self::configurar($mail);
+
+            $mail->addAddress($email);
+            $mail->Subject = "Confirmação de Novo Agendamento";
+            $mail->CharSet = 'UTF-8';
+            $mail->Body    = $mensagemHtml;
+            $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
+
+            $mail->send();
+            return [
+                "status" => "success",
+                "message" => "E-mail enviado com sucesso!"
+            ];
+        } catch (Exception $e) {
+            return [
+                "status" => "error",
+                "message" => $mail->ErrorInfo
+            ];
+        }
+    }
+
+    public static function confirmar($email, $data, $hora, $nome, $servico)
+    {
+        $data_format = date("d/m/Y", strtotime($data)); 
+        $mail = new PHPMailer(true);
+        $mensagemTexto = "Olá, ".$nome."!\n".
+        "Seu agendamento para o serviço ".$servico." foi confirmado!\n".
+        "📅 Data: ".$data_format." ⏰ Hora: ".$hora."\n".
+        "Aviso: Pedimos que chegue com alguns minutos de antecedência.\n
+        Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento
+        e poderá ser necessário reagendar conforme disponibilidade de horário.";
+        $mensagemHtml = "<h2>Olá, $nome!</h2>
+                <p>Seu agendamento para o serviço <b>$servico</b> foi confirmado!</p>
+                <p><strong><span>📅</span> Data:</strong> $data_format<br>
+                   <strong><span>⏰</span> Hora:</strong> $hora</p>
                 <p><em><strong>Aviso:</strong> Pedimos que chegue com alguns minutos de antecedência. Em caso de atraso maior que 15 minutos, não conseguimos garantir o atendimento e poderá ser necessário reagendar conforme disponibilidade de horário.</em>"
                 ;
 

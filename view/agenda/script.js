@@ -220,35 +220,38 @@ function gerarCards(busca = "", periodo = "all") {
 // -----------------------
 // EDIÇÃO DE AGENDAMENTO
 // -----------------------
-function editar(id, nome, data, hora, telefone, email) {
+function editar(id, nome, data, hora, telefone, email, status) {
     const formEditar = document.getElementById("form-editar");
-    if(!formEditar) return;
+    if (!formEditar) return;
 
     const card = document.getElementById("agendamento-" + id);
-    if(!card) return;
+    if (!card) return;
 
     formEditar.remove(); // Remove de onde estiver antes de reposicionar
     card.insertAdjacentElement("afterend", formEditar);
 
+    // Preencher campos do formulário
     const idInput = document.getElementById("id");
     const nomeInput = document.getElementById("nome");
     const dataInput = document.getElementById("data");
     const horarioSelect = document.getElementById("horario");
     const telefoneInput = document.getElementById("telefone");
+    const emailInput = document.getElementById("email");
     const statusInput = document.getElementById("status");
 
-    if(idInput) idInput.value = id;
-    if(nomeInput) nomeInput.value = nome;
-    if(dataInput) dataInput.value = data;
-    if(telefoneInput) telefoneInput.value = telefone;
+    if (idInput) idInput.value = id;
+    if (nomeInput) nomeInput.value = nome;
+    if (dataInput) dataInput.value = data;
+    if (telefoneInput) telefoneInput.value = telefone;
+    if (emailInput) emailInput.value = email;
+    if (statusInput) statusInput.value = status;
 
     document.getElementById("loadingOverlay").style.display = "block";
     formEditar.style.display = "block";
 
-
     // Buscar horários disponíveis
-    fetch('/agendamento/api/agenda/horarios.php',{
-        method : "GET",
+    fetch('/agendamento/api/agenda/horarios.php', {
+        method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -256,15 +259,15 @@ function editar(id, nome, data, hora, telefone, email) {
     })
     .then(res => res.json())
     .then(dataBackend => {
-        agendaDisponivel = dataBackend;
+        const agendaDisponivel = dataBackend;
 
         function atualizarHorarios(dataEscolhida, horarioAtual = null) {
-            if(!horarioSelect) return;
+            if (!horarioSelect) return;
             horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
 
             const horariosDisponiveis = agendaDisponivel[dataEscolhida] ? [...agendaDisponivel[dataEscolhida]] : [];
 
-            if(horarioAtual && !horariosDisponiveis.includes(horarioAtual)) {
+            if (horarioAtual && !horariosDisponiveis.includes(horarioAtual)) {
                 horariosDisponiveis.unshift(horarioAtual);
             }
 
@@ -272,22 +275,55 @@ function editar(id, nome, data, hora, telefone, email) {
                 const option = document.createElement("option");
                 option.value = h;
                 option.textContent = h;
-                if(h === horarioAtual) option.selected = true;
+                if (h === horarioAtual) option.selected = true;
                 horarioSelect.appendChild(option);
             });
         }
 
         atualizarHorarios(data, hora);
 
-        if(dataInput) {
+        if (dataInput) {
             dataInput.addEventListener('change', () => {
                 atualizarHorarios(dataInput.value, null);
             });
         }
-
     })
     .catch(err => console.error("Erro ao carregar horários do back-end:", err));
+
+    // Enviar formulário via fetch
+    formEditar.onsubmit = function(e) {
+        e.preventDefault();
+
+        const dados = {
+            id: idInput.value,
+            nome: nomeInput.value,
+            data: dataInput.value,
+            horario: horarioSelect.value,
+            telefone: telefoneInput.value,
+            email: emailInput.value,
+            status: statusInput.value
+        };
+
+        fetch('/agendamento/api/agenda/atualizar.php', {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log("Resposta do back-end:", res);
+            formEditar.style.display = "none";
+            document.getElementById("loadingOverlay").style.display = "none";
+        })
+        .catch(err => {
+            console.error("Erro ao enviar dados para o back-end:", err);
+        });
+    }
 }
+
 
 // -----------------------
 // CANCELAR EDIÇÃO

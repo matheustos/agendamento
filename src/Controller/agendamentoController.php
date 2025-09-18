@@ -241,9 +241,6 @@ class AgendamentoController{
         $telefone = $dados["telefone"];
         $status = $dados["status"];
         $emailForm = $dados["email"];
-        if(empty($status)){
-            $status = "agendado";
-        }
 
         $data_hoje = date("Y-m-d");
 
@@ -263,28 +260,65 @@ class AgendamentoController{
                         "message" => $validacao["message"]
                     ];
                 }else{
-                    $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
+                    if(empty($status)){
+                        $status = "agendado";
+                        $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
 
-                    if($res){
-                        //busca informações nome e servico no banco de dados para enviar o email com tais informações.
-                        $buscar = Agendamento::buscarPorDataHora($data, $hora);
+                        if($res){
+                            //busca informações nome e servico no banco de dados para enviar o email com tais informações.
+                            $buscar = Agendamento::buscarPorDataHora($data, $hora);
 
-                        $nome = $buscar[0]['nome'];
-                        $servico = $buscar[0]['servico'];
+                            $nome = $buscar[0]['nome'];
+                            $servico = $buscar[0]['servico'];
 
-                        $email = Agendamento::getEmail($user);
-                        if($emailForm){
-                            EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
-                            return ["status" => "success", "data" => $res];
-                        }else{
-                            if($email){
-                                EmailController::atualizar($email, $data, $hora, $nome, $servico);
+                            $email = Agendamento::getEmail($user);
+                            if($emailForm){
+                                EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
+                                return ["status" => "success", "data" => $res];
+                            }else{
+                                if($email){
+                                    EmailController::atualizar($email, $data, $hora, $nome, $servico);
+                                }
+                                return ["status" => "success", "data" => $res];
                             }
-                            return ["status" => "success", "data" => $res];
+                        }else{
+                            return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
                         }
                     }else{
-                        return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                        if($status === "Confirmado"){
+                            $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
+
+                            if($res){
+                                //busca informações nome e servico no banco de dados para enviar o email com tais informações.
+                                $buscar = Agendamento::buscarPorDataHora($data, $hora);
+
+                                $nome = $buscar[0]['nome'];
+                                $servico = $buscar[0]['servico'];
+
+                                $email = Agendamento::getEmail($user);
+                                if($emailForm){
+                                    EmailController::confirmar($emailForm, $data, $hora, $nome, $servico);
+                                    return ["status" => "success", "data" => $res];
+                                }else{
+                                    if($email){
+                                        EmailController::confirmar($email, $data, $hora, $nome, $servico);
+                                    }
+                                    return ["status" => "success", "data" => $res];
+                                }
+                            }else{
+                                return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                            }
+                        }else{
+                            $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
+
+                            if($res){
+                                return ["status" => "success", "data" => $res];
+                            }else{
+                                return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                            }
+                        }
                     }
+                    
                 }
             }
         }
