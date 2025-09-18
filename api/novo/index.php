@@ -17,10 +17,11 @@ $headers = getallheaders(); // pega todos os headers da requisição
 $authHeader = $headers['Authorization'] ?? ''; // pega o header Authorization
 
 $verifica_token = Token::verificaToken($authHeader);
+$user = $verifica_token['user_id'];
 
 if($verifica_token["status"] === true){
     // Buscar todos os bloqueios
-    $res = AgendamentoController::agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm);
+    $res = AgendamentoController::agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm, $user);
 
     echo json_encode($res);
 }else{

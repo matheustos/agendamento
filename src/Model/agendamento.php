@@ -5,10 +5,10 @@ use Model\Database;
 use Validators\AgendamentoValidators;
 
 class Agendamento {
-    public static function agendar($data, $hora, $nome, $status, $servico, $obs, $telefone) {
+    public static function agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone);
+        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`, `user`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone, $user);
         return $stmt->execute();
     }
     
@@ -204,21 +204,21 @@ class Agendamento {
         }
     }
 
-    public static function getEmail($nome){
+    public static function getEmail($user){
         $conn = Database::conectar();
 
         if (!$conn) {
             return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
         }
 
-        $sql = "SELECT email FROM usuarios WHERE nome = ?";
+        $sql = "SELECT email FROM usuarios WHERE id = ?";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
             return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
         }
 
-        $stmt->bind_param("s", $nome); // ambos são strings
+        $stmt->bind_param("i", $user); // ambos são strings
         $stmt->execute();
 
         $resultado = $stmt->get_result();
@@ -259,7 +259,7 @@ class Agendamento {
         return $agendamentos;
     }
 
-    public static function buscarMesNome($mes, $nome) {
+    public static function buscarMesUser($mes, $user) {
         $conn = Database::conectar();
 
         if (!$conn) {
@@ -277,7 +277,7 @@ class Agendamento {
         $sql = "SELECT * FROM agenda
                 WHERE MONTH(data) = ?
                 AND YEAR(data) = YEAR(CURDATE())
-                AND nome = ?
+                AND user = ?
                 AND (status = ? OR status = ?)
                 ORDER BY data, horario";
 
@@ -291,7 +291,7 @@ class Agendamento {
             ];
         }
 
-        $stmt->bind_param("isss", $mes, $nome, $statusAgendado, $statusConfirmado);
+        $stmt->bind_param("isss", $mes, $user, $statusAgendado, $statusConfirmado);
         $stmt->execute();
 
         $result = $stmt->get_result();

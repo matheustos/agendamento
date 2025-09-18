@@ -81,8 +81,6 @@ function configurarModalEdicao(userData, apiUrl, token) {
       <span class="close">&times;</span>
       <h3>Editar Perfil</h3>
       <form id="edit-form">
-        <label>ID:</label>
-        <input type="text" name="id" value="${userData.id}" />
         <label>Nome:</label>
         <input type="text" name="nome" value="${userData.nome}" />
         <label>Email:</label>

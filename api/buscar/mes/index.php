@@ -22,9 +22,9 @@ if($verifica_token["status"] === true){
     }
 
     if($verifica_token['acesso'] === "cliente"){
-        $nome = UsuariosController::buscarNome($verifica_token['user_id']);
-        if($nome){
-            $res = AgendamentoController::buscarPorMesENome($nome);
+        $user = $verifica_token['user_id'];
+        if($user){
+            $res = AgendamentoController::buscarPorMesEUser($user);
 
             echo json_encode($res);
         }else{
