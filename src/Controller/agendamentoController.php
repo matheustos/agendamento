@@ -39,14 +39,14 @@ class AgendamentoController{
                         if($res){
                             // pega o email do user no bd
                             $email = Agendamento::getEmail($user);
-                            if($email){
+                            if($emailForm){
                                 // envia email de confirmação do agendamento
-                                EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
+                                EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }else{
-                                if($emailForm){
+                                if($email){
                                     // envia confirmação de agendamento no email informado via form, caso não haja email no bd
-                                    EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
+                                    EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
                                 }
                                 // agenda sem enviar email caso não seja encontrado/informado nenhum email
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
@@ -270,12 +270,12 @@ class AgendamentoController{
                         $servico = $buscar[0]['servico'];
 
                         $email = Agendamento::getEmail($user);
-                        if($email){
-                            EmailController::atualizar($email, $data, $hora, $nome, $servico);
+                        if($emailForm){
+                            EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
                             return ["status" => "success", "data" => $res];
                         }else{
-                            if($emailForm){
-                                EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
+                            if($email){
+                                EmailController::atualizar($email, $data, $hora, $nome, $servico);
                             }
                             return ["status" => "success", "data" => $res];
                         }
