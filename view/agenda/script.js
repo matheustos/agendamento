@@ -153,7 +153,7 @@ function filtrarPorPeriodo(periodo, agendamento) {
 // BUSCAR AGENDAMENTOS
 // -----------------------
 function buscarAgendamentos() {
-    fetch("/agendamento/api/buscar/mes/index.php", {
+    fetch("/agendamento/api/buscar/index.php", {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`

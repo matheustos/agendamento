@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Controller\AgendamentoController;
 use Controller\UsuariosController;
@@ -16,7 +16,7 @@ $verifica_token = Token::verificaToken($authHeader);
 if($verifica_token["status"] === true){
     if($verifica_token['acesso'] === "admin"){
         // Buscar todos os agendamentos do mês
-        $res = AgendamentoController::buscarPorMes();
+        $res = AgendamentoController::buscarTodosAgendamentos();
 
         echo json_encode($res);
     }

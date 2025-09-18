@@ -233,7 +233,7 @@ class Agendamento {
         return $email;
     }
 
-    public static function buscarMes($mes){
+    public static function buscarAgendamentos() {
         $conn = Database::conectar();
 
         if (!$conn) {
@@ -241,16 +241,19 @@ class Agendamento {
         }
 
         $status = "agendado";
-        $stat = "confirmado";
+        $stat   = "confirmado";
+        $dataHoje = date("Y-m-d");
 
+        // busca todos os agendamentos a partir de hoje
         $sql = "SELECT * FROM agenda 
-        WHERE MONTH(data) = ? AND YEAR(data) = YEAR(CURDATE()) AND status = ? OR status = ?
-        ORDER BY data, horario";
+                WHERE data >= ? 
+                AND (status = ? OR status = ?)
+                ORDER BY data, horario";
+
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iss", $mes, $status, $stat);
+        $stmt->bind_param("sss", $dataHoje, $status, $stat);
         $stmt->execute();
 
-        // Pega os resultados
         $result = $stmt->get_result();
         $agendamentos = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -258,6 +261,9 @@ class Agendamento {
 
         return $agendamentos;
     }
+
+
+
 
     public static function buscarMesUser($mes, $user) {
         $conn = Database::conectar();

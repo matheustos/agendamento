@@ -172,9 +172,8 @@ class AgendamentoController{
         }
     }
 
-    public static function buscarPorMes(){
-        $mes = date("m");
-        $res = Agendamento::buscarMes($mes);
+    public static function buscarTodosAgendamentos(){
+        $res = Agendamento::buscarAgendamentos();
 
         if (is_array($res)) {
             if($res){
