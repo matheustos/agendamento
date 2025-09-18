@@ -5,10 +5,10 @@ use Model\Database;
 use Validators\AgendamentoValidators;
 
 class Agendamento {
-    public static function agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user) {
+    public static function agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user, $emailForm) {
         $conn = Database::conectar();
-        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`, `user`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone, $user);
+        $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`, `user`, `email`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone, $user, $emailForm);
         return $stmt->execute();
     }
     

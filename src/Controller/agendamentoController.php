@@ -17,6 +17,10 @@ class AgendamentoController{
             if(empty($obs)){
                 $obs = null;
             }
+
+            if(empty($emailForm)){
+                $emailForm = null;
+            }
             // verifica se existe bloqueio na data escolhida
             $validacao = AgendamentoValidators::validarBloqueio($data, $hora);
             if($validacao){
@@ -35,7 +39,7 @@ class AgendamentoController{
                         return $validacao;
                     }else{
                         // se não houver, agenda
-                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user);
+                        $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user, $emailForm);
                         if($res){
                             // pega o email do user no bd
                             $email = Agendamento::getEmail($user);
@@ -101,7 +105,7 @@ class AgendamentoController{
                                     return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
                                 }
                             }else{
-                                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null);
+                                $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null, null);
 
                                 if($res){
                                     return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
@@ -122,7 +126,7 @@ class AgendamentoController{
                         return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
                     }
                 }else{
-                    $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null);
+                    $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null, null);
 
                     if($res){
                         return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
@@ -216,7 +220,7 @@ class AgendamentoController{
                     //busca informações nome e servico no banco de dados para enviar o email com tais informações.
                     $buscar = Agendamento::getPorDataHora($data, $hora);
                     $nome = $buscar['data'][0]['nome'];
-                    $email = Agendamento::getEmail($user);
+                    $email = $buscar['data'][0]['email'];
                     if($email){
                         EmailController::cancelamento($email, $nome, $data, $hora);
                         return $res;

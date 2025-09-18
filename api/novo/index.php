@@ -20,7 +20,6 @@ $verifica_token = Token::verificaToken($authHeader);
 $user = $verifica_token['user_id'];
 
 if($verifica_token["status"] === true){
-    // Buscar todos os bloqueios
     $res = AgendamentoController::agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm, $user);
 
     echo json_encode($res);
