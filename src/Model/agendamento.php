@@ -9,6 +9,7 @@ class Agendamento {
         $conn = Database::conectar();
         $stmt = $conn->prepare("INSERT INTO agenda (`data`, `horario`, `nome`, `status`, `servico`, `obs`, `telefone`, `user`, `email`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssssss", $data, $hora, $nome, $status, $servico, $obs, $telefone, $user, $emailForm);
+        
         return $stmt->execute();
     }
     
