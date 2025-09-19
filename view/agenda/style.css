@@ -251,6 +251,11 @@ body {
     flex: 1;
 }
 
+.filters input:focus, .filters select:focus{
+    border: 2px solid lightseagreen;
+    outline: none;
+}
+
 .agendamento-card {
     background-color: #fff;
     padding: 15px;
@@ -347,7 +352,7 @@ body {
     font-size: 16px;
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid lightseagreen;
+    border: 1px solid #ccc;
 }
 
 #form-editar select{
@@ -356,7 +361,12 @@ body {
     font-size: 16px;
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid lightseagreen;
+    border: 1px solid #ccc;
+}
+
+#form-editar input:focus, select:focus{
+    border: 2px solid lightseagreen;
+    outline: none;
 }
 
 #loadingOverlay {

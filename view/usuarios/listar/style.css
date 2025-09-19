@@ -79,14 +79,9 @@ body {
 .container h1 {
     font-size: 2.2rem;
     margin-bottom: 5px;
-    color: lightseagreen;
+    color: #333333;
     text-align: center;
     margin-top: 0px;
-}
-
-.container h1 img{
-    font-size: 20px;
-    color: lightseagreen;
 }
 
 .container p {
@@ -297,6 +292,11 @@ body {
   position: relative;
 }
 
+.modal-content h2{
+    text-align: center;
+    color: lightseagreen;
+}
+
 /* Close button */
 .close {
   position: absolute;
@@ -325,6 +325,11 @@ body {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+}
+
+#form-editar input:focus{
+    border: 1px solid lightseagreen;
+    outline: none; /* remove a bord*/
 }
 
 #form-editar button {

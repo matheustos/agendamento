@@ -45,7 +45,12 @@ input{
     padding: 8px;
     width: 300px;
     border-radius: 5px 5px 5px 5px;
-    border: 1px solid rgba(0, 0, 0, 0.404);
+    border: 1px solid #ccc;
+}
+
+input:focus{
+    border: 2px solid lightseagreen;
+    outline: none;
 }
 
 button{

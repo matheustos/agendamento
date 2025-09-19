@@ -170,7 +170,7 @@ main form select{
     width: 400px;
     padding: 8px;
     border-radius: 5px;
-    border: 1px solid lightseagreen;
+    border: 1px solid #ccc;
 }
 
 main form input{
@@ -180,7 +180,7 @@ main form input{
     width: 380px;
     padding: 8px;
     border-radius: 5px;
-    border: 1px solid lightseagreen;
+    border: 1px solid #ccc;
 }
 
 main form textarea{
@@ -191,8 +191,13 @@ main form textarea{
     height: 80px;
     padding: 8px;
     border-radius: 5px;
-    border: 1px solid lightseagreen;
+    border: 1px solid #ccc;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+main form select:focus, input:focus, textarea:focus{
+    border: 2px solid lightseagreen;
+    outline: none;
 }
 
 button{

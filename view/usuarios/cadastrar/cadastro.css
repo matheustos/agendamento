@@ -90,6 +90,11 @@ input{
     border: 1px solid rgba(0, 0, 0, 0.518);
 }
 
+input:focus{
+    border: 2px solid lightseagreen;
+    outline: none;
+}
+
 button{
     width: 380px;
     padding: 15px;
