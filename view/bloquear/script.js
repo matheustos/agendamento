@@ -134,6 +134,11 @@ form.addEventListener("submit", (e) => {
 
     const formData = new FormData(form);
 
+    
+  // Mostrar loading
+  document.getElementById("loading-overlay").style.display = "flex";
+
+
     fetch("/agendamento/api/bloquear/index.php", {
         method: "POST",
         body: formData,
@@ -151,7 +156,10 @@ form.addEventListener("submit", (e) => {
         }
         window.location.reload();
     })
-    .catch(err => console.error("Erro ao criar bloqueio:", err));
+    .catch(err => console.error("Erro ao criar bloqueio:", err)).finally(() => {
+        // Sempre esconder loading no final
+        document.getElementById("loading-overlay").style.display = "none";
+      });
 });
 
 document.getElementById('btnLogoutSide').addEventListener('click', function() {

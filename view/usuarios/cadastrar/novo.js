@@ -5,6 +5,9 @@ form.addEventListener("submit", async function(event) {
 
   const dados = new FormData(form);
 
+  // Mostrar loading
+  document.getElementById("loading-overlay").style.display = "flex";
+
   try {
     const res = await fetch("/agendamento/api/usuarios/cadastrar/index.php", {
       method: "POST",
@@ -19,5 +22,8 @@ form.addEventListener("submit", async function(event) {
 
   } catch (err) {
     alert("Erro: " + err.message);
+  }finally {
+    // Esconde loading sempre
+    document.getElementById("loading-overlay").style.display = "none";
   }
 });

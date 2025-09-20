@@ -115,6 +115,9 @@ function configurarModalEdicao(userData, apiUrl, token) {
     e.preventDefault();
 
     const formData = new FormData(editForm);
+
+    // Mostrar loading
+    document.getElementById("loading-overlay").style.display = "flex";
     
     fetch('/agendamento/api/usuarios/atualizar/index.php', {
       method: "POST",
@@ -135,6 +138,9 @@ function configurarModalEdicao(userData, apiUrl, token) {
       .catch(error => {
         console.error("Erro ao enviar dados:", error);
         alert("Não foi possível salvar as alterações.");
+      }).finally(() => {
+        // Sempre esconder loading no final
+        document.getElementById("loading-overlay").style.display = "none";
       });
   });
 
@@ -193,7 +199,10 @@ function configurarModalEdicao(userData, apiUrl, token) {
       return;
     }
 
-    fetch('/agendamento/api/usuarios/atualizar_senha/index.php', { // tua rota nova
+    // Mostrar loading
+    document.getElementById("loading-overlay").style.display = "flex";
+
+    fetch('/agendamento/api/usuarios/atualizar_senha/index.php', {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -211,9 +220,13 @@ function configurarModalEdicao(userData, apiUrl, token) {
       .catch(error => {
         console.error("Erro ao atualizar senha:", error);
         alert("Não foi possível atualizar a senha.");
+      })
+      .finally(() => {
+        // Sempre esconder loading no final
+        document.getElementById("loading-overlay").style.display = "none";
       });
   });
-}
+  }
 configurarModalSenha(token);
 
   document.getElementById('btnLogoutSide').addEventListener('click', function() {

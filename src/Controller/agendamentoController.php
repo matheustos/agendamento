@@ -253,6 +253,9 @@ class AgendamentoController{
                     "message" => "Não é possível agendar para uma data passada!"
                 ];
             }else{
+                if($status === "Selecione o Status"){
+                    $status = "agendado";
+                }
                 $validacao = AgendamentoValidators::validacaoAgendamento($data, $hora, $id);
                 if($validacao["status"] === true){
                     return [

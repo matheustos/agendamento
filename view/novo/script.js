@@ -112,7 +112,7 @@ function habilitarDatasDisponiveis() {
     inputData.dispatchEvent(new Event('change'));
 }
 
-// -----------------------
+/// -----------------------
 // ENVIO DO FORMULÁRIO COM TELA DE "CARREGANDO"
 // -----------------------
 form.addEventListener("submit", async function(event) {
@@ -121,25 +121,8 @@ form.addEventListener("submit", async function(event) {
     const token = localStorage.getItem('token');
     const dados = new FormData(form);
 
-    // =======================
-    // TELA DE CARREGANDO
-    // =======================
-    const loadingOverlay = document.createElement("div");
-    loadingOverlay.id = "loadingOverlay";
-    loadingOverlay.style = `
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        color: white;
-        font-size: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    `;
-    loadingOverlay.textContent = "⏳ Processando, aguarde...";
-    document.body.appendChild(loadingOverlay);
+    // Mostrar loading
+    document.getElementById("loading-overlay").style.display = "flex";
 
     try {
         const res = await fetch("/agendamento/api/novo/index.php", {
@@ -152,19 +135,17 @@ form.addEventListener("submit", async function(event) {
 
         const json = await res.json();
 
-        // =======================
-        // REMOVER TELA DE CARREGANDO
-        // =======================
-        loadingOverlay.remove();
-
-        alert(json.message);
+        alert(json.message || "Agendamento realizado com sucesso!");
         location.reload();
 
     } catch (err) {
-        loadingOverlay.remove();
         alert("Erro: " + err.message);
+    } finally {
+        // Sempre esconder loading no fim
+        document.getElementById("loading-overlay").style.display = "none";
     }
 });
+
 
 document.getElementById('btnLogoutSide').addEventListener('click', function() {
     // Remove o token JWT do localStorage

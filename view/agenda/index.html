@@ -24,10 +24,6 @@
             
             <h1><span class="icon">📅</span> Agendamentos</h1>
             <p>Gerencie todos os seus agendamentos em um só lugar</p>
-            
-            <!--<div class="header-buttons">
-                <a class="btn-new" href="../novo/index.html">+ Novo Agendamento</a>
-            </div>-->
         </header>
 
         <div class="filters">
@@ -63,7 +59,7 @@
             <input type="email" name="email" id="email"><br>
             <label>Status</label><br>
             <select name="status" id="status">
-                <option></option>
+                <option>Selecione o Status</option>
                 <option>Confirmado</option>
                 <option>Concluído</option>
             </select><br>
@@ -71,9 +67,10 @@
             <button class="can" type="button" onclick="cancelar()">Cancelar</button>
         </form>
     </div>
-    <!-- Overlay de carregando -->
-    <div id="loadingOverlay" ></div>
-
+    <!-- Tela de carregamento -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
