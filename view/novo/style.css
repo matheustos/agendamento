@@ -61,7 +61,7 @@ p {
     left: 0;
     width: 220px;
     height: 100vh;
-    background: #23272F;
+    background: rgb(19, 106, 101);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -135,7 +135,7 @@ body {
     }
     .side-menu.open .side-menu-links {
         display: flex;
-        background: #23272F;
+        background: rgb(19, 106, 101);
         position: absolute;
         top: 60px;
         left: 0;
