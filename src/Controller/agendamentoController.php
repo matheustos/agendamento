@@ -4,7 +4,6 @@ namespace Controller;
 use Model\Agendamento;
 use Validators\AgendamentoValidators;
 class AgendamentoController{
-
     // lógica e validações para fazer o agendamento
     public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm, $user){
         $status = "agendado";
@@ -41,16 +40,19 @@ class AgendamentoController{
                         // se não houver, agenda
                         $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, $telefone, $user, $emailForm);
                         if($res){
-                            // pega o email do user no bd
-                            $email = Agendamento::getEmail($user);
                             if($emailForm){
                                 // envia email de confirmação do agendamento
                                 EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                             }else{
-                                if($email){
-                                    // envia confirmação de agendamento no email informado via form, caso não haja email no bd
-                                    EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
+                                if($user != "1"){
+                                    // pega o email do user no bd
+                                    $email = Agendamento::getEmail($user);
+                                    if($email){
+                                        // envia confirmação de agendamento no email informado via form, caso não haja email no bd
+                                        EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
+                                    }
+                                    return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
                                 }
                                 // agenda sem enviar email caso não seja encontrado/informado nenhum email
                                 return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
@@ -219,13 +221,14 @@ class AgendamentoController{
                     //busca informações nome e servico no banco de dados para enviar o email com tais informações.
                     $buscar = Agendamento::getPorDataHora($data, $hora);
                     $nome = $buscar['data'][0]['nome'];
-                    $email = $buscar['data'][0]['email'];
-                    if($email){
-                        EmailController::cancelamento($email, $nome, $data, $hora);
-                        return $res;
-                    }else{
-                        return $res;
+                    if($user != "1"){
+                        $email = $buscar['data'][0]['email'];
+                        if($email){
+                            EmailController::cancelamento($email, $nome, $data, $hora);
+                            return $res;
+                        }
                     }
+                    return $res;
                 }else{
                     return AgendamentoValidators::formatarErro("Erro ao cancelar agendamento!");
                 }
@@ -274,13 +277,15 @@ class AgendamentoController{
                             $nome = $buscar[0]['nome'];
                             $servico = $buscar[0]['servico'];
 
-                            $email = Agendamento::getEmail($user);
                             if($emailForm){
                                 EmailController::atualizar($emailForm, $data, $hora, $nome, $servico);
                                 return ["status" => "success", "data" => $res];
                             }else{
-                                if($email){
-                                    EmailController::atualizar($email, $data, $hora, $nome, $servico);
+                                if($user != "1"){
+                                    $email = Agendamento::getEmail($user);
+                                    if($email){
+                                        EmailController::atualizar($email, $data, $hora, $nome, $servico);
+                                    }
                                 }
                                 return ["status" => "success", "data" => $res];
                             }
@@ -298,13 +303,15 @@ class AgendamentoController{
                                 $nome = $buscar[0]['nome'];
                                 $servico = $buscar[0]['servico'];
 
-                                $email = Agendamento::getEmail($user);
                                 if($emailForm){
                                     EmailController::confirmar($emailForm, $data, $hora, $nome, $servico);
                                     return ["status" => "success", "data" => $res];
                                 }else{
-                                    if($email){
-                                        EmailController::confirmar($email, $data, $hora, $nome, $servico);
+                                    if($user != "1"){
+                                        $email = Agendamento::getEmail($user);
+                                        if($email){
+                                            EmailController::confirmar($email, $data, $hora, $nome, $servico);
+                                        }
                                     }
                                     return ["status" => "success", "data" => $res];
                                 }

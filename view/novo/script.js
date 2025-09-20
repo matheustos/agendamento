@@ -3,7 +3,22 @@
 // -----------------------
 const token = localStorage.getItem('token');
 
-// Menu lateral responsivo
+if (!token) {
+    window.location.href = "../login/index.html";
+}
+
+// -----------------------
+// FUNÇÃO LOGOUT
+// -----------------------
+function logout() {
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
+
+// -----------------------
+// MENU LATERAL RESPONSIVO
+// -----------------------
 document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.querySelector('.side-menu');
     const sideMenuToggle = document.getElementById('sideMenuToggle');
@@ -14,32 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
             sideMenu.classList.toggle('open');
         });
     }
+
     if (btnLogoutSide) {
         btnLogoutSide.addEventListener('click', logout);
     }
-});
 
-
-// Decodifique o token para pegar o acesso
-function getUserAccessFromToken() {
-    if (!token) {
-    window.location.href = "../login/index.html";
-}else{
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.acesso;
-    } catch (e) {
-        return null;
-    }
-}
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    // ...código do menu lateral...
-
-    // Esconde menus para cliente
+    // Esconde menus para clientes
     const acesso = getUserAccessFromToken();
-    if (acesso === "cliente") {;
+    if (acesso === "cliente") {
         const menuBloquear = document.getElementById('menu-bloquear');
         const menuUsuarios = document.getElementById('menu-usuarios');
         if (menuBloquear) menuBloquear.style.display = "none";
@@ -47,8 +44,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-if (!token) {
-    window.location.href = "../login/index.html";
+// -----------------------
+// DECODIFICAR TOKEN
+// -----------------------
+function getUserAccessFromToken() {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.acesso;
+    } catch (e) {
+        return null;
+    }
 }
 
 // -----------------------
@@ -77,27 +82,6 @@ fetch('/agendamento/api/agenda/horarios.php', {
 .catch(err => console.error('Erro ao carregar agenda:', err));
 
 // -----------------------
-// FILTRAR HORÁRIOS NO SELECT
-// -----------------------
-inputData.addEventListener('change', () => {
-    const dataEscolhida = inputData.value;
-
-    // Limpa o select antes de preencher
-    selectHorario.innerHTML = '<option value="">Selecione um horário</option>';
-
-    // Pega somente os horários disponíveis da data selecionada
-    const horarios = agendaDisponivel[dataEscolhida] || [];
-
-    // Adiciona os horários disponíveis
-    horarios.forEach(hora => {
-        const option = document.createElement('option');
-        option.value = hora;
-        option.textContent = hora;
-        selectHorario.appendChild(option);
-    });
-});
-
-// -----------------------
 // HABILITAR DATAS VÁLIDAS
 // -----------------------
 function habilitarDatasDisponiveis() {
@@ -112,45 +96,47 @@ function habilitarDatasDisponiveis() {
     inputData.dispatchEvent(new Event('change'));
 }
 
-/// -----------------------
-// ENVIO DO FORMULÁRIO COM TELA DE "CARREGANDO"
+// -----------------------
+// FILTRAR HORÁRIOS NO SELECT
+// -----------------------
+inputData.addEventListener('change', () => {
+    const dataEscolhida = inputData.value;
+    selectHorario.innerHTML = '<option value="">Selecione um horário</option>';
+    const horarios = agendaDisponivel[dataEscolhida] || [];
+    horarios.forEach(hora => {
+        const option = document.createElement('option');
+        option.value = hora;
+        option.textContent = hora;
+        selectHorario.appendChild(option);
+    });
+});
+
+// -----------------------
+// ENVIO DO FORMULÁRIO COM LOADING
 // -----------------------
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const token = localStorage.getItem('token');
     const dados = new FormData(form);
 
     // Mostrar loading
-    document.getElementById("loading-overlay").style.display = "flex";
+    const loading = document.getElementById("loading-overlay");
+    if (loading) loading.style.display = "flex";
 
     try {
         const res = await fetch("/agendamento/api/novo/index.php", {
             method: "POST",
             body: dados,
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
         const json = await res.json();
-
         alert(json.message || "Agendamento realizado com sucesso!");
         location.reload();
 
     } catch (err) {
         alert("Erro: " + err.message);
     } finally {
-        // Sempre esconder loading no fim
-        document.getElementById("loading-overlay").style.display = "none";
+        if (loading) loading.style.display = "none";
     }
-});
-
-
-document.getElementById('btnLogoutSide').addEventListener('click', function() {
-    // Remove o token JWT do localStorage
-    localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
-
-    // Redireciona para a página de login
-    window.location.href = '../login/index.html';
 });

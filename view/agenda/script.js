@@ -200,10 +200,16 @@ function editar(a) {
     .then(dataBackend => {
         hideLoading();
         const horarioSelect = document.getElementById("horario");
+        const statusSelect = document.getElementById("status");
         if (!horarioSelect) return;
 
         horarioSelect.innerHTML = '<option value="">Selecione um horário</option>';
         const horariosDisponiveis = dataBackend[a.data] ? [...dataBackend[a.data]] : [];
+        statusSelect.innerHTML = `
+            <option value="">Selecione um status</option>
+            <option>Confirmado</option>
+            <option>Concluído</option>
+        `;
 
         if (a.horario && !horariosDisponiveis.includes(a.horario)) {
             horariosDisponiveis.unshift(a.horario);
