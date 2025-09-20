@@ -3,11 +3,11 @@
         'name' => 'mathe/agendamento',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6650f1845a7ef19b2a2cc37ca48fcfa59a38c80e',
+        'reference' => '07fa476108559b0245f715d9170979939a0d324d',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'dev' => true,
+        'dev' => false,
     ),
     'versions' => array(
         'firebase/php-jwt' => array(
@@ -31,7 +31,7 @@
         'mathe/agendamento' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6650f1845a7ef19b2a2cc37ca48fcfa59a38c80e',
+            'reference' => '07fa476108559b0245f715d9170979939a0d324d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
