@@ -1,3 +1,16 @@
+// Menu lateral responsivo
+document.addEventListener("DOMContentLoaded", () => {
+    const sideMenu = document.querySelector('.side-menu');
+    const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
+
+    if (sideMenuToggle) {
+        sideMenuToggle.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+        });
+    }
+});
+
 const form = document.getElementById("anamnese");
 
   // Limpar
