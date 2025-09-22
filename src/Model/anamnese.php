@@ -46,6 +46,51 @@ class Anamnese{
             return $resultado->fetch_all(MYSQLI_ASSOC);
         }
     }
+
+    public static function atualizar($dados){
+        $id = $dados["id"];
+        $nome = $dados["nome"];
+        $data_nascimento = $dados["data_nascimento"];
+        $telefone = $dados["telefone"];
+        $email = $dados["email"];
+        $sexo = $dados["sexo"];
+        $profissao = $dados["profissao"];
+        $endereco = $dados["endereco"];
+        $condicoes = $dados["condicoes"];
+        $alergias = $dados["alergias"];
+        $medicamentos = $dados["medicamentos"];
+        $cirurgias = $dados["cirurgias"];
+        $marcapasso = $dados["marcapasso"];
+        $gestante = $dados["gestante"];
+        $queixa = $dados["queixa"];
+        $podologico = $dados["podologico"];
+        $calcados = $dados["calcados"];
+        $higiene = $dados["higiene"];
+        $exame = $dados["exame"];
+        $conduta = $dados["conduta"];
+        $obs = $dados["obs"];
+        $profissional = $dados["profissional"];
+        $data = $dados["data"];
+
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Prepara e executa a atualização
+        $sql = "UPDATE anamnese SET nome = ?, data_nascimento = ?, telefone = ?, email = ?, sexo = ?, profissao = ?, endereco = ?, condicoes = ?, alergias = ?, medicamentos = ?, cirurgias = ?, marcapasso = ?, gestante = ?, queixa = ?, podologico = ?, calcados = ?, higiene = ?, exame = ?, conduta = ?, obs = ?, profissional = ?, data = ? WHERE id= ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssssssssssssssssssssi", $nome, $data_nascimento, $telefone, $email, $sexo, $profissao, $endereco, $condicoes, $alergias, $medicamentos, $cirurgias, $marcapasso, $gestante, $queixa, $podologico, $calcados, $higiene, $exame, $conduta, $obs, $profissional, $data, $id);
+
+
+        if ($stmt->execute()) {
+            return AgendamentoValidators::formatarRetorno("Ficha atualizada com sucesso!", null);
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
 }
 
 

@@ -10,6 +10,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+const token = localStorage.getItem('token');
+if(!token){
+    window.location.href = "../login/index.html";
+}
+
+try {
+    const payloadBase64 = token.split('.')[1];
+    const payload = JSON.parse(atob(payloadBase64));
+    const agora = Math.floor(Date.now() / 1000);
+
+    if (!payload.exp || payload.exp < agora) {
+        localStorage.removeItem('token');
+        window.location.href = "../login/index.html";
+    } else {
+        userAccess = payload.acesso; // "admin" ou "cliente"
+    }
+} catch (e) {
+    localStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
 
 const form = document.getElementById("anamnese");
 
