@@ -41,6 +41,18 @@ class AnamneseController{
        }
     }
 
+    public static function getAnamnese(){
+        //listar todas as fichas
+
+        $fichas = Anamnese::buscarAnamnese();
+
+        if($fichas){
+            return ["status" => true, "message" => "Fichas encontradas", "data" => $fichas];
+        }else{
+            return ["status" => false, "message" => "Nenhuma ficha de anamnese encontrada!"];
+        }
+    }
+
 }
 
 

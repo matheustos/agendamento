@@ -1,6 +1,7 @@
 <?php
 
 namespace Model;
+use Validators\AgendamentoValidators;
 
 class Anamnese{
     public static function cadastro($dados){
@@ -33,6 +34,17 @@ class Anamnese{
         $stmt->bind_param("ssssssssssssssssssssss", $nome, $data_nascimento, $telefone, $email, $sexo, $profissao, $endereco, $condicoes, $alergias, $medicamentos, $cirurgias, $marcapasso, $gestante, $queixa, $podologico, $calcados, $higiene, $exame, $conduta, $obs, $profissional, $data);
         
         return $stmt->execute();
+    }
+
+    public static function buscarAnamnese(){
+        $conn = Database::conectar();
+        $stmt = $conn->prepare("SELECT * FROM anamnese");
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        
+        if ($resultado->num_rows > 0) {
+            return $resultado->fetch_all(MYSQLI_ASSOC);
+        }
     }
 }
 

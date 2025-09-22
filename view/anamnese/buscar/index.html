@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fichas de Anamenese</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <!-- Menu lateral fixo à esquerda -->
+        <nav class="side-menu">
+            <div class="side-menu-limpo" id="sideMenuToggle">☰</div>
+            <ul class="side-menu-links" id="sideMenuLinks">
+                <li><a href="../../agenda/index.html">Agenda</a></li>
+                <li><a href="../../novo/index.html">Novo Agendamento</a></li>
+                <li id = menu-bloquear><a href="../../bloquear/index.html">Bloquear Agenda</a></li>
+                <li id = menu-anamnese><a href="../index.html">Anamnese</a></li>
+                <li><a href="../../usuarios/listar/index.html">Usuários</a></li>
+                <li><a href="../../usuarios/perfil/index.html">Perfil</a></li>
+                <button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button>
+            </ul>
+        </nav>
+    </header>
+    <h1>Fichas de Anamnese</h1>
+    <div id="search-container">
+        <input type="text" id="search" placeholder="Pesquisar por nome do cliente">
+    </div>
+    <div id="cards-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
