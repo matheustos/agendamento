@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ficha de Anamnese - Podologia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ficha de Anamnese — Podologia</h1>
+    <p class="lead">Preencha os campos abaixo antes do atendimento. Campos com * são obrigatórios.</p>
+
+    <form id="anamnese">
+      <div class="grid">
+        <div>
+          <label for="nome">Nome *</label>
+          <input id="nome" name="nome" type="text" required placeholder="Nome completo">
+        </div>
+
+        <div>
+          <label for="nascimento">Data de nascimento *</label>
+          <input id="nascimento" name="data_nascimento" type="date" required>
+        </div>
+
+        <div>
+          <label for="telefone">Telefone *</label>
+          <input id="telefone" name="telefone" type="tel" placeholder="(00) 0 0000-0000">
+        </div>
+
+        <div>
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" placeholder="seu@email.com">
+        </div>
+
+        <div>
+          <label for="sexo">Sexo *</label>
+          <select id="sexo" name="sexo">
+            <option value="">-- Selecionar --</option>
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="outro">Outro/Prefiro não dizer</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="profissao">Profissão</label>
+          <input id="profissao" name="profissao" type="text">
+        </div>
+
+        <div class="full">
+          <label for="endereco">Endereço *</label>
+          <input id="endereco" name="endereco" type="text" placeholder="Rua, número, bairro, cidade">
+        </div>
+
+        <div class="full section">
+          <label>Histórico de Saúde</label>
+          <div class="checkbox-row small">
+            <label><input type="checkbox" name="condicoes[]" value="diabetes"> Diabetes</label>
+            <label><input type="checkbox" name="condicoes[]" value="hipertensao"> Hipertensão</label>
+            <label><input type="checkbox" name="condicoes[]" value="cardiaco"> Problema cardíaco</label>
+            <label><input type="checkbox" name="condicoes[]" value="circulatorio"> Problema circulatório</label>
+            <label><input type="checkbox" name="condicoes[]" value="renal"> Problema renal</label>
+            <label><input type="checkbox" name="condicoes[]" value="outros"> Outros</label>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="alergias">Alergias / Reações</label>
+            <input id="alergias" name="alergias" type="text" placeholder="Ex: penicilina, látex, etc.">
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="medicamentos">Uso de medicamentos</label>
+            <input id="medicamentos" name="medicamentos" type="text" placeholder="Nome dos medicamentos / doses">
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="cirurgias">Cirurgias anteriores / Observações</label>
+            <input id="cirurgias" name="cirurgias" type="text">
+          </div>
+
+          <div style="margin-top:10px" class="checkbox-row small">
+            <label><input type="checkbox" id="marcapasso" name="marcapasso"> Marcapasso</label>
+            <label><input type="checkbox" id="gestante" name="gestante"> Gestante</label>
+          </div>
+        </div>
+
+        <div class="full section">
+          <label>Queixa Principal *</label>
+          <textarea id="queixa" name="queixa" placeholder="Descreva o motivo da consulta, duração dos sintomas, fatores que pioram ou aliviam..."></textarea>
+        </div>
+
+        <div class="full section">
+          <label>Histórico Podológico</label>
+          <div class="checkbox-row small">
+            <label><input type="checkbox" name="podologico[]" value="dor"> Dores / desconforto</label>
+            <label><input type="checkbox" name="podologico[]" value="micose"> Micose</label>
+            <label><input type="checkbox" name="podologico[]" value="unha_encravada"> Unha encravada</label>
+            <label><input type="checkbox" name="podologico[]" value="onicolise"> Onicólise</label>
+            <label><input type="checkbox" name="podologico[]" value="calos"> Calosidades</label>
+            <label><input type="checkbox" name="podologico[]" value="fissuras"> Fissuras</label>
+            <label><input type="checkbox" name="podologico[]" value="verrugas"> Verrugas</label>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="calcados">Uso de calçados</label>
+            <input id="calcados" name="calcados" type="text" placeholder="Ex: fechados, abertos, salto alto">
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="higiene">Higiene dos pés</label>
+            <select id="higiene" name="higiene">
+              <option value="">-- Selecionar --</option>
+              <option value="adequada">Adequada</option>
+              <option value="inadequada">Inadequada</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="full section">
+          <label>Exame Físico (preenchido pelo profissional)</label>
+          <textarea id="exame" name="exame" placeholder="Inspeção, palpação, alterações observadas..."></textarea>
+        </div>
+
+        <div class="full">
+          <label>Conduta / Plano de Tratamento</label>
+          <textarea id="conduta" name="conduta" placeholder="Procedimentos realizados, orientações e retorno..."></textarea>
+        </div>
+
+        <div class="full">
+          <label>Observações Adicionais</label>
+          <textarea id="obs" name="obs"></textarea>
+        </div>
+
+        <div class="full small note">
+          <strong>Importante:</strong> informações médicas relevantes (ex.: diabetes, uso de anticoagulantes) devem ser informadas ao profissional antes de qualquer procedimento.
+        </div>
+
+        <div class="full" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div>
+            <label for="profissional">Assinatura do profissional</label>
+            <input id="profissional" name="profissional" type="text" placeholder="Nome do profissional">
+          </div>
+
+          <div style="min-width:160px">
+            <label for="data">Data</label>
+            <input id="data" name="data" type="date">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button type="reset" class="secondary" id="limpar">Limpar</button>
+        <button type="button" id="salvar">Salvar</button>
+        <button type="button" id="imprimir">Imprimir / Salvar PDF</button>
+      </div>
+    </form>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
