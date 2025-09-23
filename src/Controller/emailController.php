@@ -3,8 +3,7 @@
 namespace Controller;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Model\Agendamento;
-use Validators\AgendamentoValidators;
+use Dotenv\Dotenv;
 
 class EmailController{
 
@@ -14,7 +13,7 @@ class EmailController{
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'matheusstos123456@gmail.com';
-        $mail->Password   = 'nnii wtto hazc awdh';
+        $mail->Password   = $_ENV['CHAVE_APP'];
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
