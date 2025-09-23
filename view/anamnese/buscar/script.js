@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
             sideMenu.classList.toggle('open');
         });
     }
+    if (btnLogoutSide) {
+        btnLogoutSide.addEventListener('click', logout);
+    }
 });
 
 const token = localStorage.getItem('token');
@@ -35,6 +38,12 @@ try {
 
 if(userAccess === "cliente"){
     window.location.href = "../../agenda/index.html"
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    window.location.href = "../../login/index.html";
 }
 
 const labels = {
