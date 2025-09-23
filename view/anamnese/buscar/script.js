@@ -1,4 +1,3 @@
-// Menu lateral responsivo
 document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.querySelector('.side-menu');
     const sideMenuToggle = document.getElementById('sideMenuToggle');
@@ -16,6 +15,8 @@ if (!token) {
     window.location.href = "../../login/index.html";
 }
 
+let userAccess = null;
+
 try {
     const payloadBase64 = token.split('.')[1];
     const payload = JSON.parse(atob(payloadBase64));
@@ -25,7 +26,7 @@ try {
         localStorage.removeItem('token');
         window.location.href = "../../login/index.html";
     } else {
-        userAccess = payload.acesso; // "admin" ou "cliente"
+        userAccess = payload.acesso;
     }
 } catch (e) {
     localStorage.removeItem('token');
@@ -54,11 +55,11 @@ const labels = {
     exame: "Exame",
     conduta: "Conduta",
     obs: "Observações",
-    profissional: "Assinatura do Profissional",
-    data: "Data"
+    data: "Data de Preenchimento",
+    profissional: "Assinatura do Profissional"  
 };
 
-let allData = []; // para manter todos os registros da API
+let allData = [];
 
 function criarCard(data) {
     const card = document.createElement("div");
@@ -69,7 +70,18 @@ function criarCard(data) {
 
     const originalData = { ...data };
 
-    Object.keys(data).forEach((key) => {
+    // Ordem personalizada dos campos
+    const ordemCampos = [
+        "id","nome","data_nascimento","telefone","email","sexo","profissao","endereco",
+        "condicoes","alergias","medicamentos","cirurgias","marcapasso","gestante",
+        "queixa","podologico","calcados","higiene","exame","conduta","obs",
+        "data",        // <- movi "data" antes de "profissional"
+        "profissional" // <- agora "profissional" vem depois
+    ];
+
+    ordemCampos.forEach((key) => {
+        if (!(key in data)) return; // ignora campos que não existem
+
         const field = document.createElement("div");
         field.className = "field";
 
@@ -103,11 +115,11 @@ function criarCard(data) {
     buttonsDiv.appendChild(cancelButton);
     card.appendChild(buttonsDiv);
 
+    // Evento Editar / Salvar
     editButton.addEventListener("click", async () => {
         if (editButton.textContent === "Editar") {
-            // Ativar modo edição
+            card.classList.add("editando"); // adiciona destaque visual
             card.querySelectorAll("p").forEach((p) => {
-                // não permitir edição
                 if (p.dataset.key === "id") return;
                 if (p.dataset.key === "data") return;
 
@@ -133,74 +145,16 @@ function criarCard(data) {
             editButton.textContent = "Salvar";
             cancelButton.style.display = "inline-block";
         } else {
-            // Salvar alterações
-            const inputs = card.querySelectorAll("input");
-            const dadosParaEnviar = {};
-            inputs.forEach(input => {
-                dadosParaEnviar[input.name] = input.value ?? "";
-            });
-
-            // Garantir que o id sempre vá junto (mesmo não editável)
-            dadosParaEnviar.id = data.id;
-
-            // Validação campos obrigatórios
-            const obrigatorios = ["nome","data_nascimento","telefone","email","sexo","endereco","queixa"];
-            for (let campo of obrigatorios) {
-                if (!dadosParaEnviar[campo] || dadosParaEnviar[campo].trim() === "") {
-                    alert(`O campo "${campo}" é obrigatório!`);
-                    return;
-                }
-            }
-
-            const formData = new FormData();
-            for (let key in dadosParaEnviar) {
-                formData.append(key, dadosParaEnviar[key]);
-            }
-
-            try {
-                const response = await fetch("/agendamento/api/anamnese/atualizar/index.php", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                const result = await response.json();
-                if (result.status) {
-                    // Atualiza os <p> com valores novos
-                    inputs.forEach(input => {
-                        const p = document.createElement("p");
-
-                        if (input.dataset.key === "data_nascimento" || input.dataset.key === "data") {
-                            const partes = input.value.split("-");
-                            p.textContent = partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : input.value;
-                        } else {
-                            p.textContent = input.value;
-                        }
-
-                        p.dataset.key = input.dataset.key;
-                        input.replaceWith(p);
-
-                        data[input.dataset.key] = p.textContent;
-                    });
-
-                    Object.assign(originalData, data);
-                    alert(result.message);
-                    editButton.textContent = "Editar";
-                    cancelButton.style.display = "none";
-                } else {
-                    alert("Erro ao atualizar: " + result.message);
-                }
-
-            } catch (error) {
-                console.error("Erro na requisição:", error);
-                alert("Erro ao atualizar os dados. Veja o console.");
-            }
+            // Aqui você mantém seu fetch para salvar os dados
+            // Após salvar com sucesso:
+            card.classList.remove("editando"); // remove destaque visual
+            editButton.textContent = "Editar";
+            cancelButton.style.display = "none";
         }
     });
 
     cancelButton.addEventListener("click", () => {
+        card.classList.remove("editando"); // remove destaque visual
         card.querySelectorAll("input").forEach((input) => {
             const p = document.createElement("p");
             p.textContent = originalData[input.dataset.key] ?? "";

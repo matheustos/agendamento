@@ -57,6 +57,9 @@ const form = document.getElementById("anamnese");
     try {
       const response = await fetch("/agendamento/api/anamnese/index.php", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+      },
         body: formData // manda igual formulário
       });
 
