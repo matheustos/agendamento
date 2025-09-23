@@ -33,6 +33,10 @@ try {
     window.location.href = "../../login/index.html";
 }
 
+if(userAccess === "cliente"){
+    window.location.href = "../../agenda/index.html"
+}
+
 const labels = {
     id: "ID do cliente",
     nome: "Nome completo",

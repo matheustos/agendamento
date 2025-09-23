@@ -31,6 +31,10 @@ try {
     window.location.href = "../login/index.html";
 }
 
+if(userAccess === "cliente"){
+    window.location.href = "../agenda/index.html"
+}
+
 const form = document.getElementById("anamnese");
 
   // Limpar
