@@ -2,7 +2,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.querySelector('.side-menu');
     const sideMenuToggle = document.getElementById('sideMenuToggle');
-    const btnLogoutSide = document.getElementById('btnLogoutSide');
 
     if (sideMenuToggle) {
         sideMenuToggle.addEventListener('click', () => {
@@ -13,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const token = localStorage.getItem('token');
 
-if(!token){
+if (!token) {
     window.location.href = "../../login/index.html";
 }
 
@@ -42,13 +41,13 @@ const labels = {
     data_nascimento: "Data de Nascimento",
     sexo: "Sexo",
     profissao: "Profissão",
-    condicoes: "Condições",
+    condicoes: "Histórico de Saúde",
     alergias: "Alergias",
     medicamentos: "Medicamentos",
     cirurgias: "Cirurgias",
     marcapasso: "Marcapasso",
     gestante: "Gestante",
-    queixa: "Queixa", 
+    queixa: "Queixa",
     podologico: "Histórico Podológico",
     calcados: "Calçados",
     higiene: "Higiene",
@@ -104,107 +103,104 @@ function criarCard(data) {
     buttonsDiv.appendChild(cancelButton);
     card.appendChild(buttonsDiv);
 
-   editButton.addEventListener("click", async () => {
-    if (editButton.textContent === "Editar") {
-        // Ativar modo edição
-        card.querySelectorAll("p").forEach((p) => {
-            const input = document.createElement("input");
-            input.dataset.key = p.dataset.key;
-            input.name = p.dataset.key;
+    editButton.addEventListener("click", async () => {
+        if (editButton.textContent === "Editar") {
+            // Ativar modo edição
+            card.querySelectorAll("p").forEach((p) => {
+                // não permitir edição
+                if (p.dataset.key === "id") return;
+                if (p.dataset.key === "data") return;
 
-            // Verifica se é campo de data
-            if (p.dataset.key === "data_nascimento" || p.dataset.key === "data") {
-                input.type = "date";
+                const input = document.createElement("input");
+                input.dataset.key = p.dataset.key;
+                input.name = p.dataset.key;
 
-                // Converte DD/MM/YYYY para YYYY-MM-DD se necessário
-                const partes = p.textContent.split("/");
-                if (partes.length === 3) {
-                    input.value = `${partes[2]}-${partes[1].padStart(2,"0")}-${partes[0].padStart(2,"0")}`;
+                if (p.dataset.key === "data_nascimento" || p.dataset.key === "data") {
+                    input.type = "date";
+                    const partes = p.textContent.split("/");
+                    if (partes.length === 3) {
+                        input.value = `${partes[2]}-${partes[1].padStart(2,"0")}-${partes[0].padStart(2,"0")}`;
+                    } else {
+                        input.value = p.textContent;
+                    }
                 } else {
-                    // Caso já venha no formato do backend (YYYY-MM-DD)
+                    input.type = "text";
                     input.value = p.textContent;
                 }
 
-            } else {
-                input.type = "text";
-                input.value = p.textContent;
-            }
-
-            p.replaceWith(input);
-        });
-        editButton.textContent = "Salvar";
-        cancelButton.style.display = "inline-block";
-    } else {
-        // Salvar alterações
-        const inputs = card.querySelectorAll("input");
-        const dadosParaEnviar = {};
-        inputs.forEach(input => {
-            dadosParaEnviar[input.name] = input.value ?? "";
-        });
-
-        // Validação campos obrigatórios
-        const obrigatorios = ["nome","data_nascimento","telefone","email","sexo","endereco","queixa"];
-        for (let campo of obrigatorios) {
-            if (!dadosParaEnviar[campo] || dadosParaEnviar[campo].trim() === "") {
-                alert(`O campo "${campo}" é obrigatório!`);
-                return;
-            }
-        }
-
-        // Enviar via POST
-        const formData = new FormData();
-        for (let key in dadosParaEnviar) {
-            formData.append(key, dadosParaEnviar[key]);
-        }
-
-        try {
-            const response = await fetch("/agendamento/api/anamnese/atualizar/index.php", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                body: formData
+                p.replaceWith(input);
+            });
+            editButton.textContent = "Salvar";
+            cancelButton.style.display = "inline-block";
+        } else {
+            // Salvar alterações
+            const inputs = card.querySelectorAll("input");
+            const dadosParaEnviar = {};
+            inputs.forEach(input => {
+                dadosParaEnviar[input.name] = input.value ?? "";
             });
 
-            const result = await response.json();
-            if (result.status) {
-                // Atualiza os <p> com valores novos
-                inputs.forEach(input => {
-                    const p = document.createElement("p");
+            // Garantir que o id sempre vá junto (mesmo não editável)
+            dadosParaEnviar.id = data.id;
 
-                    // Se for data, converte para formato DD/MM/YYYY para exibição
-                    if (input.dataset.key === "data_nascimento" || input.dataset.key === "data") {
-                        const partes = input.value.split("-");
-                        p.textContent = partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : input.value;
-                    } else {
-                        p.textContent = input.value;
-                    }
-
-                    p.dataset.key = input.dataset.key;
-                    input.replaceWith(p);
-
-                    data[input.dataset.key] = p.textContent; // mantém dados atualizados
-                });
-
-                Object.assign(originalData, data);
-                alert(result.message);
-                editButton.textContent = "Editar";
-                cancelButton.style.display = "none";
-            } else {
-                alert("Erro ao atualizar: " + result.message);
+            // Validação campos obrigatórios
+            const obrigatorios = ["nome","data_nascimento","telefone","email","sexo","endereco","queixa"];
+            for (let campo of obrigatorios) {
+                if (!dadosParaEnviar[campo] || dadosParaEnviar[campo].trim() === "") {
+                    alert(`O campo "${campo}" é obrigatório!`);
+                    return;
+                }
             }
 
-        } catch (error) {
-            console.error("Erro na requisição:", error);
-            alert("Erro ao atualizar os dados. Veja o console.");
+            const formData = new FormData();
+            for (let key in dadosParaEnviar) {
+                formData.append(key, dadosParaEnviar[key]);
+            }
+
+            try {
+                const response = await fetch("/agendamento/api/anamnese/atualizar/index.php", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.status) {
+                    // Atualiza os <p> com valores novos
+                    inputs.forEach(input => {
+                        const p = document.createElement("p");
+
+                        if (input.dataset.key === "data_nascimento" || input.dataset.key === "data") {
+                            const partes = input.value.split("-");
+                            p.textContent = partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : input.value;
+                        } else {
+                            p.textContent = input.value;
+                        }
+
+                        p.dataset.key = input.dataset.key;
+                        input.replaceWith(p);
+
+                        data[input.dataset.key] = p.textContent;
+                    });
+
+                    Object.assign(originalData, data);
+                    alert(result.message);
+                    editButton.textContent = "Editar";
+                    cancelButton.style.display = "none";
+                } else {
+                    alert("Erro ao atualizar: " + result.message);
+                }
+
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                alert("Erro ao atualizar os dados. Veja o console.");
+            }
         }
-    }
-});
-
-
+    });
 
     cancelButton.addEventListener("click", () => {
-        // Reverter para dados originais
         card.querySelectorAll("input").forEach((input) => {
             const p = document.createElement("p");
             p.textContent = originalData[input.dataset.key] ?? "";
@@ -227,7 +223,7 @@ async function buscarDados() {
             }
         });
         const json = await response.json();
-        allData = json.data; // salva todos os registros
+        allData = json.data;
         exibirCards(allData);
     } catch (error) {
         console.error("Erro ao buscar dados:", error);
