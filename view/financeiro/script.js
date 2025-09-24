@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetch("/agendamento/api/financeiro/filtro/index.php", {
         method: "POST",
+        headers: {"Authorization": `Bearer ${token}`},
         body: formData
         })
         .then(res => res.text()) // <--- aqui, pega o valor puro
