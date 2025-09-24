@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const sideMenu = document.querySelector('.side-menu');
     const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
 
     if (sideMenuToggle) {
         sideMenuToggle.addEventListener('click', () => {
@@ -12,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// ========================
+// TOKEN E VALIDAÇÃO
+// ========================
 const token = localStorage.getItem('token');
 
 if (!token) {
@@ -46,6 +50,9 @@ function logout() {
     window.location.href = "../../login/index.html";
 }
 
+// ========================
+// LABELS
+// ========================
 const labels = {
     id: "ID do cliente",
     nome: "Nome completo",
@@ -74,6 +81,9 @@ const labels = {
 
 let allData = [];
 
+// ========================
+// FUNÇÃO CRIAR CARD
+// ========================
 function criarCard(data) {
     const card = document.createElement("div");
     card.className = "card";
@@ -83,17 +93,15 @@ function criarCard(data) {
 
     const originalData = { ...data };
 
-    // Ordem personalizada dos campos
     const ordemCampos = [
         "id","nome","data_nascimento","telefone","email","sexo","profissao","endereco",
         "condicoes","alergias","medicamentos","cirurgias","marcapasso","gestante",
         "queixa","podologico","calcados","higiene","exame","conduta","obs",
-        "data",        // <- movi "data" antes de "profissional"
-        "profissional" // <- agora "profissional" vem depois
+        "data","profissional"
     ];
 
     ordemCampos.forEach((key) => {
-        if (!(key in data)) return; // ignora campos que não existem
+        if (!(key in data)) return;
 
         const field = document.createElement("div");
         field.className = "field";
@@ -115,6 +123,7 @@ function criarCard(data) {
     const buttonsDiv = document.createElement("div");
     buttonsDiv.className = "buttons";
 
+    // BOTÕES
     const editButton = document.createElement("button");
     editButton.textContent = "Editar";
     editButton.className = "save-btn";
@@ -124,14 +133,25 @@ function criarCard(data) {
     cancelButton.className = "cancel-btn";
     cancelButton.style.display = "none";
 
+    const printButton = document.createElement("button");
+    printButton.textContent = "Imprimir Ficha";
+    printButton.className = "save-btn";
+    printButton.style.background = "#28a745";
+    printButton.addEventListener("click", () => {
+        imprimirFicha(card);
+    });
+
     buttonsDiv.appendChild(editButton);
     buttonsDiv.appendChild(cancelButton);
+    buttonsDiv.appendChild(printButton);
     card.appendChild(buttonsDiv);
 
-    // Evento Editar / Salvar
+    // ========================
+    // EDITAR / SALVAR
+    // ========================
     editButton.addEventListener("click", async () => {
         if (editButton.textContent === "Editar") {
-            card.classList.add("editando"); // adiciona destaque visual
+            card.classList.add("editando");
             card.querySelectorAll("p").forEach((p) => {
                 if (p.dataset.key === "id") return;
                 if (p.dataset.key === "data") return;
@@ -158,16 +178,14 @@ function criarCard(data) {
             editButton.textContent = "Salvar";
             cancelButton.style.display = "inline-block";
         } else {
-            // Aqui você mantém seu fetch para salvar os dados
-            // Após salvar com sucesso:
-            card.classList.remove("editando"); // remove destaque visual
+            card.classList.remove("editando");
             editButton.textContent = "Editar";
             cancelButton.style.display = "none";
         }
     });
 
     cancelButton.addEventListener("click", () => {
-        card.classList.remove("editando"); // remove destaque visual
+        card.classList.remove("editando");
         card.querySelectorAll("input").forEach((input) => {
             const p = document.createElement("p");
             p.textContent = originalData[input.dataset.key] ?? "";
@@ -182,12 +200,51 @@ function criarCard(data) {
     return card;
 }
 
+// ========================
+// FUNÇÃO IMPRIMIR FICHA
+// ========================
+function imprimirFicha(cardElement) {
+    const printWindow = window.open('', '', 'width=800,height=600');
+    const fieldsContent = Array.from(cardElement.querySelectorAll(".field")).map(f => {
+        const label = f.querySelector("label").textContent;
+        const value = f.querySelector("p") ? f.querySelector("p").textContent : f.querySelector("input").value;
+        return `<div class="ficha-field"><label>${label}</label><span>${value}</span></div>`;
+    }).join("");
+
+    const style = `
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .ficha { display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; }
+            .ficha-field { display: flex; flex-direction: column; flex: 1 1 45%; min-width: 200px; margin-bottom:10px; }
+            .ficha-field label { font-weight: bold; margin-bottom: 5px; font-size: 16px; }
+            .ficha-field span { padding: 6px 8px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; }
+            h1 { text-align: center; }
+        </style>
+    `;
+
+    printWindow.document.write(`
+        <html>
+            <head><title>Ficha de Anamnese</title>${style}</head>
+            <body>
+                <h1>Ficha de Anamnese</h1>
+                <div class="ficha">${fieldsContent}</div>
+            </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+}
+
+// ========================
+// BUSCAR DADOS DA API
+// ========================
 async function buscarDados() {
     try {
         const response = await fetch("/agendamento/api/anamnese/buscar/index.php", {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+            headers: { "Authorization": `Bearer ${token}` }
         });
         const json = await response.json();
         allData = json.data;
@@ -197,13 +254,18 @@ async function buscarDados() {
     }
 }
 
+// ========================
+// EXIBIR CARDS
+// ========================
 function exibirCards(dataArray) {
     const container = document.getElementById("cards-container");
     container.innerHTML = "";
     dataArray.forEach(item => container.appendChild(criarCard(item)));
 }
 
-// Pesquisa por nome
+// ========================
+// PESQUISA POR NOME
+// ========================
 const searchInput = document.getElementById("search");
 searchInput.addEventListener("input", () => {
     const filtro = searchInput.value.toLowerCase();
@@ -211,4 +273,7 @@ searchInput.addEventListener("input", () => {
     exibirCards(filtrados);
 });
 
+// ========================
+// INICIALIZA
+// ========================
 buscarDados();
