@@ -21,9 +21,34 @@
             <li><button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button></li>
         </ul>
     </nav>
+
     <div class="dashboard">
         <h1>Dashboard Financeiro</h1>
         <p class="subtitulo">Acompanhe suas receitas e performance financeira em tempo real</p>
+
+        <div class="filtro-container">
+            <div class="filtro-row">
+                <label for="filtroTipo">Filtrar por:</label>
+                <select id="filtroTipo">
+                <option value="">Selecione...</option>
+                <option value="dia">Dia</option>
+                <option value="mes">Mês</option>
+                <option value="ano">Ano</option>
+                </select>
+
+                <!-- Inputs escondidos -->
+                <input type="date" id="filtroDia" style="display:none;">
+                <input type="month" id="filtroMes" style="display:none;">
+                <input type="number" id="filtroAno" placeholder="Digite o ano" min="2000" max="2100" style="display:none;">
+
+                <button id="btnFiltrar">Pesquisar</button>
+            </div>
+        </div>
+        <div class="card card-filtrada">
+            <h3>Receita Filtrada</h3>
+            <p id="receita-filtrada">R$ 0,00</p>
+            <small>Resultado do filtro selecionado</small>
+        </div>
 
         <div class="cards">
             <div class="card card-hoje">

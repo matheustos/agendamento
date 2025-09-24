@@ -70,6 +70,74 @@ function formatarMoeda(valor) {
     return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+function atualizarDashboard(valor) {
+    const span = document.getElementById('receita-filtrada');
+    if(span) {
+        span.textContent = formatarMoeda(Number(valor));
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const filtroTipo = document.getElementById("filtroTipo");
+  const filtroDia = document.getElementById("filtroDia");
+  const filtroMes = document.getElementById("filtroMes");
+  const filtroAno = document.getElementById("filtroAno");
+  const btnFiltrar = document.getElementById("btnFiltrar");
+
+  // Sempre esconde todos os inputs primeiro
+  function esconderInputs() {
+    filtroDia.style.display = "none";
+    filtroMes.style.display = "none";
+    filtroAno.style.display = "none";
+  }
+
+  // Mostrar o input certo de acordo com a seleção
+  filtroTipo.addEventListener("change", () => {
+    esconderInputs();
+    if (filtroTipo.value === "dia") filtroDia.style.display = "block";
+    if (filtroTipo.value === "mes") filtroMes.style.display = "block";
+    if (filtroTipo.value === "ano") filtroAno.style.display = "block";
+  });
+
+  // Quando clicar em "Pesquisar"
+  btnFiltrar.addEventListener("click", () => {
+    let tipo = "";
+    let valor = "";
+
+    if (filtroTipo.value === "dia" && filtroDia.value) {
+      tipo = "dia"; valor = filtroDia.value;
+    } else if (filtroTipo.value === "mes" && filtroMes.value) {
+      tipo = "mes"; valor = filtroMes.value;
+      // pega só o mês (segundo split)
+        valor = filtroMes.value.split("-")[1]; 
+    } else if (filtroTipo.value === "ano" && filtroAno.value) {
+      tipo = "ano"; valor = filtroAno.value;
+    } else {
+      alert("Selecione um valor válido.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("tipo", tipo);
+    formData.append("valor", valor);
+
+    fetch("/agendamento/api/financeiro/filtro/index.php", {
+        method: "POST",
+        body: formData
+        })
+        .then(res => res.text()) // <--- aqui, pega o valor puro
+        .then(data => {
+            console.log("Resposta:", data); // deve aparecer algo como "250"
+            const valor = Number(data); // transforma em número
+            atualizarDashboard(valor);
+        })
+        .catch(err => console.error("Erro:", err));
+
+  });
+});
+
+
 // Função para atualizar receitas
 async function atualizarReceitas() {
     try {

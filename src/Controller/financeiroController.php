@@ -30,6 +30,27 @@ class FinanceiroController{
         return $totalDia;
     }
 
+    public static function calcularPrecosData($data){
+        $status = "Concluído";
+
+        $servicos = Agendamento::getServico($data, $status);
+        $servicosComPreco = [];
+
+        foreach ($servicos as $servico) {
+            $preco = Financeiro::getpreco($servico); // pega o preço do serviço
+            $servicosComPreco[] = [
+                "servico" => $servico,
+                "preco" => $preco
+            ];
+        }
+        $total = 0;
+        foreach ($servicosComPreco as $item) {
+            $total += $item['preco']; // soma cada preço
+        }
+
+        return $total;
+    }
+
     public static function calcularPrecosSemana(){
         date_default_timezone_set('America/Sao_Paulo');
         $dataHoje = date("Y-m-d"); // dia atual
@@ -81,6 +102,29 @@ class FinanceiroController{
         return $totalMes;
     }
 
+    public static function calcularMesEspecifico($mes){
+        $status = "Concluído";
+
+        $servicos = Agendamento::getServicoPorMes($mes, $status);
+        
+        $servicosComPreco = [];
+
+        foreach ($servicos as $servico) {
+            $preco = Financeiro::getpreco($servico); // pega o preço do serviço
+            $servicosComPreco[] = [
+                "servico" => $servico,
+                "preco" => $preco
+            ];
+        }
+        $total = 0;
+        foreach ($servicosComPreco as $item) {
+            $total += $item['preco']; // soma cada preço
+        }
+
+        return $total;
+    }
+
+
     public static function calcularPrecosAno(){
         date_default_timezone_set('America/Sao_Paulo');
         $ano = date("Y"); 
@@ -104,6 +148,26 @@ class FinanceiroController{
         return $totalAno;
     }
 
+    public static function calcularAnoEspecifico($ano){
+        $status = "Concluído";
+
+        $servicos = Agendamento::getServicoPorAno($ano, $status);
+        $servicosComPreco = [];
+
+        foreach ($servicos as $servico) {
+            $preco = Financeiro::getpreco($servico); // pega o preço do serviço
+            $servicosComPreco[] = [
+                "servico" => $servico,
+                "preco" => $preco
+            ];
+        }
+        $total = 0;
+        foreach ($servicosComPreco as $item) {
+            $total += $item['preco']; // soma cada preço
+        }
+        
+        return $total;
+    }
 }
 
 
