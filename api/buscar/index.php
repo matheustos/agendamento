@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Controller\AgendamentoController;
-use Controller\UsuariosController;
 use Jwt\Token;
 
 header('Content-Type: application/json');

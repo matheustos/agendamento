@@ -36,10 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const menuUsuarios = document.getElementById('menu-usuarios');
         const menuAnamnese = document.getElementById('menu-anamnese');
         const menuFicha = document.getElementById('menu-ficha');
+        const menuFinanceiro = document.getElementById('menu-financeiro');
         if (menuBloquear) menuBloquear.style.display = "none";
         if (menuUsuarios) menuUsuarios.style.display = "none";
         if (menuAnamnese) menuAnamnese.style.display = "none";
         if (menuFicha) menuFicha.style.display = "none";
+        if (menuFinanceiro) menuFinanceiro.style.display = "none";
     }
 });
 

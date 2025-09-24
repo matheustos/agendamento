@@ -60,6 +60,34 @@ try {
     window.location.href = "../login/index.html";
 }
 
+// Decodifica o token para pegar o acesso
+function getUserAccessFromToken() {
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.acesso;
+    } catch (e) {
+        return null;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Esconde menus para cliente
+    const acesso = getUserAccessFromToken();
+    if (acesso === "cliente") {
+        const menuBloquear = document.getElementById('menu-bloquear');
+        const menuUsuarios = document.getElementById('menu-usuarios');
+        const menuAnamnese = document.getElementById('menu-anamnese');
+        const menuFicha = document.getElementById('menu-ficha');
+        const menuFinanceiro = document.getElementById('menu-financeiro');
+        if (menuBloquear) menuBloquear.style.display = "none";
+        if (menuUsuarios) menuUsuarios.style.display = "none";
+        if (menuAnamnese) menuAnamnese.style.display = "none";
+        if (menuFicha) menuFicha.style.display = "none";
+        if (menuFinanceiro) menuFinanceiro.style.display = "none";
+    }
+});
+
 function logout() {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
@@ -326,17 +354,5 @@ if(periodFilter) periodFilter.addEventListener("change", (e) => gerarCards(searc
 // -----------------------
 // INICIALIZAÇÃO
 // -----------------------
-document.addEventListener("DOMContentLoaded", () => {
-    if (userAccess === "cliente") {
-        const menuBloquear = document.getElementById('menu-bloquear');
-        const menuUsuarios = document.getElementById('menu-usuarios');
-        const menuAnamnese = document.getElementById('menu-anamnese');
-        const menuFicha = document.getElementById('menu-ficha');
-        if (menuBloquear) menuBloquear.style.display = "none";
-        if (menuUsuarios) menuUsuarios.style.display = "none";
-        if (menuAnamnese) menuAnamnese.style.display = "none";
-        if (menuFicha) menuFicha.style.display = "none";
-    }
 
-    buscarAgendamentos();
-});
+buscarAgendamentos();

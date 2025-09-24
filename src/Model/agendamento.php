@@ -242,7 +242,7 @@ class Agendamento {
         }
 
         $status = "agendado";
-        $stat   = "confirmado";
+        $stat   = "Confirmado";
         $dataHoje = date("Y-m-d");
 
         // busca todos os agendamentos a partir de hoje
@@ -264,6 +264,91 @@ class Agendamento {
     }
 
 
+    public static function buscarAgendadoPorData() {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $status = "agendado";
+
+        date_default_timezone_set('America/Sao_Paulo');
+        $dataHoje = date("Y-m-d");
+
+        // Busca apenas a quantidade
+        $sql = "SELECT COUNT(*) as total FROM agenda WHERE data = ? AND status = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $dataHoje, $status);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $stmt->close();
+
+        // Retorna já como array associativo para poder mesclar depois
+        return ["agendados" => (int)$row['total']];
+    }
+
+
+    public static function buscarConfirmadoPorData() {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $status = "Confirmado";
+
+        date_default_timezone_set('America/Sao_Paulo');
+        $dataHoje = date("Y-m-d");
+
+        // Busca apenas a quantidade
+        $sql = "SELECT COUNT(*) as total FROM agenda WHERE data = ? AND status = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $dataHoje, $status);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $stmt->close();
+
+        // Retorna já como array associativo para poder mesclar depois
+        return ["confirmados" => (int)$row['total']];
+    }
+
+
+    public static function buscarConcluidoPorData() {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $status = "Concluído";
+
+        date_default_timezone_set('America/Sao_Paulo');
+        $dataHoje = date("Y-m-d");
+
+        // Busca apenas a quantidade
+        $sql = "SELECT COUNT(*) as total FROM agenda WHERE data = ? AND status = ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $dataHoje, $status);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $stmt->close();
+
+        // Retorna já como array associativo para poder mesclar depois
+        return ["concluidos" => (int)$row['total']];
+    }
 
 
     public static function buscarMesUser($mes, $user) {
@@ -338,6 +423,124 @@ class Agendamento {
         $stmt->close();
 
         return $bloqueios;
+    }
+
+    public static function getServico($data, $status){
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        $sql = "SELECT servico FROM agenda WHERE data = ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta.".$conn->error);
+        }
+
+        $stmt->bind_param("ss", $data, $status); 
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = $row['servico'];
+        }
+
+        $stmt->close();
+
+        return $servicos;
+    }
+
+    public static function getServicoPorIntervalo($dataInicio, $dataFim, $status) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT servico FROM agenda WHERE data BETWEEN ? AND ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("sss", $dataInicio, $dataFim, $status);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = $row['servico']; // só pega o nome do serviço
+        }
+
+        $stmt->close();
+
+        return $servicos; // retorna array de strings com os nomes dos serviços
+    }
+
+    public static function getServicoPorMes($mes, $status) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT servico FROM agenda WHERE MONTH(data) = ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("is", $mes, $status);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = $row['servico']; // só pega o nome do serviço
+        }
+
+        $stmt->close();
+
+        return $servicos; // retorna array de strings com os nomes dos serviços
+    }
+
+    public static function getServicoPorAno($ano, $status) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT servico FROM agenda WHERE YEAR(data) = ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("is", $ano, $status);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = $row['servico']; // só pega o nome do serviço
+        }
+
+        $stmt->close();
+
+        return $servicos; // retorna array de strings com os nomes dos serviços
     }
 
     public static function bloquearTodosHorarios($data) {
@@ -510,6 +713,7 @@ class Agendamento {
         $stmt->close();
         $conn->close();
     }
+
 }
 
 

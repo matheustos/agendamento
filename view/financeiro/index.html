@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Menu lateral fixo à esquerda -->
+    <nav class="side-menu">
+        <div class="side-menu-limpo" id="sideMenuToggle">☰</div>
+        <ul class="side-menu-links" id="sideMenuLinks">
+            <li><a href="../agenda/index.html">Agenda</a></li>
+            <li><a href="../novo/index.html">Novo Agendamento</a></li>
+            <li id="menu-bloquear"><a href="../bloquear/index.html">Bloquear Agenda</a></li>
+            <li id="menu-anamnese"><a href="../anamnese/index.html">Anamnese</a></li>
+            <li id="menu-ficha"><a href="../anamnese/buscar/index.html">Fichas de Anamnese</a></li>
+            <li id="menu-usuarios"><a href="../usuarios/listar/index.html">Usuários</a></li>
+            <li><a href="../usuarios/perfil/index.html">Perfil</a></li>
+            <li><button class="btn-sair" title="Logout" id="btnLogoutSide">Sair ➜]</button></li>
+        </ul>
+    </nav>
+    <div class="dashboard">
+        <h1>Dashboard Financeiro</h1>
+        <p class="subtitulo">Acompanhe suas receitas e performance financeira em tempo real</p>
+
+        <div class="cards">
+            <div class="card card-hoje">
+                <h3>Receita Hoje</h3>
+                <p id="receita-hoje">R$ 0,00</p>
+                <small>Serviços concluídos hoje</small>
+            </div>
+            <div class="card card-semana">
+                <h3>Receita Semanal</h3>
+                <p id="receita-semana">R$ 0,00</p>
+                <small>Total da semana atual</small>
+            </div>
+            <div class="card card-mes">
+                <h3>Receita Mensal</h3>
+                <p id="receita-mes">R$ 0,00</p>
+                <small>Total do mês atual</small>
+            </div>
+            <div class="card card-ano">
+                <h3>Receita Anual</h3>
+                <p id="receita-ano">R$ 0,00</p>
+                <small>Total do ano atual</small>
+            </div>
+        </div>
+
+        <div class="status-servicos">
+            <h3>Status dos Serviços</h3>
+            <ul>
+                <li>Agendados: <span id="agendados">0</span></li>
+                <li>Confirmados: <span id="confirmados">0</span></li>
+                <li>Concluídos: <span id="concluidos">0</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

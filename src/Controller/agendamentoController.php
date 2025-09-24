@@ -141,6 +141,7 @@ class AgendamentoController{
     }
 
     public static function buscarBloqueios(){
+        date_default_timezone_set('America/Sao_Paulo');
         $dataHoje = date('Y-m-d');
 
         $mes = date("m");
@@ -172,6 +173,15 @@ class AgendamentoController{
         } else {
             return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
         }
+    }
+
+    public static function buscarPorStatus(){
+        $agendado = Agendamento::buscarAgendadoPorData();
+        $confirmado = Agendamento::buscarConfirmadoPorData();
+        $concluido = Agendamento::buscarConcluidoPorData();
+
+        $dados = array_merge($agendado, $confirmado, $concluido);
+        return $dados;
     }
 
     public static function buscarTodosAgendamentos(){
@@ -245,6 +255,7 @@ class AgendamentoController{
         $status = $dados["status"];
         $emailForm = $dados["email"];
 
+        date_default_timezone_set('America/Sao_Paulo');
         $data_hoje = date("Y-m-d");
 
         if(empty($hora) || empty($data) || empty($id) || empty($nome) || empty($telefone)){
