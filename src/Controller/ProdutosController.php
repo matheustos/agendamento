@@ -59,6 +59,55 @@ class ProdutosController{
             return ["status" => false, "message" => "Erro ao remover produto!"];
         }
     }
+
+    public static function movimentacao($dados){
+        $id =  $dados["id"];
+        $tipo = $dados["tipo"];
+        $quantidade = $dados["quantidade"];
+
+        if(empty($quantidade) || empty($id) || empty($tipo)){
+            return ["status" => false, "message" => "Informe todos os dados!"];
+        }
+
+        $quantia = Produtos::buscarQuantidade($id);
+        $preco = Produtos::buscarPreco($id);
+
+        if(!$quantia || !$preco){
+            return ["status" => false, "message" => "Produto não encontrado!"];
+        }
+
+        $quantidade_banco = $quantia["quantidade"];
+        $precoProduto = $preco["preco"];
+
+        if($tipo === "entrada"){
+            $entrada = $quantidade_banco + $quantidade;
+            $atualizar = Produtos::atualizarQuantidade($entrada, $id);
+            if($atualizar){
+                return ["status" => true, "message" => "Estoque atualizado com sucesso!"];
+            }else{
+                return ["status" => false, "message" => "Erro ao atualizar estoque!"];
+            }
+        } else if($tipo === "saída"){
+            if($quantidade > $quantidade_banco){
+                return ["status" => false, "message" => "Não é possível realizar uma venda com quantidade superior ao estoque!"];
+            }
+
+            $saida = $quantidade_banco - $quantidade;
+            $valor_vendido = $precoProduto * $quantidade;
+
+            $atualizar = Produtos::atualizarQuantidade($saida, $id);
+            if($atualizar){
+                Produtos::registrarVenda($id, $quantidade, $precoProduto, $valor_vendido);
+                return ["status" => true, "message" => "Estoque atualizado com sucesso!", "vendas" => $valor_vendido];
+            } else{
+                return ["status" => false, "message" => "Erro ao atualizar estoque!"];
+            }
+        }
+
+        // retorno padrão caso $tipo não seja válido
+        return ["status" => false, "message" => "Tipo inválido!"];
+    }
+
 }
 
 

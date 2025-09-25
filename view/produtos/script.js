@@ -31,9 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnLogoutSide.addEventListener('click', logout);
     }
 
-    // -----------------------
     // DECODIFICAR TOKEN
-    // -----------------------
     function getUserAccessFromToken() {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
@@ -43,25 +41,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Esconde menus para clientes
     const acesso = getUserAccessFromToken();
     if (acesso === "cliente") {
         window.location.href="../agenda/index.html";
     }
 });
 
+// -----------------------
+// PRODUTOS E MOVIMENTAÇÃO
+// -----------------------
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("products-list");
+
     const modal = document.getElementById("modal");
     const modalTitle = document.getElementById("modal-title");
+    const modalMov = document.getElementById("modal-movimentacao");
 
-    let editMode = false; // controla se estamos editando ou cadastrando
+    const movProdutoId = document.getElementById("mov-produto-id");
+    const movTipo = document.getElementById("mov-tipo");
+    const movQuantidade = document.getElementById("mov-quantidade");
 
-    // === ABRIR MODAL ===
+    let editMode = false;
+
+    // === ABRIR MODAL CADASTRO/EDIÇÃO ===
     window.openModal = function(produto = null) {
         modal.style.display = "flex";
-
-        // Captura os inputs dentro da função
         const productId = document.getElementById("product-id");
         const productName = document.getElementById("product-name");
         const productQty = document.getElementById("product-qty");
@@ -84,22 +88,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // === FECHAR MODAL ===
+    // === FECHAR MODAL CADASTRO/EDIÇÃO ===
     window.closeModal = function() {
         modal.style.display = "none";
     };
 
-    // === SALVAR PRODUTO (CADASTRAR / EDITAR) ===
+    // === SALVAR PRODUTO ===
     window.saveProduct = function() {
         const productId = document.getElementById("product-id");
         const productName = document.getElementById("product-name");
         const productQty = document.getElementById("product-qty");
         const productPrice = document.getElementById("product-price");
-
-        // Debug: mostra os valores antes de enviar
-        console.log("Nome:", productName.value);
-        console.log("Quantidade:", productQty.value);
-        console.log("Preço:", productPrice.value);
 
         const formData = new FormData();
         if(editMode) formData.append("id", productId.value);
@@ -113,10 +112,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch(url, {
             method: "POST",
+            headers: { 'Authorization': `Bearer ${token}` },
             body: formData
         })
-        .then(res => res.json())
-        .then(response => {
+        .then(res => res.text())
+        .then(text => {
+            let response;
+            try {
+                response = JSON.parse(text);
+            } catch(e){
+                console.error("Resposta inválida do servidor:", text);
+                alert("Erro: resposta inválida do servidor.");
+                return;
+            }
+
             alert(response.message || "Operação concluída!");
             if(response.status) {
                 closeModal();
@@ -133,15 +142,24 @@ document.addEventListener("DOMContentLoaded", () => {
     function removerProduto(id) {
         if(confirm("Tem certeza que deseja remover este produto?")) {
             const formData = new FormData();
-            formData.append("id", id); // envia o ID via FormData
+            formData.append("id", id);
 
             fetch("/agendamento/api/produtos/remover/index.php", {
                 method: "POST",
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             })
-            .then(res => res.json())
-            .then(response => {
+            .then(res => res.text())
+            .then(text => {
+                let response;
+                try {
+                    response = JSON.parse(text);
+                } catch(e){
+                    console.error("Resposta inválida do servidor:", text);
+                    alert("Erro: resposta inválida do servidor.");
+                    return;
+                }
+
                 alert(response.message || "Operação concluída!");
                 if(response.status) carregarProdutos();
             })
@@ -149,37 +167,113 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // === ABRIR MODAL DE MOVIMENTAÇÃO ===
+    window.abrirModalMovimentacao = function(produtoId) {
+        movProdutoId.value = produtoId;
+        movQuantidade.value = "";
+        movTipo.value = "entrada";
+        modalMov.style.display = "flex";
+    };
 
-    // === LISTAR PRODUTOS ===
+    // === FECHAR MODAL DE MOVIMENTAÇÃO ===
+    window.fecharModalMovimentacao = function() {
+        modalMov.style.display = "none";
+    };
+
+    // === SALVAR MOVIMENTAÇÃO ===
+    window.salvarMovimentacao = function() {
+        const id = movProdutoId.value;
+        const tipo = movTipo.value;
+        const quantidade = parseInt(movQuantidade.value, 10);
+
+        if(!id || !tipo || isNaN(quantidade) || quantidade <= 0){
+            alert("Preencha todos os campos corretamente!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("tipo", tipo);
+        formData.append("quantidade", quantidade);
+
+        fetch("/agendamento/api/produtos/movimentacao/index.php", {
+            method: "POST",
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+        })
+        .then(res => res.text())
+        .then(text => {
+            let response;
+            try {
+                response = JSON.parse(text);
+            } catch(e){
+                console.error("Resposta inválida do servidor:", text);
+                alert("Erro: resposta inválida do servidor.");
+                return;
+            }
+
+            alert(response.message || "Movimentação concluída!");
+            if(response.status){
+                fecharModalMovimentacao();
+                carregarProdutos();
+            }
+        })
+        .catch(err => {
+            console.error("Erro ao se comunicar com a API:", err);
+            alert("Erro ao enviar dados para o servidor.");
+        });
+    };
+
+    // === CARREGAR PRODUTOS ===
     function carregarProdutos() {
         fetch("/agendamento/api/produtos/index.php", {
             method: "GET",
             headers: { 'Authorization': `Bearer ${token}` }
         })
-            .then(res => res.json())
-            .then(response => {
-                container.innerHTML = "";
-                if(response.status && response.data.length > 0) {
-                    response.data.forEach(produto => {
-                        const card = document.createElement("div");
-                        card.className = "product-card";
-                        card.innerHTML = `
-                            <p><strong>ID:</strong> ${produto.id}</p>
-                            <p><strong>Nome:</strong> ${produto.nome}</p>
-                            <p><strong>Quantidade:</strong> ${produto.quantidade}</p>
-                            <p><strong>Preço:</strong> R$ ${produto.preco}</p>
-                            <button class="btn-edit">Editar</button>
-                            <button class="btn-remove">Remover</button>
-                        `;
-                        card.querySelector(".btn-edit").addEventListener("click", () => openModal(produto));
-                        card.querySelector(".btn-remove").addEventListener("click", () => removerProduto(produto.id));
-                        container.appendChild(card);
-                    });
-                } else {
-                    container.innerHTML = "<p>Nenhum produto encontrado!</p>";
-                }
-            })
-            .catch(err => console.error("Erro:", err));
+        .then(res => res.text())
+        .then(text => {
+            let response;
+            try {
+                response = JSON.parse(text);
+            } catch(e){
+                console.error("Resposta inválida do servidor:", text);
+                container.innerHTML = "<p>Erro ao carregar produtos.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            if(response.status && response.data.length > 0) {
+                response.data.forEach(produto => {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.innerHTML = `
+                        <p><strong>ID:</strong> ${produto.id}</p>
+                        <p><strong>Nome:</strong> ${produto.nome}</p>
+                        <p><strong>Quantidade:</strong> ${produto.quantidade}</p>
+                        <p><strong>Preço:</strong> R$ ${produto.preco}</p>
+                        <button class="btn-edit">Editar</button>
+                        <button class="btn-remove">Remover</button>
+                    `;
+                    card.querySelector(".btn-edit").addEventListener("click", () => openModal(produto));
+                    card.querySelector(".btn-remove").addEventListener("click", () => removerProduto(produto.id));
+
+                    // Botão Entrada/Saída
+                    const btnMov = document.createElement("button");
+                    btnMov.className = "btn-movimentacao";
+                    btnMov.textContent = "Entrada/Saída";
+                    btnMov.addEventListener("click", () => abrirModalMovimentacao(produto.id));
+                    card.appendChild(btnMov);
+
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = "<p>Nenhum produto encontrado!</p>";
+            }
+        })
+        .catch(err => {
+            console.error("Erro:", err);
+            container.innerHTML = "<p>Erro ao carregar produtos.</p>";
+        });
     }
 
     // Carrega produtos ao iniciar

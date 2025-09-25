@@ -3,6 +3,7 @@
 namespace Controller;
 use Model\Agendamento;
 use Model\Financeiro;
+use Model\Produtos;
 
 
 class FinanceiroController{
@@ -11,24 +12,26 @@ class FinanceiroController{
         $dataHoje = date("Y-m-d"); // dia atual
         $status = "Concluído";
 
+        // ---- Serviços concluídos ----
         $servicos = Agendamento::getServico($dataHoje, $status);
-        $servicosComPreco = [];
+        $totalServicos = 0;
 
         foreach ($servicos as $servico) {
-            $preco = Financeiro::getpreco($servico); // pega o preço do serviço
-            $servicosComPreco[] = [
-                "servico" => $servico,
-                "preco" => $preco
-            ];
-        }
-        $total = 0;
-        foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $preco = Financeiro::getPreco($servico);
+            $totalServicos += $preco;
         }
 
-        $totalDia = ["receitaHoje" => $total];
+        // ---- Produtos vendidos ----
+        $totalProdutos = Produtos::getProdutosDia($dataHoje);
+
+        // ---- Receita total ----
+        $totalDia = [
+            "receitaHoje"     => $totalServicos + $totalProdutos
+        ];
+
         return $totalDia;
     }
+
 
     public static function calcularPrecosData($data){
         $status = "Concluído";
@@ -48,41 +51,54 @@ class FinanceiroController{
             $total += $item['preco']; // soma cada preço
         }
 
-        return $total;
+        // ---- Produtos vendidos ----
+        $totalProdutos = Produtos::getProdutosDia($data);
+
+        $totalDia = $total + $totalProdutos;
+
+        return $totalDia;
     }
 
     public static function calcularPrecosSemana(){
         date_default_timezone_set('America/Sao_Paulo');
-        $dataHoje = date("Y-m-d"); // dia atual
-        $inicio = date("Y-m-d", strtotime("monday this week", strtotime($dataHoje)));;
+        $dataHoje = date("Y-m-d"); 
+        $inicio = date("Y-m-d", strtotime("monday this week", strtotime($dataHoje)));
         $fim    = date("Y-m-d", strtotime("sunday this week", strtotime($dataHoje)));
         $status = "Concluído";
 
+        // ---- Serviços concluídos ----
         $servicos = Agendamento::getServicoPorIntervalo($inicio, $fim, $status);
-        $servicosComPreco = [];
+        $totalServicos = 0;
 
         foreach ($servicos as $servico) {
-            $preco = Financeiro::getpreco($servico); // pega o preço do serviço
-            $servicosComPreco[] = [
-                "servico" => $servico,
-                "preco" => $preco
-            ];
-        }
-        $total = 0;
-        foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $preco = Financeiro::getPreco($servico);
+            $totalServicos += $preco;
         }
 
-        $totalSemana = ["receitaSemana" => $total];
+        // ---- Produtos vendidos ----
+        $produtosTotais = Produtos::getTotalPorIntervalo($inicio, $fim); // array de totais
+        $totalProdutos = 0;
+
+        foreach ($produtosTotais as $valor) {
+            $totalProdutos += (float) $valor; // soma todos os totais
+        }
+
+        // ---- Receita total ----
+        $totalSemana = [
+            "receitaSemana" => $totalServicos + $totalProdutos
+        ];
+
         return $totalSemana;
     }
+
 
     public static function calcularPrecosMes(){
         date_default_timezone_set('America/Sao_Paulo');
         $mes = date("m"); 
+        $ano = date("Y");
         $status = "Concluído";
 
-        $servicos = Agendamento::getServicoPorMes($mes, $status);
+        $servicos = Agendamento::getServicoPorMes($mes, $ano, $status);
         
         $servicosComPreco = [];
 
@@ -93,19 +109,27 @@ class FinanceiroController{
                 "preco" => $preco
             ];
         }
-        $total = 0;
+        $totalServicos = 0;
         foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $totalServicos += $item['preco']; // soma cada preço
         }
 
-        $totalMes = ["receitaMes" => $total];
+        // ---- Produtos vendidos ----
+        $produtosTotais = Produtos::getTotalPorMes($mes, $ano); // array de totais
+        $totalProdutos = 0;
+
+        foreach ($produtosTotais as $valor) {
+            $totalProdutos += (float) $valor; // soma todos os totais
+        }
+
+        $totalMes = ["receitaMes" => $totalServicos + $totalProdutos];
         return $totalMes;
     }
 
-    public static function calcularMesEspecifico($mes){
+    public static function calcularMesEspecifico($mes, $ano){
         $status = "Concluído";
 
-        $servicos = Agendamento::getServicoPorMes($mes, $status);
+        $servicos = Agendamento::getServicoPorMes($mes, $ano, $status);
         
         $servicosComPreco = [];
 
@@ -116,12 +140,21 @@ class FinanceiroController{
                 "preco" => $preco
             ];
         }
-        $total = 0;
+        $totalServicos = 0;
         foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $totalServicos += $item['preco']; // soma cada preço
         }
 
-        return $total;
+        // ---- Produtos vendidos ----
+        $produtosTotais = Produtos::getTotalPorMes($mes, $ano); // array de totais
+        $totalProdutos = 0;
+
+        foreach ($produtosTotais as $valor) {
+            $totalProdutos += (float) $valor; // soma todos os totais
+        }
+
+        $totalMes = $totalServicos + $totalProdutos;
+        return $totalMes;
     }
 
 
@@ -140,11 +173,20 @@ class FinanceiroController{
                 "preco" => $preco
             ];
         }
-        $total = 0;
+        $totalServicos = 0;
         foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $totalServicos += $item['preco']; // soma cada preço
         }
-        $totalAno = ["receitaAno" => $total];
+
+        // ---- Produtos vendidos ----
+        $produtosTotais = Produtos::getTotalPorAno($ano); // array de totais
+        $totalProdutos = 0;
+
+        foreach ($produtosTotais as $valor) {
+            $totalProdutos += (float) $valor; // soma todos os totais
+        }
+
+        $totalAno = ["receitaAno" => $totalServicos + $totalProdutos];
         return $totalAno;
     }
 
@@ -161,12 +203,21 @@ class FinanceiroController{
                 "preco" => $preco
             ];
         }
-        $total = 0;
+        $totalServicos = 0;
         foreach ($servicosComPreco as $item) {
-            $total += $item['preco']; // soma cada preço
+            $totalServicos += $item['preco']; // soma cada preço
+        }
+
+        // ---- Produtos vendidos ----
+        $produtosTotais = Produtos::getTotalPorAno($ano); // array de totais
+        $totalProdutos = 0;
+
+        foreach ($produtosTotais as $valor) {
+            $totalProdutos += (float) $valor; // soma todos os totais
         }
         
-        return $total;
+        $totalAno = $totalServicos + $totalProdutos;
+        return $totalAno;
     }
 }
 

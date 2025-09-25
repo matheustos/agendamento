@@ -483,7 +483,7 @@ class Agendamento {
         return $servicos; // retorna array de strings com os nomes dos serviços
     }
 
-    public static function getServicoPorMes($mes, $status) {
+    public static function getServicoPorMes($mes, $ano, $status) {
         $conn = Database::conectar();
 
         if (!$conn) {
@@ -491,14 +491,14 @@ class Agendamento {
         }
 
         // Consulta para pegar todos os serviços entre as datas
-        $sql = "SELECT servico FROM agenda WHERE MONTH(data) = ? AND status = ?";
+        $sql = "SELECT servico FROM agenda WHERE MONTH(data) = ? AND YEAR(data) = ? AND status = ?";
         $stmt = $conn->prepare($sql);
 
         if (!$stmt) {
             return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
         }
 
-        $stmt->bind_param("is", $mes, $status);
+        $stmt->bind_param("iis", $mes, $ano, $status);
         $stmt->execute();
 
         $resultado = $stmt->get_result();

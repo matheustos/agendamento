@@ -29,6 +29,34 @@
     <div id="products-list"></div>
   </div>
 
+  <!-- Modal Movimentação Estoque -->
+  <div id="modal-movimentacao" class="modal">
+      <div class="modal-content">
+          <h2>Movimentação de Estoque</h2>
+
+          <input type="hidden" id="mov-produto-id">
+
+          <div style="margin-bottom:10px;">
+              <label for="mov-tipo">Tipo:</label>
+              <select id="mov-tipo" style="width:100%; padding:6px;">
+                  <option value="entrada">Entrada</option>
+                  <option value="saída">Saída</option>
+              </select>
+          </div>
+
+          <div style="margin-bottom:10px;">
+              <label for="mov-quantidade">Quantidade:</label>
+              <input type="number" id="mov-quantidade" min="1" style="width:95%; padding:6px;">
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+              <button onclick="fecharModalMovimentacao()" style="padding:6px 12px; border:none; background:#ccc; border-radius:4px; cursor:pointer;">Cancelar</button>
+              <button onclick="salvarMovimentacao()" style="padding:6px 12px; border:none; background:#28a745; color:#fff; border-radius:4px; cursor:pointer;">Salvar</button>
+          </div>
+      </div>
+  </div>
+
+
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">

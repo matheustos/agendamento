@@ -106,36 +106,45 @@ document.addEventListener("DOMContentLoaded", () => {
     let valor = "";
 
     if (filtroTipo.value === "dia" && filtroDia.value) {
-      tipo = "dia"; valor = filtroDia.value;
+        tipo = "dia";
+        valor = filtroDia.value;
     } else if (filtroTipo.value === "mes" && filtroMes.value) {
-      tipo = "mes"; valor = filtroMes.value;
-      // pega só o mês (segundo split)
-        valor = filtroMes.value.split("-")[1]; 
+        tipo = "mes";
+        const [ano, mes] = filtroMes.value.split("-");
+        // aqui enviamos separados
+        valor = { ano: parseInt(ano), mes: parseInt(mes) };
     } else if (filtroTipo.value === "ano" && filtroAno.value) {
-      tipo = "ano"; valor = filtroAno.value;
+        tipo = "ano";
+        valor = filtroAno.value;
     } else {
-      alert("Selecione um valor válido.");
-      return;
+        alert("Selecione um valor válido.");
+        return;
     }
 
     const formData = new FormData();
     formData.append("tipo", tipo);
-    formData.append("valor", valor);
+
+    if (tipo === "mes") {
+        formData.append("ano", valor.ano);
+        formData.append("mes", valor.mes);
+    } else {
+        formData.append("valor", valor);
+    }
 
     fetch("/agendamento/api/financeiro/filtro/index.php", {
         method: "POST",
-        headers: {"Authorization": `Bearer ${token}`},
+        headers: { "Authorization": `Bearer ${token}` },
         body: formData
-        })
-        .then(res => res.text()) // <--- aqui, pega o valor puro
-        .then(data => {
-            console.log("Resposta:", data); // deve aparecer algo como "250"
-            const valor = Number(data); // transforma em número
-            atualizarDashboard(valor);
-        })
-        .catch(err => console.error("Erro:", err));
+    })
+    .then(res => res.text())
+    .then(data => {
+        console.log("Resposta:", data);
+        const valorNum = Number(data);
+        atualizarDashboard(valorNum);
+    })
+    .catch(err => console.error("Erro:", err));
+});
 
-  });
 });
 
 

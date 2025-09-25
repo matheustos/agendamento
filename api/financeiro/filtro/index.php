@@ -11,15 +11,19 @@ $authHeader = $headers['Authorization'] ?? ''; // pega o header Authorization
 $verifica_token = Token::verificaToken($authHeader);
 
 $tipo = $_POST["tipo"];
-$valor = $_POST["valor"];
+
 
 if($verifica_token["status"] === true){
 
     if ($tipo === "dia") {
+        $valor = $_POST["valor"];
         $res = FinanceiroController::calcularPrecosData($valor);
     } elseif ($tipo === "mes") {
-        $res = FinanceiroController::calcularMesEspecifico($valor);
+        $mes = $_POST["mes"];
+        $ano = $_POST["ano"];
+        $res = FinanceiroController::calcularMesEspecifico($mes, $ano);
     } elseif ($tipo === "ano") {
+        $valor = $_POST["valor"];
         $res = FinanceiroController::calcularAnoEspecifico($valor);
     } else {
         $res = ["erro" => "Tipo de filtro inválido"];
