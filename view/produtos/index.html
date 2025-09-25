@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="content">
+    <h1>Gerenciar Produtos</h1>
+    <button class="btn-add" onclick="openModal()">Cadastrar Produto</button>
+    <div id="products-list"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="modal-title">Cadastrar Produto</h2>
+      <input type="hidden" id="product-id">
+      <label>Nome</label>
+      <input type="text" id="product-name">
+      <label>Quantidade</label>
+      <input type="number" id="product-qty">
+      <label>Preço</label>
+      <input type="number" id="product-price">
+      <button class="btn-add" onclick="saveProduct()">Salvar</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

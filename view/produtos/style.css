@@ -1,0 +1,145 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f5fb;
+  margin: 0;
+  padding: 20px;
+}
+
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.btn-add {
+  background: #007bff;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-add:hover {
+  background: #0056b3;
+}
+
+/* Cards dos produtos */
+.product-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas: ID, Nome, Qtd, Preço */
+  gap: 10px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  align-items: center;
+  text-align: center;
+}
+
+.product-card p {
+  margin: 0;
+}
+
+.product-card strong {
+  display: block;   /* label em cima */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Linha de botões */
+.product-actions {
+  display: flex;
+  gap: 8px; /* espaço entre os botões */
+  margin-top: 10px;
+  justify-content: flex-start; /* alinha à esquerda */
+}
+
+/* Botões */
+.btn-edit,
+.btn-remove {
+  padding: 6px 12px;      /* altura e largura do botão */
+  font-size: 0.85rem;     /* tamanho do texto */
+  border-radius: 6px;     /* cantos arredondados */
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase; /* deixa o texto em maiúsculas */
+}
+
+/* Cores */
+.btn-edit {
+  background: #28a745;
+}
+
+.btn-edit:hover {
+  background: #1e7e34;
+}
+
+.btn-remove {
+  background: #dc3545;
+}
+
+.btn-remove:hover {
+  background: #b21f2d;
+}
+
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: left;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.modal-content button {
+  margin-top: 15px;
+  margin-right: 10px;
+}
+
+.modal-content .btn-cancel {
+  margin-top: 15px;
+  margin-right: 10px;
+  background-color: #b21f2d;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+}
+
+.modal-content .btn-cancel:hover{
+    background-color: #83101bfc;
+}
