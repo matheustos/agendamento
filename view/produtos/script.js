@@ -1,3 +1,46 @@
+const token = localStorage.getItem('token');
+
+if(!token){
+    window.location.href="../login/index.html";
+}
+
+// -----------------------
+// FUNÇÃO LOGOUT
+// -----------------------
+function logout() {
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    window.location.href = "../login/index.html";
+}
+
+// -----------------------
+// MENU LATERAL RESPONSIVO
+// -----------------------
+document.addEventListener("DOMContentLoaded", () => {
+    const sideMenu = document.querySelector('.side-menu');
+    const sideMenuToggle = document.getElementById('sideMenuToggle');
+    const btnLogoutSide = document.getElementById('btnLogoutSide');
+
+    if (sideMenuToggle) {
+        sideMenuToggle.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+        });
+    }
+
+    if (btnLogoutSide) {
+        btnLogoutSide.addEventListener('click', logout);
+    }
+
+    // Esconde menus para clientes
+    const acesso = getUserAccessFromToken();
+    if (acesso === "cliente") {
+        const menuBloquear = document.getElementById('menu-bloquear');
+        const menuUsuarios = document.getElementById('menu-usuarios');
+        if (menuBloquear) menuBloquear.style.display = "none";
+        if (menuUsuarios) menuUsuarios.style.display = "none";
+    }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("products-list");
     const modal = document.getElementById("modal");
@@ -85,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             fetch("/agendamento/api/produtos/remover/index.php", {
                 method: "POST",
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             })
             .then(res => res.json())
@@ -99,7 +143,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // === LISTAR PRODUTOS ===
     function carregarProdutos() {
-        fetch("/agendamento/api/produtos/index.php")
+        fetch("/agendamento/api/produtos/index.php", {
+            method: "GET",
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
             .then(res => res.json())
             .then(response => {
                 container.innerHTML = "";
