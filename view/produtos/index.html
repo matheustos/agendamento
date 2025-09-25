@@ -36,22 +36,22 @@
 
           <input type="hidden" id="mov-produto-id">
 
-          <div style="margin-bottom:10px;">
+          <div class="modal-aberto">
               <label for="mov-tipo">Tipo:</label>
-              <select id="mov-tipo" style="width:100%; padding:6px;">
+              <select id="mov-tipo">
                   <option value="entrada">Entrada</option>
                   <option value="saída">Saída</option>
               </select>
           </div>
 
-          <div style="margin-bottom:10px;">
+          <div class="modal-aberto">
               <label for="mov-quantidade">Quantidade:</label>
-              <input type="number" id="mov-quantidade" min="1" style="width:95%; padding:6px;">
+              <input type="number" id="mov-quantidade" min="1">
           </div>
 
-          <div style="display:flex; justify-content:flex-end; gap:10px;">
-              <button onclick="fecharModalMovimentacao()" style="padding:6px 12px; border:none; background:#ccc; border-radius:4px; cursor:pointer;">Cancelar</button>
-              <button onclick="salvarMovimentacao()" style="padding:6px 12px; border:none; background:#28a745; color:#fff; border-radius:4px; cursor:pointer;">Salvar</button>
+          <div class="buttons">
+              <button class="fechar" onclick="fecharModalMovimentacao()">Cancelar</button>
+              <button class="salvar" onclick="salvarMovimentacao()">Salvar</button>
           </div>
       </div>
   </div>
