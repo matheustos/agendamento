@@ -39,8 +39,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (acesso === "cliente") {
         const menuBloquear = document.getElementById('menu-bloquear');
         const menuUsuarios = document.getElementById('menu-usuarios');
+        const menuAnamnese = document.getElementById('menu-anamnese');
+        const menuFicha = document.getElementById('menu-ficha');
+        const menuProdutos = document.getElementById('menu-produtos');
+        const menuFinanceiro = document.getElementById('menu-financeiro');
         if (menuBloquear) menuBloquear.style.display = "none";
         if (menuUsuarios) menuUsuarios.style.display = "none";
+        if (menuProdutos) menuProdutos.style.display = "none";
+        if (menuAnamnese) menuAnamnese.style.display = "none";
+        if (menuFicha) menuFicha.style.display = "none";
+        if (menuFinanceiro) menuFinanceiro.style.display = "none";
     }
 });
 

@@ -31,13 +31,22 @@ document.addEventListener("DOMContentLoaded", () => {
         btnLogoutSide.addEventListener('click', logout);
     }
 
+    // -----------------------
+    // DECODIFICAR TOKEN
+    // -----------------------
+    function getUserAccessFromToken() {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.acesso;
+        } catch (e) {
+            return null;
+        }
+    }
+
     // Esconde menus para clientes
     const acesso = getUserAccessFromToken();
     if (acesso === "cliente") {
-        const menuBloquear = document.getElementById('menu-bloquear');
-        const menuUsuarios = document.getElementById('menu-usuarios');
-        if (menuBloquear) menuBloquear.style.display = "none";
-        if (menuUsuarios) menuUsuarios.style.display = "none";
+        window.location.href="../agenda/index.html";
     }
 });
 
