@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Financeiro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Botão Cadastrar Despesa -->
+    <div class="acao-despesa">
+      <button id="btnCadastrarDespesa">Cadastrar Despesa</button>
+    </div>
+
+    <!-- Formulário de cadastro de despesa -->
+    <div id="formDespesa" class="form-despesa hidden">
+      <h3>Cadastrar Nova Despesa</h3>
+      <label for="nomeDespesa">Nome:</label>
+      <input type="text" id="nomeDespesa" placeholder="Digite o nome da despesa">
+
+      <label for="quantidadeDespesa">Quantidade:</label>
+      <input type="number" id="quantidadeDespesa" min="1" value="1">
+
+      <label for="precoDespesa">Preço:</label>
+      <input type="number" id="precoDespesa" min="0" step="0.01" value="0">
+
+      <label for="data">Data:</label>
+      <input type="date" id="data" >
+
+      <button id="btnSalvarDespesa">Salvar Despesa</button>
+      <button id="btnCancelarDespesa">Cancelar</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+      <label for="filtroMes">Mês:</label>
+      <select id="filtroMes">
+        <option value="">Todos</option>
+        <option value="01">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+      </select>
+
+      <label for="filtroAno">Ano:</label>
+      <input type="number" id="filtroAno" value="2025" min="2000" max="2100">
+
+      <button id="btnFiltrar">Filtrar</button>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="cards">
+      <div class="card">
+        <h3>Faturamento</h3>
+        <p id="faturamento">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Despesas</h3>
+        <p id="despesas">R$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>Saldo</h3>
+        <p id="saldo">R$ 0,00</p>
+      </div>
+    </div>
+
+    <!-- Últimas Movimentações -->
+    <div class="movimentacoes">
+      <h2>Últimas Movimentações</h2>
+      <ul id="lista-movimentacoes"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

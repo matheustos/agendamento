@@ -155,6 +155,48 @@ class Produtos{
         return $total; // retorna array de strings com os nomes dos serviços
     }
 
+    public static function getVendasPorMes($mes, $ano) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta somente o campo necessário
+        $sql = "SELECT *
+                FROM vendas_produtos 
+                WHERE MONTH(data) = ? AND YEAR(data) = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("ii", $mes, $ano);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $registros = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            // monta cada registro como array associativo (pra usar no front depois)
+            $registros[] = [
+                "id" => $row["produto_id"],
+                "descricao" => "Venda",
+                "nome" => $row["nome"],
+                "data"      => date("d/m/Y", strtotime($row["data"])),
+                "quantidade" => $row["quantidade"],
+                "preço unitário" => $row["preco"],
+                "valor"     => (float)$row["total"]
+            ];
+        }
+
+        $stmt->close();
+
+        return $registros; // retorna array de arrays
+    }
+
+
     public static function getTotalPorAno($ano) {
         $conn = Database::conectar();
 

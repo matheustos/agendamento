@@ -4,6 +4,7 @@ namespace Controller;
 use Model\Agendamento;
 use Model\Financeiro;
 use Model\Produtos;
+use Model\Despesas;
 
 
 class FinanceiroController{
@@ -122,7 +123,11 @@ class FinanceiroController{
             $totalProdutos += (float) $valor; // soma todos os totais
         }
 
-        $totalMes = ["receitaMes" => $totalServicos + $totalProdutos];
+        // -----Despesas mês -------
+
+        $despesas = Despesas::getValor($ano, $mes);
+
+        $totalMes = ["receitaMes" => $totalServicos + $totalProdutos, "DespesasMes" => $despesas];
         return $totalMes;
     }
 
@@ -153,10 +158,13 @@ class FinanceiroController{
             $totalProdutos += (float) $valor; // soma todos os totais
         }
 
-        $totalMes = $totalServicos + $totalProdutos;
+        // -----Despesas mês -------
+
+        $despesas = Despesas::getValor($ano, $mes);
+
+        $totalMes = [$totalServicos + $totalProdutos, "DespesasMes" => $despesas];
         return $totalMes;
     }
-
 
     public static function calcularPrecosAno(){
         date_default_timezone_set('America/Sao_Paulo');
@@ -216,7 +224,11 @@ class FinanceiroController{
             $totalProdutos += (float) $valor; // soma todos os totais
         }
         
-        $totalAno = $totalServicos + $totalProdutos;
+        // -----Despesas mês -------
+
+        $despesas = Despesas::getValorAno($ano);
+
+        $totalAno = [$totalServicos + $totalProdutos, "DespesasMes" => $despesas];
         return $totalAno;
     }
 }
