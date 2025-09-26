@@ -1,8 +1,14 @@
+/* ===========================
+   Estilos Globais
+=========================== */
 body {
   font-family: Arial, sans-serif;
-  background: #f4f5fb;
+  background: #f4f3ff;
   margin: 0;
   padding: 20px;
+  color: #333;
+  transition: margin-left 0.2s;
+  margin-left: 220px;
 }
 
 .content {
@@ -15,103 +21,99 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Menu lateral fixo */
+/* ===========================
+   Menu lateral fixo
+=========================== */
 .side-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 100vh;
-    background: rgb(19, 106, 101);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    z-index: 200;
-    transition: width 0.2s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background: rgb(19, 106, 101);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 200;
+  transition: width 0.2s;
 }
 
 .side-menu-limpo {
-    font-size: 2rem;
-    padding: 18px 24px 12px 24px;
-    cursor: pointer;
-    display: none;
+  font-size: 2rem;
+  padding: 18px 24px 12px 24px;
+  cursor: pointer;
+  display: none;
 }
 
 .side-menu-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .side-menu-links li {
-    width: 78%;
+  width: 78%;
 }
 
 .side-menu-links .btn-sair {
-    width: 128%;
+  width: 128%;
 }
 
 .side-menu-links a,
 .side-menu-links button {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 18px 24px;
-    border: none;
-    background: none;
-    text-align: left;
-    border-radius: 0;
-    transition: background 0.2s;
-    width: 100%;
-    cursor: pointer;
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 18px 24px;
+  border: none;
+  background: none;
+  text-align: left;
+  border-radius: 0;
+  transition: background 0.2s;
+  width: 100%;
+  cursor: pointer;
 }
 
 .side-menu-links a:hover,
 .side-menu-links button:hover {
-    background: #2563eb;
+  background: #2563eb;
 }
 
-/* Espaço para o conteúdo não ficar atrás do menu */
-body {
-    margin-left: 220px;
-    background-color: #f4f3ff;
-    color: #333;
-    padding: 20px;
-    transition: margin-left 0.2s;
-}
-
-/* Responsivo: menu recolhível em telas pequenas */
+/* Menu responsivo */
 @media (max-width: 820px) {
-    .side-menu {
-        width: 60px;
-    }
-    .side-menu-limpo {
-        display: block;
-    }
-    .side-menu-links {
-        display: none;
-    }
-    .side-menu.open .side-menu-links {
-        display: flex;
-        background: rgb(19, 106, 101);
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 180px;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-    }
-    body {
-        margin-left: 60px;
-    }
+  .side-menu {
+    width: 60px;
+  }
+  .side-menu-limpo {
+    display: block;
+  }
+  .side-menu-links {
+    display: none;
+  }
+  .side-menu.open .side-menu-links {
+    display: flex;
+    background: rgb(19, 106, 101);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 180px;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  }
+  body {
+    margin-left: 60px;
+  }
 }
 
+/* ===========================
+   Botões
+=========================== */
 .btn-add {
   background: purple;
   color: white;
@@ -120,16 +122,81 @@ body {
   border-radius: 6px;
   cursor: pointer;
   margin-bottom: 20px;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .btn-add:hover {
   background: rgb(58, 1, 58);
+  transform: translateY(-1px);
 }
 
-/* Cards dos produtos */
+.btn-edit,
+.btn-remove,
+.btn-movimentacao {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  text-align: center;
+  min-width: 100px;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.btn-edit {
+  background: #28a745;
+}
+.btn-edit:hover {
+  background: #1e7e34;
+  transform: translateY(-1px);
+}
+.btn-edit:active {
+  transform: translateY(0);
+}
+
+.btn-remove {
+  background: #dc3545;
+}
+.btn-remove:hover {
+  background-color: #b21f2d;
+  transform: translateY(-1px);
+}
+.btn-remove:active {
+  transform: translateY(0);
+}
+
+.btn-movimentacao {
+  background-color: #007bff;
+}
+.btn-movimentacao:hover {
+  background-color: #0056b3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+.btn-movimentacao:active {
+  transform: translateY(0);
+}
+
+/* Foco acessível */
+.btn-edit:focus,
+.btn-remove:focus,
+.btn-movimentacao:focus {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+}
+
+/* ===========================
+   Cards de produtos / agendamentos
+=========================== */
 .product-card {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 colunas: ID, Nome, Qtd, Preço */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   background: #fff;
   border-radius: 12px;
@@ -140,64 +207,67 @@ body {
   text-align: center;
 }
 
-.product-card p {
+.product-card p,
+.product-card strong {
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .product-card strong {
-  display: block;   /* label em cima */
+  display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-/* Linha de botões */
+/* Linha de botões dentro do card */
 .product-actions {
   display: flex;
-  gap: 8px; /* espaço entre os botões */
+  gap: 12px;
   margin-top: 10px;
-  justify-content: flex-start; /* alinha à esquerda */
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
-/* Botões */
-.btn-edit,
-.btn-remove {
-  padding: 6px 12px;      /* altura e largura do botão */
-  font-size: 0.85rem;     /* tamanho do texto */
-  border-radius: 6px;     /* cantos arredondados */
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  text-transform: uppercase; /* deixa o texto em maiúsculas */
+/* ===========================
+   Responsividade Cards
+=========================== */
+@media (max-width: 800px) {
+  .product-card {
+    grid-template-columns: repeat(2, 1fr);
+    text-align: left;
+  }
+  .product-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
-/* Cores */
-.btn-edit {
-  background: #28a745;
+@media (max-width: 500px) {
+  .product-card {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+  .product-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
 }
 
-.btn-edit:hover {
-  background: #1e7e34;
-}
-
-.btn-remove {
-  background: #dc3545;
-}
-
-.btn-remove:hover {
-  background: #b21f2d;
-}
-
-
-/* Modal */
-.modal {
+/* ===========================
+   Modais
+=========================== */
+.modal,
+.modal-movimentacao {
   display: none;
   position: fixed;
   top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   background: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
@@ -205,6 +275,7 @@ body {
   padding: 20px;
   border-radius: 10px;
   width: 400px;
+  max-width: 90%;
   text-align: left;
 }
 
@@ -214,12 +285,14 @@ body {
   font-weight: bold;
 }
 
-.modal-content input {
+.modal-content input,
+.modal-content select {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .modal-content button {
@@ -228,96 +301,72 @@ body {
 }
 
 .modal-content .btn-cancel {
-  margin-top: 15px;
-  margin-right: 10px;
   background-color: #b21f2d;
   padding: 10px;
   border-radius: 6px;
   border: none;
   color: white;
 }
-
-.modal-content .btn-cancel:hover{
+.modal-content .btn-cancel:hover {
   background-color: #83101bfc;
 }
 
-.modal-movimentacao{
-  display:none; 
-  position:fixed; 
-  top:0; 
-  left:0; 
-  width:100%; 
-  height:100%; 
-  background:rgba(0,0,0,0.5); 
-  justify-content:center; 
-  align-items:center; 
-  z-index:1000;
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.modal-content{
-  background:#fff; 
-  padding:20px; 
-  border-radius:8px; 
-  width:250px; 
-  position:relative;
+.fechar {
+  padding: 6px 12px;
+  border: none;
+  background: #ccc;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-
-/* Botão Entrada/Saída */
-.btn-movimentacao {
-    background-color: #007bff; /* azul */
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 5px;
-    transition: background-color 0.2s, transform 0.1s;
+.salvar {
+  padding: 6px 12px;
+  border: none;
+  background: #28a745;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.btn-movimentacao:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
+.modal-aberto {
+  margin-bottom: 10px;
 }
 
-.btn-movimentacao:active {
-    transform: translateY(0);
+#mov-tipo {
+  width: 100%;
+  padding: 6px;
 }
 
-.buttons{
-  display:flex; 
-  justify-content:flex-end; 
-  gap:10px;
+#mov-quantidade {
+  width: 95%;
+  padding: 6px;
 }
 
-.fechar{
-  padding:6px 12px; 
-  border:none;
-  background:#ccc; 
-  border-radius:4px; 
-  cursor:pointer;
-}
-
-.salvar{
-  padding:6px 12px; 
-  border:none; 
-  background:#28a745; 
-  color:#fff; 
-  border-radius:4px; 
-  cursor:pointer;
-}
-
-.modal-aberto{
-  margin-bottom:10px;
-}
-
-#mov-tipo{
-  width:100%; 
-  padding:6px;
-}
-
-#mov-quantidade{
-  width:95%; 
-  padding:6px;
+/* ===========================
+   Ajustes Mobile
+=========================== */
+@media (max-width: 400px) {
+  body {
+    padding: 10px;
+  }
+  .product-card {
+    padding: 10px;
+  }
+  .btn-add {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+  .btn-edit,
+  .btn-remove,
+  .btn-movimentacao {
+    min-width: 60px;
+    padding: 4px 6px;
+    font-size: 0.8rem;
+  }
 }
