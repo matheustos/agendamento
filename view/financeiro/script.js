@@ -136,10 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Authorization": `Bearer ${token}` },
         body: formData
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(data => {
         console.log("Resposta:", data);
-        const valorNum = Number(data);
+        const valorNum = Number(data["0"]);
         atualizarDashboard(valorNum);
     })
     .catch(err => console.error("Erro:", err));
