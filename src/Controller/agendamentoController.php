@@ -3,7 +3,6 @@
 namespace Controller;
 use Model\Agendamento;
 use Validators\AgendamentoValidators;
-use Validators\Retornos;
 use Validators\RetornosValidators;
 class AgendamentoController{
     // lógica e validações para fazer o agendamento
