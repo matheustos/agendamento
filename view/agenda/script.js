@@ -81,12 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const menuFicha = document.getElementById('menu-ficha');
         const menuFinanceiro = document.getElementById('menu-financeiro');
         const menuProdutos = document.getElementById('menu-produtos');
+        const menuContabilidade = document.getElementById('menu-contabilidade');
         if (menuBloquear) menuBloquear.style.display = "none";
         if (menuUsuarios) menuUsuarios.style.display = "none";
         if (menuAnamnese) menuAnamnese.style.display = "none";
         if (menuFicha) menuFicha.style.display = "none";
         if (menuFinanceiro) menuFinanceiro.style.display = "none";
         if (menuProdutos) menuProdutos.style.display = "none";
+        if (menuContabilidade) menuContabilidade.style.display = "none";
     }
 });
 
