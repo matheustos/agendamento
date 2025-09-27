@@ -2,6 +2,7 @@
 
 namespace Model;
 use Model\Database;
+use Model\Financeiro;
 use Validators\AgendamentoValidators;
 
 class Agendamento {
@@ -538,6 +539,78 @@ class Agendamento {
             $servicos[] = $row['servico']; // só pega o nome do serviço
         }
 
+        $stmt->close();
+
+        return $servicos; // retorna array de strings com os nomes dos serviços
+    }
+
+    public static function getAgendaMes($mes, $ano, $status) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT * FROM agenda WHERE MONTH(data) = ? AND YEAR(data) = ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("iis", $mes, $ano, $status);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = [
+                "id" => $row["id"],
+                "descricao" => "Serviço",
+                "nome" => $row["servico"],
+                "data"      => date("d/m/Y", strtotime($row["data"])),
+                "quantidade" => "1",
+                "valor" => Financeiro::getpreco($row["servico"]),
+            ];
+        }
+        $stmt->close();
+
+        return $servicos; // retorna array de strings com os nomes dos serviços
+    }
+
+    public static function getAgendaAno($ano, $status) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT * FROM agenda WHERE YEAR(data) = ? AND status = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("is", $ano, $status);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $servicos = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $servicos[] = [
+                "id" => $row["id"],
+                "descricao" => "Serviço",
+                "nome" => $row["servico"],
+                "data"      => date("d/m/Y", strtotime($row["data"])),
+                "quantidade" => "1",
+                "valor" => Financeiro::getpreco($row["servico"]),
+            ];
+        }
         $stmt->close();
 
         return $servicos; // retorna array de strings com os nomes dos serviços

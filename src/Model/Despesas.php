@@ -53,6 +53,47 @@ class Despesas{
         return $registros; // retorna array de arrays
     }
 
+    public static function getDespesasAno($ano) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta somente o campo necessário
+        $sql = "SELECT *
+                FROM despesas 
+                WHERE YEAR(data) = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("i", $ano);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $registros = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            // monta cada registro como array associativo (pra usar no front depois)
+            $registros[] = [
+                "id" => $row["id"],
+                "descricao" => "Despesa",
+                "nome" => $row["nome"],
+                "data"      => date("d/m/Y", strtotime($row["data"])),
+                "quantidade" => $row["quantidade"],
+                "preço unitário" => $row["preco"],
+                "valor"     => (float)$row["valor"]
+            ];
+        }
+
+        $stmt->close();
+
+        return $registros; // retorna array de arrays
+    }
+
     public static function getValor($ano, $mes) {
         $conn = Database::conectar();
 

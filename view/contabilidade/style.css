@@ -191,6 +191,11 @@ body {
   font-weight: bold;
 }
 
+.valorNeutro {
+  color: green; /* azul para serviços */
+  font-weight: bold;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .cards {

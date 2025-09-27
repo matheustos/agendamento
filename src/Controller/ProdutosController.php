@@ -51,6 +51,20 @@ class ProdutosController{
         }
     }
 
+    public static function buscarVendasAno($ano){
+        if(empty($ano)){
+            return ["status" => false, "message" => "Digite o ano!"];
+        }
+
+        $vendas = Produtos::getVendasPorAno($ano);
+
+        if($vendas){
+            return $vendas;
+        }else{
+            return ["status" => false, "message" => "Erro ao buscar vendas!"];
+        }
+    }
+
     public static function removeProduto($id){
         $remover = Produtos::remover($id);
         if($remover){

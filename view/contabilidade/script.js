@@ -43,7 +43,7 @@ document.getElementById("btnSalvarDespesa").addEventListener("click", async () =
   formData.append("preco", preco);
   formData.append("data", data);
   formData.append("ano", ano);
-  formData.append("mes", mes); // envia "" se for Todos
+  formData.append("mes", mes);
 
   try {
     const response = await fetch("/agendamento/api/contabilidade/cadastrar_despesa/index.php", {
@@ -83,8 +83,6 @@ async function filtrarDados(mes, ano) {
     });
 
     const resumo = await resResumo.json();
-
-    // Considerando o seu retorno atual: {"0": receita, "DespesasMes": despesas}
     const faturamento = Number(resumo[0] || 0);
     const despesas = Number(resumo.DespesasMes || 0);
     const saldo = faturamento - despesas;
@@ -97,23 +95,40 @@ async function filtrarDados(mes, ano) {
     document.getElementById("saldo").textContent =
       saldo.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-    // 2️⃣ Carregar movimentações (vendas + despesas)
-    const urlVendas = mes ? "/agendamento/api/contabilidade/index.php" : "/agendamento/api/contabilidade/vendas_ano.php";
-    const urlDespesas = mes ? "/agendamento/api/contabilidade/despesas/index.php" : "/agendamento/api/contabilidade/despesas_ano.php";
+    // 2️⃣ Carregar movimentações (vendas + despesas + serviços)
+    const urlVendas = mes ? "/agendamento/api/contabilidade/index.php" : "/agendamento/api/contabilidade/vendas_ano/index.php";
+    const urlDespesas = mes ? "/agendamento/api/contabilidade/despesas/index.php" : "/agendamento/api/contabilidade/despesas_ano/index.php";
+    const urlServicos = "/agendamento/api/contabilidade/servicos/index.php";
 
-    const [resVendas, resDespesas] = await Promise.all([
+    const [resVendas, resDespesas, resServicos] = await Promise.all([
       fetch(urlVendas, { method: "POST", body: formData }),
-      fetch(urlDespesas, { method: "POST", body: formData })
+      fetch(urlDespesas, { method: "POST", body: formData }),
+      fetch(urlServicos, { method: "POST", body: formData })
     ]);
 
-    const vendas = await resVendas.json();
-    const despesasList = await resDespesas.json();
+    // ✅ Chama .json() apenas uma vez
+    const dataVendas = await resVendas.json();
+    const dataDespesas = await resDespesas.json();
+    const dataServicos = await resServicos.json();
+
+    const vendas = Array.isArray(dataVendas) ? dataVendas : [];
+    const despesasList = Array.isArray(dataDespesas) ? dataDespesas : [];
+    const servicosList = Array.isArray(dataServicos) ? dataServicos : [];
 
     const todasMovimentacoes = [
       ...vendas.map(v => ({ ...v, tipo: "venda" })),
-      ...despesasList.map(d => ({ ...d, tipo: "despesa" }))
+      ...despesasList.map(d => ({ ...d, tipo: "despesa" })),
+      ...servicosList.map(s => ({ ...s, tipo: "servico" }))
     ];
 
+    // Ordena por data (mais recente primeiro)
+    todasMovimentacoes.sort((a, b) => {
+      const d1 = a.data.split("/").reverse().join("-");
+      const d2 = b.data.split("/").reverse().join("-");
+      return new Date(d2) - new Date(d1);
+    });
+
+    // Renderiza lista
     const listaMovimentacoes = document.getElementById("lista-movimentacoes");
     listaMovimentacoes.innerHTML = "";
 
@@ -124,15 +139,21 @@ async function filtrarDados(mes, ano) {
 
     todasMovimentacoes.forEach(mov => {
       const quantidade = Number(mov.quantidade || 0);
-      const precoUnitario = Number(mov["preço unitário"] || mov.preco || 0);
       const valorOriginal = Number(mov.valor || 0);
       const nomeExibido = mov.nome || "-";
-      const descricao = mov.descricao || "-";
+      const descricao = mov.descricao || (mov.tipo === "servico" ? "Serviço" : "-");
 
       let valorExibido = valorOriginal;
-      let classeValor = mov.tipo === "despesa" ? "valorNegativo" : (valorOriginal > 0 ? "valorPositivo" : "valorNegativo");
+      let classeValor = "valorPositivo";
 
-      if (mov.tipo === "despesa") valorExibido = -Math.abs(valorOriginal);
+      if (mov.tipo === "despesa") {
+        valorExibido = -Math.abs(valorOriginal);
+        classeValor = "valorNegativo";
+      } else if (mov.tipo === "venda") {
+        classeValor = valorOriginal > 0 ? "valorPositivo" : "valorNegativo";
+      } else if (mov.tipo === "servico") {
+        classeValor = "valorNeutro";
+      }
 
       const li = document.createElement("li");
       li.innerHTML = `
@@ -140,7 +161,7 @@ async function filtrarDados(mes, ano) {
           <strong>${descricao}</strong>
           <small>${nomeExibido}</small>
           <small>${mov.data || "-"}</small>
-          <small>Qtd: ${quantidade} | Unit: ${precoUnitario.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</small>
+          <small>Qtd: ${quantidade}</small>
         </div>
         <span class="${classeValor}">
           ${valorExibido.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}

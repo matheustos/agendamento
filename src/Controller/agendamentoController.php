@@ -184,6 +184,34 @@ class AgendamentoController{
         return $dados;
     }
 
+    public static function buscarConcluidos($mes, $ano){
+        if(empty($mes) || empty($ano)){
+            $mes = date("m");
+            $ano = date("Y");
+        }
+        $status = "Concluído";
+
+        $agendamentos = Agendamento::getAgendaMes($mes, $ano, $status);
+
+        if($agendamentos){
+            return $agendamentos;
+        }else{
+            return ["status" => false, "message" => "Nenhum agendamento encontrado!"];
+        }
+    }
+
+    public static function buscarConcluidosAno($ano){
+        $status = "Concluído";
+
+        $agendamentos = Agendamento::getAgendaAno($ano, $status);
+
+        if($agendamentos){
+            return $agendamentos;
+        }else{
+            return ["status" => false, "message" => "Nenhum agendamento encontrado!"];
+        }
+    }
+
     public static function buscarTodosAgendamentos(){
         $res = Agendamento::buscarAgendamentos();
 
