@@ -4,6 +4,12 @@ if(!token){
   window.location.href = "../login/index.html";
 }
 
+function logout() {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    window.location.href = "../login/index.html";
+}
+
 // -----------------------
 // MENU LATERAL RESPONSIVO
 // -----------------------
@@ -92,6 +98,7 @@ document.getElementById("btnSalvarDespesa").addEventListener("click", async () =
   try {
     const response = await fetch("/agendamento/api/contabilidade/cadastrar_despesa/index.php", {
       method: "POST",
+      headers: { "Authorization": `Bearer ${token}`},
       body: formData
     });
 
@@ -123,6 +130,7 @@ async function filtrarDados(mes, ano) {
     // 1️⃣ Carregar resumo
     const resResumo = await fetch("/agendamento/api/contabilidade/filtro/index.php", {
       method: "POST",
+      headers: { "Authorization": `Bearer ${token}` },
       body: formData
     });
 
@@ -145,9 +153,15 @@ async function filtrarDados(mes, ano) {
     const urlServicos = "/agendamento/api/contabilidade/servicos/index.php";
 
     const [resVendas, resDespesas, resServicos] = await Promise.all([
-      fetch(urlVendas, { method: "POST", body: formData }),
-      fetch(urlDespesas, { method: "POST", body: formData }),
-      fetch(urlServicos, { method: "POST", body: formData })
+      fetch(urlVendas, { method: "POST", 
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData }),
+      fetch(urlDespesas, { method: "POST", 
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData }),
+      fetch(urlServicos, { method: "POST", 
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData })
     ]);
 
     // ✅ Chama .json() apenas uma vez
