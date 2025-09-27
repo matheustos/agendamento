@@ -132,40 +132,65 @@ body {
 }
 
 /* Formulário de despesa */
-.form-despesa {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  max-width: 400px;
+
+/* Overlay escuro cobrindo a tela */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6); /* escurece o fundo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* acima de tudo */
 }
 
-.form-despesa label {
+/* Caixa central (modal) */
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.modal label {
   display: block;
   margin-top: 10px;
   font-weight: bold;
 }
 
-.form-despesa input {
+.modal input {
   width: 100%;
-  padding: 6px 10px;
+  padding: 8px;
   margin-top: 5px;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-.form-despesa button {
-  margin-top: 15px;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+/* Botões do modal */
+.botoes-despesa {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 #btnSalvarDespesa {
   background-color: #007bff;
   color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 #btnSalvarDespesa:hover {
@@ -175,7 +200,10 @@ body {
 #btnCancelarDespesa {
   background-color: #dc3545;
   color: white;
-  margin-left: 10px;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 #btnCancelarDespesa:hover {
@@ -300,4 +328,45 @@ body {
     gap: 5px;
   }
 }
+
+.imprimir{
+  background-color: #007bff;
+  font-size: 14px;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.imprimir:hover{
+  background-color: #0056b3;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;   /* pode trocar para landscape se preferir deitado */
+    margin: 5mm;         /* margens bem pequenas */
+  }
+
+  body {
+    zoom: 0.75; /* reduz o conteúdo para caber em uma única folha */
+    background: #fff;
+    color: #000;
+  }
+
+  .cards, .movimentacoes {
+    page-break-inside: avoid; /* não quebrar dentro */
+  }
+
+  /* Esconder elementos desnecessários */
+  .side-menu,
+  .acao-despesa,
+  .filtros,
+  button {
+    display: none !important;
+  }
+}
+
+
 
