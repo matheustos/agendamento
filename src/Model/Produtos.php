@@ -125,6 +125,36 @@ class Produtos{
         return $total; // retorna array de strings com os nomes dos serviços
     }
 
+    public static function getNome($id) {
+        $conn = Database::conectar();
+
+        if (!$conn) {
+            return AgendamentoValidators::formatarErro("Erro na conexão com o banco de dados.");
+        }
+
+        // Consulta para pegar todos os serviços entre as datas
+        $sql = "SELECT nome FROM produtos WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            return AgendamentoValidators::formatarErro("Erro ao preparar a consulta. ".$conn->error);
+        }
+
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+
+        $resultado = $stmt->get_result();
+        $nome = [];
+
+        while ($row = $resultado->fetch_assoc()) {
+            $nome[] = $row['nome']; // só pega o nome do serviço
+        }
+
+        $stmt->close();
+
+        return $nome; // retorna array de strings com os nomes dos serviços
+    }
+
     public static function getTotalPorMes($mes, $ano) {
         $conn = Database::conectar();
 
@@ -183,7 +213,7 @@ class Produtos{
             $registros[] = [
                 "id" => $row["produto_id"],
                 "descricao" => "Venda",
-                "nome" => $row["nome"],
+                "nome" => Produtos::getNome($row["produto_id"]),
                 "data"      => date("d/m/Y", strtotime($row["data"])),
                 "quantidade" => $row["quantidade"],
                 "preço unitário" => $row["preco"],
@@ -224,7 +254,7 @@ class Produtos{
             $registros[] = [
                 "id" => $row["produto_id"],
                 "descricao" => "Venda",
-                "nome" => $row["nome"],
+                "nome" => Produtos::getNome($row["produto_id"]),
                 "data"      => date("d/m/Y", strtotime($row["data"])),
                 "quantidade" => $row["quantidade"],
                 "preço unitário" => $row["preco"],
