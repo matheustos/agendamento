@@ -1,8 +1,8 @@
 <?php
 namespace Controller;
-use Model\usuarios;
+use Model\Usuarios;
 use Validators\AgendamentoValidators;
-use Validators\usuariosValidators;
+use Validators\UsuariosValidators;
 
 class UsuariosController{
     public static function cadastro($dados){
