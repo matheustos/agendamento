@@ -4,7 +4,7 @@ namespace Controller;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
-
+use Validators\RetornosValidators;
 class EmailController{
 
     private static function configurar(PHPMailer $mail)
@@ -50,15 +50,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 
@@ -89,15 +83,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 
@@ -123,15 +111,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 
@@ -160,15 +142,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 
@@ -192,15 +168,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 
@@ -222,15 +192,9 @@ class EmailController{
             $mail->AltBody = $mensagemTexto ?: strip_tags($mensagemHtml);
 
             $mail->send();
-            return [
-                "status" => "success",
-                "message" => "E-mail enviado com sucesso!"
-            ];
+            return RetornosValidators::sucesso("E-mail enviado com sucesso!");
         } catch (Exception $e) {
-            return [
-                "status" => "error",
-                "message" => $mail->ErrorInfo
-            ];
+            return RetornosValidators::erro($mail->ErrorInfo);
         }
     }
 }

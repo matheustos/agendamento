@@ -6,7 +6,6 @@ use Model\Financeiro;
 use Model\Produtos;
 use Model\Despesas;
 
-
 class FinanceiroController{
     public static function calcularPrecosDia(){
         date_default_timezone_set('America/Sao_Paulo');

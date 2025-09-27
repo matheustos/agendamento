@@ -2,6 +2,7 @@
 
 namespace Controller;
 use Model\Anamnese;
+use Validators\RetornosValidators;
 
 class AnamneseController{
 
@@ -11,10 +12,7 @@ class AnamneseController{
         // Verifica obrigatórios
         foreach ($obrigatorios as $campo) {
             if (empty($dados[$campo])) {
-                return [
-                    "status" => false,
-                    "message" => "O campo {$campo} é obrigatório!"
-                ];
+                return RetornosValidators::erro("O campo {$campo} é obrigatório!");
             }
         }
 
@@ -34,9 +32,9 @@ class AnamneseController{
        $res = Anamnese::cadastro($dados);
 
        if($res){
-            return ["status" => true, "message" => "Ficha de anamnese cadastrada com sucesso!"];
+            return RetornosValidators::sucesso("Ficha de anamnese cadastrada com sucesso!");
        }else{
-        return ["status" => false, "message" => "Erro ao salvar dados!"];
+        return RetornosValidators::erro("Erro ao salvar dados!");
        }
     }
 
@@ -62,14 +60,8 @@ class AnamneseController{
             unset($ficha); // boa prática
         }
 
-        return [
-            "status" => true,
-            "message" => "Fichas encontradas",
-            "data" => $fichas
-        ];
+        return RetornosValidators::sucessodata("Fichas encontradas", $fichas);
     }
-
-
 
     public static function atualizarAnamnese($dados){
         $obrigatorios = ["nome", "data_nascimento", "telefone", "email", "sexo", "endereco", "queixa"];
@@ -77,10 +69,7 @@ class AnamneseController{
         // Verifica obrigatórios
         foreach ($obrigatorios as $campo) {
             if (empty($dados[$campo])) {
-                return [
-                    "status" => false,
-                    "message" => "O campo {$campo} é obrigatório!"
-                ];
+                return RetornosValidators::erro("O campo {$campo} é obrigatório!");
             }
         }
 
@@ -102,13 +91,10 @@ class AnamneseController{
         if($atualizar){
             return $atualizar;
         }else{
-            return ["status" => false, "message" => "Erro ao atualizar ficha!"];
+            return RetornosValidators::erro("Erro ao atualizar ficha!");
         }
     }
 
 }
-
-
-
 
 ?>

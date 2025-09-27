@@ -2,15 +2,16 @@
 
 namespace Controller;
 use Model\Produtos;
+use Validators\RetornosValidators;
 
 class ProdutosController{
     public static function buscarProdutos(){
         $produtos = Produtos::buscar();
 
         if($produtos){
-            return ["status" => true, "message" => "Produtos encontrados", "data" => $produtos];
+            return RetornosValidators::sucessodata("Produtos encontrados", $produtos);
         }else{
-            return ["status" => false, "message" => "Nenhum produto encontrado!"];
+            return RetornosValidators::erro("Nenhum produto encontrado!");
         }
     }
 
@@ -21,14 +22,14 @@ class ProdutosController{
         $id = $dados["id"];
 
         if(empty($nome) || empty($quantidade) || empty($preco) || empty($id)){
-            return ["status" => false, "message" => "Informe todos os dados!"];
+            return RetornosValidators::erro("Informe todos os dados!");
         }else{
             $produto = Produtos::atualizar($nome, $quantidade, $preco, $id);
 
             if($produto){
-                return ["status" => true, "message" => "Produto atualizado com sucesso!"];
+                return RetornosValidators::sucesso("Produto atualizado com sucesso!");
             }else{
-                return ["status" => false, "message" => "Erro ao atualizar produto!"];
+                return RetornosValidators::erro("Erro ao atualizar produto!");
             }
         }
     }
@@ -39,21 +40,21 @@ class ProdutosController{
         $preco = $dados["preco"];
 
         if(empty($nome) || empty($quantidade) || empty($preco)){
-            return ["status" => false, "message" => "Informe todos os dados!"];
+            return RetornosValidators::erro("Informe todos os dados!");
         }else{
             $cadastrar = Produtos::cadastrar($nome, $quantidade, $preco);
 
             if($cadastrar){
-                return ["status" => true, "message" => "Produto cadastrado com sucesso!"];
+                return RetornosValidators::sucesso("Produto cadastrado com sucesso!");
             }else{
-                return ["status" => false, "message" => "Erro ao cadastrar produto."];
+                return RetornosValidators::erro("Erro ao cadastrar produto.");
             }
         }
     }
 
     public static function buscarVendasAno($ano){
         if(empty($ano)){
-            return ["status" => false, "message" => "Digite o ano!"];
+            return RetornosValidators::erro("Digite o ano!");
         }
 
         $vendas = Produtos::getVendasPorAno($ano);
@@ -61,16 +62,16 @@ class ProdutosController{
         if($vendas){
             return $vendas;
         }else{
-            return ["status" => false, "message" => "Erro ao buscar vendas!"];
+            return RetornosValidators::erro("Erro ao buscar vendas!");
         }
     }
 
     public static function removeProduto($id){
         $remover = Produtos::remover($id);
         if($remover){
-            return ["status" => true, "message" => "Produto removido com sucesso!"];
+            return RetornosValidators::sucesso("Produto removido com sucesso!");
         }else{
-            return ["status" => false, "message" => "Erro ao remover produto!"];
+            return RetornosValidators::erro("Erro ao remover produto!");
         }
     }
 
@@ -80,14 +81,14 @@ class ProdutosController{
         $quantidade = $dados["quantidade"];
 
         if(empty($quantidade) || empty($id) || empty($tipo)){
-            return ["status" => false, "message" => "Informe todos os dados!"];
+            return RetornosValidators::erro("Informe todos os dados!");
         }
 
         $quantia = Produtos::buscarQuantidade($id);
         $preco = Produtos::buscarPreco($id);
 
         if(!$quantia || !$preco){
-            return ["status" => false, "message" => "Produto não encontrado!"];
+            return RetornosValidators::erro("Produto não encontrado!");
         }
 
         $quantidade_banco = $quantia["quantidade"];
@@ -97,13 +98,13 @@ class ProdutosController{
             $entrada = $quantidade_banco + $quantidade;
             $atualizar = Produtos::atualizarQuantidade($entrada, $id);
             if($atualizar){
-                return ["status" => true, "message" => "Estoque atualizado com sucesso!"];
+                return RetornosValidators::sucesso("Estoque atualizado com sucesso!");
             }else{
-                return ["status" => false, "message" => "Erro ao atualizar estoque!"];
+                return RetornosValidators::erro("Erro ao atualizar estoque!");
             }
         } else if($tipo === "saída"){
             if($quantidade > $quantidade_banco){
-                return ["status" => false, "message" => "Não é possível realizar uma venda com quantidade superior ao estoque!"];
+                return RetornosValidators::erro("Não é possível realizar uma venda com quantidade superior ao estoque!");
             }
 
             $saida = $quantidade_banco - $quantidade;
@@ -114,12 +115,12 @@ class ProdutosController{
                 Produtos::registrarVenda($id, $quantidade, $precoProduto, $valor_vendido);
                 return ["status" => true, "message" => "Estoque atualizado com sucesso!", "vendas" => $valor_vendido];
             } else{
-                return ["status" => false, "message" => "Erro ao atualizar estoque!"];
+                return RetornosValidators::erro("Erro ao atualizar estoque!");
             }
         }
 
         // retorno padrão caso $tipo não seja válido
-        return ["status" => false, "message" => "Tipo inválido!"];
+        return RetornosValidators::erro("Tipo inválido!");
     }
 
 }

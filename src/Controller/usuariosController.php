@@ -2,6 +2,7 @@
 namespace Controller;
 use Model\Usuarios;
 use Validators\AgendamentoValidators;
+use Validators\RetornosValidators;
 use Validators\UsuariosValidators;
 
 class UsuariosController{
@@ -28,9 +29,9 @@ class UsuariosController{
                 $res = usuarios::cadastrar($nome, $email, $hash, $telefone, $acesso);
 
                 if(!$res){
-                    return ["status" => false, "message" => "Erro ao cadastrar usuário."];
+                    return RetornosValidators::erro("Erro ao cadastrar usuário.");
                 }else{
-                    return ["status" => true, "message" => "Usuário cadastrado com sucesso!", "data" => $res];
+                    return RetornosValidators::sucessodata("Usuário cadastrado com sucesso!", $res);
                 }
             }else{
                 return $validacao;
@@ -49,9 +50,9 @@ class UsuariosController{
         if($validacao["status"] === true){
             $res = Usuarios::atualizar($nome, $telefone, $email, $user);
             if(!$res){
-                return ["status" => false, "message" => "Erro ao atualizar dados."];
+                return RetornosValidators::erro("Erro ao atualizar dados.");
             }else{
-                return ["status" => true, "message" => "Dados atualizados com sucesso!", "data" => $res];
+                return RetornosValidators::sucessodata("Dados atualizados com sucesso!", $res);
             }
         }else{
             return $validacao;
@@ -61,15 +62,15 @@ class UsuariosController{
 
     public static function removerUser($id){
         if(empty($id)){
-            return ["status" => false, "message" => "Informe o usuário!"];
+            return RetornosValidators::erro("Informe o usuário!");
         }
 
         $res = Usuarios::removerUsuario($id);
 
         if($res){
-            return ["status" => true, "message" => "Usuário removio com sucesso!"];
+            return RetornosValidators::sucesso("Usuário removio com sucesso!");
         }else{
-            return ["status" => false, "message" => "Erro ao remover usuário!"];
+            return RetornosValidators::erro("Erro ao remover usuário!");
         }
     }
 
@@ -104,13 +105,13 @@ class UsuariosController{
 
     public static function updateSenha($email) {
         if(empty($email)){
-            return ["status" => false, "message" => "Informe o email!"];
+            return RetornosValidators::erro("Informe o email!");
         }
         // Verificar se o email existe
         $emailExistente = usuariosValidators::buscarEmail($email);
         if ($emailExistente["status"] === false) {
             // Se o email não existir, retornar erro
-            return ["status" => false, "message" => "Usuário não encontrado."];
+            return RetornosValidators::erro("Usuário não encontrado.");
         }else{
             $nova_senha = UsuariosController::gerarSenha(8);
             // Atualizar senha do usuário
@@ -118,17 +119,17 @@ class UsuariosController{
             $res = usuarios::updateSenha($hash, $email);
             // Verificar se a atualização foi bem-sucedida
             if(!$res){
-                return ["status" => false, "message" => "Erro ao atualizar senha."];
+                return RetornosValidators::erro("Erro ao atualizar senha.");
             }else{
                 $user = usuarios::buscarPorEmail($email);
                 $nome = $user["nome"];
                 if($nome){
                     EmailController::resetSenha($email, $nova_senha, $nome);
-                    return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                    return RetornosValidators::sucesso("Senha atualizada com sucesso!");
                 }else{
                     $nome = "";
                     EmailController::resetSenha($email, $nova_senha, $nome);
-                    return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                    return RetornosValidators::sucesso("Senha atualizada com sucesso!");
                 }
             }
         }
@@ -136,26 +137,26 @@ class UsuariosController{
 
     public static function atualizar_senha($email, $nova_senha, $confirmar_senha){
         if(empty($email) || empty($nova_senha)|| empty($confirmar_senha)){
-            return ["status" => false, "message" => "Insira todos os dados!"];
+            return RetornosValidators::erro("Insira todos os dados!");
         }else{
             if($nova_senha != $confirmar_senha){
-                return ["status" => false, "message" => "As senhas não coincidem!"];
+                return RetornosValidators::erro("As senhas não coincidem!");
             }else{
                 // Atualizar senha do usuário
                 $hash = password_hash($nova_senha, PASSWORD_DEFAULT);
                 $res = usuarios::updateSenha($hash, $email);
                 if(!$res){
-                    return ["status" => false, "message" => "Erro ao atualizar senha."];
+                    return RetornosValidators::erro("Erro ao atualizar senha.");
                 }else{
                     $user = usuarios::buscarPorEmail($email);
                     $nome = $user["nome"];
                     if($nome){
                         EmailController::atualizarSenha($email, $nome);
-                        return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                        return RetornosValidators::sucesso("Senha atualizada com sucesso!");
                     }else{
                         $nome = "";
                         EmailController::atualizarSenha($email, $nome);
-                        return ["status" => true, "message" => "Senha atualizada com sucesso!"];
+                        return RetornosValidators::sucesso("Senha atualizada com sucesso!");
                     }
                 }
             }

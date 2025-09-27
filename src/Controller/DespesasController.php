@@ -3,12 +3,13 @@
 namespace Controller;
 
 use Model\Despesas;
+use Validators\RetornosValidators;
 
 class DespesasController{
 
     public static function cadastar($nome, $quantidade, $preco){
         if(empty($nome) || empty($quantidade) || empty($preco)){
-            return ["status" => false, "message" => "Preencha todos os dados!"];
+            return RetornosValidators::erro("Preencha todos os dados!");
         }
         date_default_timezone_set('America/Sao_Paulo');
         $data = date("Y-m-d");
@@ -16,9 +17,9 @@ class DespesasController{
         $despesa = Despesas::cadastrarDespesas($nome, $quantidade, $preco, $valor, $data);
 
         if($despesa){
-            return ["status" => true, "message" => "Despesa cadastrada com sucesso!"];
+            return RetornosValidators::sucesso("Despesa cadastrada com sucesso!");
         }else{
-            return ["status" => false, "message" => "Erro ao cadastrar produto"];
+            return RetornosValidators::erro("Erro ao cadastrar produto");
         }
     }
 }
