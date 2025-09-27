@@ -3,6 +3,7 @@
 namespace Controller;
 use Model\Agendamento;
 use Validators\AgendamentoValidators;
+use Validators\Retornos;
 class AgendamentoController{
     // lógica e validações para fazer o agendamento
     public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm, $user){
@@ -10,7 +11,7 @@ class AgendamentoController{
 
         // verifica se os campos estão vazios, se sim, retorna erro
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($telefone)){
-            return ["status" => false, "message" => "Insira todos os dados!"];
+            Retornos::erro("Insira todos os dados!");
         }else{
             // permite que a observação seja nula, caso não seja passada via form
             if(empty($obs)){
