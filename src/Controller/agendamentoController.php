@@ -79,7 +79,7 @@ class AgendamentoController{
 
         // verifica se os dados essenciais para o bloqueio foram informadas
         if(empty($data) || empty($hora)){
-            return AgendamentoValidators::formatarErro("Informe data e hora!");
+            return RetornosValidators::erro("Informe data e hora!")
         }else{
             // permite que a observação seja nula se não for informada
             if(empty($obs) || !isset($obs)){
@@ -90,15 +90,15 @@ class AgendamentoController{
             if(isset($getStatus['data'])){
                 $retorno = $getStatus["data"];
                 if($retorno === "bloqueado"){
-                    return AgendamentoValidators::formatarErro("Agenda já se encontra bloqueada");
+                    return RetornosValidators::erro("Agenda já se encontra bloqueada");
                 }else{
                     if($retorno === "cancelado"){
                         $res = Agendamento::atualizarStatus($status, $data, $hora, $nome, $servico, $obs);
 
                         if($res){
-                            return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                            return RetornosValidators::sucesso("Agenda bloqueada com sucesso!");
                         }else{
-                            return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                            return RetornosValidators::erro("Erro ao bloquear agenda!");
                         }
                     }else{
                         $validacao = AgendamentoValidators::verificarBloqueio($data, $hora);
@@ -106,15 +106,15 @@ class AgendamentoController{
                             if($hora === "Todos os horários"){
                                 $res = Agendamento::bloquearTodosHorarios($data);
                                 if($res === true){
-                                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                                    return RetornosValidators::sucesso("Agenda bloqueada com sucesso!");
                                 }
                             }else{
                                 $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null, null);
 
                                 if($res){
-                                    return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                                    return RetornosValidators::sucesso("Agenda bloqueada com sucesso!");
                                 }else{
-                                    return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                                    return RetornosValidators::erro("Erro ao bloquear agenda!");
                                 }
                             }
                             
@@ -127,15 +127,15 @@ class AgendamentoController{
                 if($hora === "Todos os horários"){
                     $res = Agendamento::bloquearTodosHorarios($data);
                     if($res === true){
-                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                        return RetornosValidators::sucesso("Agenda bloqueada com sucesso!");
                     }
                 }else{
                     $res = Agendamento::agendar($data, $hora, $nome, $status, $servico, $obs, null, null, null);
 
                     if($res){
-                        return AgendamentoValidators::formatarRetorno("Agenda bloqueada com sucesso!", []);
+                        return RetornosValidators::sucesso("Agenda bloqueada com sucesso!");
                     }else{
-                        return AgendamentoValidators::formatarErro("Erro ao bloquear agenda!");
+                        return RetornosValidators::erro("Erro ao bloquear agenda!");
                     }
                 }
             }
@@ -165,7 +165,7 @@ class AgendamentoController{
     public static function buscarPorDia($dia) {
 
         if (empty($dia)) {
-            return AgendamentoValidators::formatarErro("Informe o dia!");
+            return RetornosValidators::erro("Informe o dia!");
         }
 
         $res = Agendamento::buscar($dia);
@@ -173,7 +173,7 @@ class AgendamentoController{
         if (is_array($res)) {
             return $res;
         } else {
-            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+            return RetornosValidators::erro("Erro ao consultar agenda.");
         }
     }
 
@@ -198,7 +198,7 @@ class AgendamentoController{
         if($agendamentos){
             return $agendamentos;
         }else{
-            return ["status" => false, "message" => "Nenhum agendamento encontrado!"];
+            return RetornosValidators::erro("Nenhum agendamento encontrado!");
         }
     }
 
@@ -210,7 +210,7 @@ class AgendamentoController{
         if($agendamentos){
             return $agendamentos;
         }else{
-            return ["status" => false, "message" => "Nenhum agendamento encontrado!"];
+            return RetornosValidators::erro("Nenhum agendamento encontrado!");
         }
     }
 
@@ -219,12 +219,12 @@ class AgendamentoController{
 
         if (is_array($res)) {
             if($res){
-                return AgendamentoValidators::formatarRetorno("Registros encontrados!",$res);
+                return RetornosValidators::sucessodata("Registros encontrados!", $res);
             }else{
-                return AgendamentoValidators::formatarErro("Não existem registros para esse mês!");
+                return RetornosValidators::erro("Não existem registros para esse mês!");
             }
         } else {
-            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+            return RetornosValidators::erro("Não existem registros para esse mês!");
         }
     }
 
@@ -234,12 +234,12 @@ class AgendamentoController{
 
         if (is_array($res)) {
             if($res){
-                return AgendamentoValidators::formatarRetorno("Registros encontrados!",$res);
+                return RetornosValidators::sucessodata("Registros encontrados!", $res);
             }else{
-                return AgendamentoValidators::formatarErro("Não existem registros para esse mês!");
+                return RetornosValidators::erro("Não existem registros para esse mês!");
             }
         } else {
-            return AgendamentoValidators::formatarErro("Erro ao consultar agenda.");
+            return RetornosValidators::erro("Erro ao consultar agenda!");
         }
     }
 
@@ -248,7 +248,7 @@ class AgendamentoController{
         $hora = $dados["horario"];
 
         if(empty($data) || empty($hora)){
-            return AgendamentoValidators::formatarErro("Informe todos os dados!");
+            return RetornosValidators::erro("Informe todos os dados!");
         }else{
             $validacao = AgendamentoValidators::validacaoCancelamento($data, $hora);
 
@@ -270,7 +270,7 @@ class AgendamentoController{
                     }
                     return $res;
                 }else{
-                    return AgendamentoValidators::formatarErro("Erro ao cancelar agendamento!");
+                    return RetornosValidators::erro("Erro ao cancelar agendamento!");
                 }
             }
         }
@@ -289,13 +289,10 @@ class AgendamentoController{
         $data_hoje = date("Y-m-d");
 
         if(empty($hora) || empty($data) || empty($id) || empty($nome) || empty($telefone)){
-            return AgendamentoValidators::formatarErro("Informe todos os dados!");
+            return RetornosValidators::erro("Informe todos os dados!");
         }else{
             if($data < $data_hoje){
-                return [
-                    "status" => "error",
-                    "message" => "Não é possível agendar para uma data passada!"
-                ];
+                return RetornosValidators::erro("Não é possível agendar para uma data passada!");
             }else{
                 if($status === "Selecione o Status"){
                     $status = "agendado";
@@ -331,7 +328,7 @@ class AgendamentoController{
                                 return ["status" => "success", "data" => $res];
                             }
                         }else{
-                            return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                            return RetornosValidators::erro("Erro ao atualizar o agendamento!");
                         }
                     }else{
                         if($status === "Confirmado"){
@@ -357,7 +354,7 @@ class AgendamentoController{
                                     return ["status" => "success", "data" => $res];
                                 }
                             }else{
-                                return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                                return RetornosValidators::erro("Erro ao atualizar o agendamento!");
                             }
                         }else{
                             $res = Agendamento::atualizar($data, $hora, $id, $nome, $telefone, $status);
@@ -365,7 +362,7 @@ class AgendamentoController{
                             if($res){
                                 return ["status" => "success", "data" => $res];
                             }else{
-                                return AgendamentoValidators::formatarErro("Erro ao atualizar o agendamento!");
+                                return RetornosValidators::erro("Erro ao atualizar o agendamento!");
                             }
                         }
                     }

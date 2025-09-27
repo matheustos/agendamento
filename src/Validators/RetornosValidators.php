@@ -9,6 +9,10 @@ class RetornosValidators{
     public static function erro($messagem){
         return ["status" => false, "message" => $messagem];
     }
+
+    public static function sucessodata($messagem, $data){
+        return ["status" => false, "message" => $messagem, "data" => $data];
+    }
 }
 
 ?>
