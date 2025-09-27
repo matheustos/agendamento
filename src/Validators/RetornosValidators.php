@@ -1,7 +1,7 @@
 <?php
 namespace Validators;
 
-class Retornos{
+class RetornosValidators{
     public static function sucesso($messagem){
         return ["status" => true, "message" => $messagem];
     }

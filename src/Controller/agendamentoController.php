@@ -4,6 +4,7 @@ namespace Controller;
 use Model\Agendamento;
 use Validators\AgendamentoValidators;
 use Validators\Retornos;
+use Validators\RetornosValidators;
 class AgendamentoController{
     // lógica e validações para fazer o agendamento
     public static function agendamento($data, $hora, $nome, $servico, $obs, $telefone, $emailForm, $user){
@@ -11,7 +12,7 @@ class AgendamentoController{
 
         // verifica se os campos estão vazios, se sim, retorna erro
         if(empty($hora) || empty($nome) || empty($servico) || empty($data) || empty($telefone)){
-            return Retornos::erro("Insira todos os dados!");
+            return RetornosValidators::erro("Insira todos os dados!");
         }else{
             // permite que a observação seja nula, caso não seja passada via form
             if(empty($obs)){
@@ -44,7 +45,7 @@ class AgendamentoController{
                             if($emailForm){
                                 // envia email de confirmação do agendamento
                                 EmailController::enviar($emailForm, $data, $hora, $nome, $servico, $obs);
-                                return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                                return RetornosValidators::sucesso("Agendamento efetuado com sucesso!");
                             }else{
                                 if($user != "1"){
                                     // pega o email do user no bd
@@ -53,13 +54,13 @@ class AgendamentoController{
                                         // envia confirmação de agendamento no email informado via form, caso não haja email no bd
                                         EmailController::enviar($email, $data, $hora, $nome, $servico, $obs);
                                     }
-                                    return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                                    return RetornosValidators::sucesso("Agendamento efetuado com sucesso!");
                                 }
                                 // agenda sem enviar email caso não seja encontrado/informado nenhum email
-                                return ["status" => true, "message" => "Agendamento efetuado com sucesso!"];
+                                return RetornosValidators::sucesso("Agendamento efetuado com sucesso!");
                             }
                         }else{
-                            return AgendamentoValidators::formatarErro("Nenhum dado recebido.");
+                            return RetornosValidators::erro("Nenhum dado recebido.");
                         }
                     }
                 }
