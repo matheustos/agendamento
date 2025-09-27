@@ -78,7 +78,7 @@ class AgendamentoController{
 
         // verifica se os dados essenciais para o bloqueio foram informadas
         if(empty($data) || empty($hora)){
-            return RetornosValidators::erro("Informe data e hora!")
+            return RetornosValidators::erro("Informe data e hora!");
         }else{
             // permite que a observação seja nula se não for informada
             if(empty($obs) || !isset($obs)){
