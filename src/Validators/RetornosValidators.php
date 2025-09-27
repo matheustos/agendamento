@@ -11,7 +11,7 @@ class RetornosValidators{
     }
 
     public static function sucessodata($messagem, $data){
-        return ["status" => false, "message" => $messagem, "data" => $data];
+        return ["status" => true, "message" => $messagem, "data" => $data];
     }
 }
 
